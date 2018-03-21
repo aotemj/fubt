@@ -1,0 +1,16 @@
+body,div,html,.con-box,li,ul{
+	margin:0;
+	padding:0;
+	box-sizing: border-box;
+}
+a{
+	text-decoration: none;
+	color:#000;
+}
+input,button,textarea{
+	border:none;
+	outline:none;
+}
+ul,li{
+	list-style: none;
+}

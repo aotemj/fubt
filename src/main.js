@@ -14,6 +14,7 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
+import '../static/reset.css'
 import '../static/common.css'
 
 new Vue({

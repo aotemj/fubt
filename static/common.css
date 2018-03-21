@@ -1,8 +1,4 @@
-body,div,html,.con-box{
-	margin:0;
-	padding:0;
-	box-sizing: border-box;
-}
+
 .con-box{
 	width:100%;
 	/*background-color: green;*/
@@ -29,4 +25,20 @@ el-carousel,el-carousel-item{
 }
 el-carousel-item img{
 	width:100%;
+}
+.news {
+	height:60px;
+	width:100%;
+	background-color: pink;
+	line-height: 60px;
+}
+.news-item {
+	color:#fff;
+	background-color: rgba(14, 19, 40,1);
+}
+/*表单内容*/
+.content{
+	width:100%;
+	padding:0 300px;
+	position: relative;
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="block">
 	  <el-carousel height="500px">
-	    <el-carousel-item v-for="item in imgList" :key="item">
+	    <el-carousel-item v-for="(item,index) in imgList" :key="index">
 				<img :src="item.src" alt="" width="100%" height="100%">
 	    </el-carousel-item>
 	  </el-carousel>
@@ -20,9 +20,6 @@
 					},
 					{
 						src:'https://www.fubt.top/front/images/index/c.jpg'
-					},
-					{
-						src:'https://www.fubt.top/front/images/index/m.jpg'
 					}
 				]
 			}
