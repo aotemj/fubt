@@ -39,6 +39,12 @@ el-carousel-item img{
 /*表单内容*/
 .content{
 	width:100%;
-	padding:0 300px;
+	padding:0 200px;
 	position: relative;
+}
+.el-tabs__item:hover{
+	color:#2884e6;
+}
+.el-tabs__item{
+	color:#fff;
 }

@@ -16,10 +16,14 @@ Vue.config.productionTip = false
 
 import '../static/reset.css'
 import '../static/common.css'
+import '../static/iconfont.css'
+
 
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+	el: '#app',
+	router,
+	components: {
+		App
+	},
+	template: '<App/>'
 })
