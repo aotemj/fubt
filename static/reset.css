@@ -10,7 +10,30 @@ a{
 input,button,textarea{
 	border:none;
 	outline:none;
+	background-color: transparent;
+	color:#fff;
+	display: block;
+	box-sizing: border-box;
 }
 ul,li{
 	list-style: none;
+}
+.clearfix::before{
+	clear:both;
+	content:'';
+	height:0;
+	visibility:hidden;
+	display:none;
+}
+.clearfix{
+	*zoom:1;
+}
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.ov{
+	overflow: hidden;
 }
