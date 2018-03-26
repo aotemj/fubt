@@ -164,11 +164,11 @@
 		},
 		computed:{},
 		created(){
-			var url = common.apidomain+'real/indexmarket';
-			ajax(url,'get',{},(res)=>{
-				console.log(res);
-				this.dataList = res.data.data;
-			});
+			// var url = common.apidomain+'real/indexmarket';
+			// ajax(url,'get',{},(res)=>{
+			// 	console.log(res);
+			// 	this.dataList = res.data.data;
+			// });
 		}
 	}
 </script>

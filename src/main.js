@@ -19,6 +19,10 @@ import '../static/common.css'
 import '../static/iconfont.css'
 
 
+Vue.filter('keepTwoNum',function(value){
+  value = Number(value);
+  return value.toFixed(2);
+})
 new Vue({
 	el: '#app',
 	router,

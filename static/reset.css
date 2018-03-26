@@ -14,6 +14,7 @@ input,button,textarea{
 	color:#fff;
 	display: block;
 	box-sizing: border-box;
+  font-size: 14px;
 }
 ul,li{
 	list-style: none;
