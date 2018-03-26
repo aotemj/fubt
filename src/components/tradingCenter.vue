@@ -40,7 +40,33 @@
       <div class="inner-box">
         <!--买入-->
         <div class="buy">
-          {{currentCurrency01.name}}余额：{{currentCurrency01.count | keepTwoNum}}
+          <ul>
+            <li>
+              {{currentCurrency01.name}}余额：{{currentCurrency01.count | keepTwoNum}}
+            </li>
+            <li>
+              最大可买：{{currentCurrency01.maxBuy}}
+            </li>
+            <li>
+              参考单价：{{currentCurrency01.referencePrice}}
+            </li>
+            <li class="clearfix buy-sell-box">
+              <div class="buy-price fl">
+                <span class="tips">买入价格({{currentCurrency01.name}})</span>
+                <input type="text" v-bind:value="userBuyPrice" class="user-buy-price">
+              </div>
+              <div class="symbol fl">*</div>
+              <div class="buy-price fl">
+                买入数量({{currentCurrency02.name}})
+                <input type="text" v-bind:vlaue="userBuyCount" class="user-buy-price">
+              </div>
+              <div class="symbol fl">=</div>
+              <div class=" buy-price fl">
+                金额({{currentCurrency02.name}})
+                <input type="text" disabled name="" id="" class="user-buy-price" v-bind:value="userBuyCount*userBuyPrice">
+              </div>
+            </li>
+          </ul>
         </div>
         <!--卖出-->
         <div class="sell"></div>
@@ -58,15 +84,25 @@
 				currentCurrency01:{
 				  name:'FUC',//币种
           count:0,//数量
+          maxBuy:0,//最大可买
+          referencePrice:0.00000254,//参考单价
+          buyPrice:0,//买入价格
+          buyCount:0,//买入数量
+          totalPrice:this.buyPrice*this.buyCount,//总金额
         },
         currentCurrency02:{
           name:'FBT',//币种
           count:0,//数量
+          maxBuy:0,//最大可买
+          referencePrice:0,//参考单价
         },
 				curListIsShow:false,//币种选择框显示状态
 				curDescIsShow:false,//币种资料框显示状态
-        // current
+        userBuyPrice:0,//用户买入价格
+        userBuyCount:0,//用户买入数量
+
 			}
+
 		},
 		methods:{
 			//显示隐藏币种选择框
@@ -93,7 +129,7 @@
 		height:70px;
 		line-height:70px;
 		margin-top:100px;
-		padding:0 200px;
+		padding:0 100px;
 	}
   .currencyData .inner-box {
     background-color: #10172d;
@@ -127,7 +163,7 @@
   .deal-box{
     margin-top:20px;
     height:400px;
-    padding:0 200px;
+    padding:0 100px;
     /*text-align: left;*/
   }
   .deal-box .inner-box{
@@ -146,5 +182,25 @@
   }
   .deal-box .inner-box .price{
     margin-right:0;
+  }
+  .buy-price{
+    font-size: 12px;
+    /*background-color: pink;*/
+    width:30%;
+  }
+  .buy-sell-box{
+    position: relative;
+  }
+
+  /*用户买入价格*/
+  .user-buy-price{
+    margin-top:10px;
+    border:1px solid #fff;
+    width:60px;
+    height:30px;
+    border-radius:5px;
+  }
+  .tips{
+    white-space:nowrap;
   }
 </style>

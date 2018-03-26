@@ -175,7 +175,7 @@
 <style scoped>
 	.search-btn{
 		position: absolute;
-		right:200px;
+		right:100px;
 		top:10px;
 	}
 	.th{

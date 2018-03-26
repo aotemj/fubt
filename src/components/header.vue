@@ -48,7 +48,7 @@
 <style scoped>
 	.header-box{
 		width:100%;
-		padding:0 200px;
+		padding:0 100px;
 	}
 	.inner-content{
 		/*background-color: pink;*/

@@ -9,7 +9,7 @@
 	line-height:85px;
 	background-color: rgba(0,0,0,.3);
 	box-sizing: border-box;
-	padding:0 300px;
+	padding:0 100px;
 	position: fixed;
 	top:0;
 	z-index: 999;
@@ -40,7 +40,7 @@ el-carousel-item img{
 /*表单内容*/
 .content{
 	width:100%;
-	padding:0 200px;
+	padding:0 100px;
 	position: relative;
 }
 .el-tabs__item:hover{
