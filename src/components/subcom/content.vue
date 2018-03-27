@@ -1,17 +1,18 @@
 <template>
 	<div class="content">
 		<el-tabs v-model="activeName">
-		  <el-tab-pane label="全部" name="first">
+		  <el-tab-pane name="first">
+        <span slot="label">{{$t('m.all')}}</span>
 		   	<div class="table">
 		   		<ul class="th">
-						<li class="td">市场</li>
-						<li class="td">最新价格(FBT)</li>
-						<li class="td">最高价(FBT)</li>
-						<li class="td">最低价(FBT)</li>
-						<li class="td">24H成交量</li>
-						<li class="td">24H涨跌</li>
-						<li class="td">6小时走势</li>
-						<li class="td">收藏</li>
+						<li class="td">{{$t('m.pairs')}}</li>
+						<li class="td">{{$t('m.latestprice')}}(FBT)</li>
+						<li class="td"> {{$t('m.maxPrice')}}(FBT)</li>
+						<li class="td">{{$t('m.minPrice')}}(FBT)</li>
+						<li class="td">{{$t('m.tfHVolume')}}</li>
+						<li class="td">{{$t('m.change')}}</li>
+						<li class="td">{{$t('m.sixChange')}}</li>
+						<li class="td">{{$t('m.like')}}</li>
 		   		</ul>
 		   		<div class="tbody">
 						<div class="item" v-for="(item,index) in dataList" v-on:mouseover="hover">
@@ -27,17 +28,18 @@
 		   		</div>
 		   	</div>
 		 	</el-tab-pane>
-		  <el-tab-pane label="FBT交易区" name="second">
+		  <el-tab-pane  name="second">
+        <span slot="label">FBT {{$t('m.tradingArea')}}</span>
   	   	<div class="table">
   	   		<ul class="th">
-  					<li class="td">市场</li>
-  					<li class="td">最新价格(FBT)</li>
-  					<li class="td">最高价(FBT)</li>
-  					<li class="td">最低价(FBT)</li>
-  					<li class="td">24H成交量</li>
-  					<li class="td">24H涨跌</li>
-  					<li class="td">6小时走势</li>
-  					<li class="td">收藏</li>
+            <li class="td">{{$t('m.pairs')}}</li>
+            <li class="td">{{$t('m.latestprice')}}(FBT)</li>
+            <li class="td"> {{$t('m.maxPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.minPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.tfHVolume')}}</li>
+            <li class="td">{{$t('m.change')}}</li>
+            <li class="td">{{$t('m.sixChange')}}</li>
+            <li class="td">{{$t('m.like')}}</li>
   	   		</ul>
   	   		<div class="tbody">
   					<div class="item" v-for="(item,index) in dataList" v-on:mouseover="hover">
@@ -53,17 +55,18 @@
   	   		</div>
   	   	</div>
 		  </el-tab-pane>
-		  <el-tab-pane label="BTC交易区" name="third">
+		  <el-tab-pane label="" name="third">
+        <span slot="label">BTC {{$t('m.tradingArea')}}</span>
   	   	<div class="table">
   	   		<ul class="th">
-  					<li class="td">市场</li>
-  					<li class="td">最新价格(FBT)</li>
-  					<li class="td">最高价(FBT)</li>
-  					<li class="td">最低价(FBT)</li>
-  					<li class="td">24H成交量</li>
-  					<li class="td">24H涨跌</li>
-  					<li class="td">6小时走势</li>
-  					<li class="td">收藏</li>
+            <li class="td">{{$t('m.pairs')}}</li>
+            <li class="td">{{$t('m.latestprice')}}(FBT)</li>
+            <li class="td"> {{$t('m.maxPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.minPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.tfHVolume')}}</li>
+            <li class="td">{{$t('m.change')}}</li>
+            <li class="td">{{$t('m.sixChange')}}</li>
+            <li class="td">{{$t('m.like')}}</li>
   	   		</ul>
   	   		<div class="tbody">
   					<div class="item" v-for="(item,index) in dataList" v-on:mouseover="hover">
@@ -79,17 +82,18 @@
   	   		</div>
   	   	</div>
 			</el-tab-pane>
-		  <el-tab-pane label="FUC交易区" name="fourth">
+		  <el-tab-pane label="" name="fourth">
+        <span slot="label">FUC {{$t('m.tradingArea')}}</span>
   	   	<div class="table">
   	   		<ul class="th">
-  					<li class="td">市场</li>
-  					<li class="td">最新价格(FBT)</li>
-  					<li class="td">最高价(FBT)</li>
-  					<li class="td">最低价(FBT)</li>
-  					<li class="td">24H成交量</li>
-  					<li class="td">24H涨跌</li>
-  					<li class="td">6小时走势</li>
-  					<li class="td">收藏</li>
+            <li class="td">{{$t('m.pairs')}}</li>
+            <li class="td">{{$t('m.latestprice')}}(FBT)</li>
+            <li class="td"> {{$t('m.maxPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.minPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.tfHVolume')}}</li>
+            <li class="td">{{$t('m.change')}}</li>
+            <li class="td">{{$t('m.sixChange')}}</li>
+            <li class="td">{{$t('m.like')}}</li>
   	   		</ul>
   	   		<div class="tbody">
   					<div class="item" v-for="(item,index) in dataList" v-on:mouseover="hover">
@@ -105,17 +109,18 @@
   	   		</div>
   	   	</div>
 		  </el-tab-pane>
-		  <el-tab-pane label="我的收藏" name="five">
+		  <el-tab-pane label="" name="five">
+        <span slot="label">{{$t('m.like')}}</span>
 		   	<div class="table">
 		   		<ul class="th">
-						<li class="td">市场</li>
-						<li class="td">最新价格(FBT)</li>
-						<li class="td">最高价(FBT)</li>
-						<li class="td">最低价(FBT)</li>
-						<li class="td">24H成交量</li>
-						<li class="td">24H涨跌</li>
-						<li class="td">6小时走势</li>
-						<li class="td">收藏</li>
+            <li class="td">{{$t('m.pairs')}}</li>
+            <li class="td">{{$t('m.latestprice')}}(FBT)</li>
+            <li class="td"> {{$t('m.maxPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.minPrice')}}(FBT)</li>
+            <li class="td">{{$t('m.tfHVolume')}}</li>
+            <li class="td">{{$t('m.change')}}</li>
+            <li class="td">{{$t('m.sixChange')}}</li>
+            <li class="td">{{$t('m.like')}}</li>
 		   		</ul>
 		   		<div class="tbody">
 						<div class="item" v-for="(item,index) in dataList" v-on:mouseover="hover">
@@ -132,7 +137,7 @@
 		   	</div>
 		  </el-tab-pane>
 		 </el-tabs>
-		 <input class="search-btn" type="text" name="" id="" placeholder="搜索">
+		 <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i class="el-icon-search search-icon"></i>
 	</div>
 </template>
 <script>
@@ -177,7 +182,18 @@
 		position: absolute;
 		right:100px;
 		top:10px;
+    width:100px;
+    border:1px solid #fff;
+    border-radius:25px;
+    box-sizing: border-box;
+    padding:0 20px;
+    color:#fff;
 	}
+  .search-icon{
+    position: absolute;
+    right:180px;
+    top:12px;
+  }
 	.th{
 		display: flex;
 		background-color: #0e1328;

@@ -38,3 +38,20 @@ ul,li{
 .ov{
 	overflow: hidden;
 }
+input::-webkit-input-placeholder{ /*WebKit browsers*/
+
+  color: #fff;
+
+}
+
+input::-moz-input-placeholder{ /*Mozilla Firefox*/
+
+  color: #fff;
+
+}
+
+input::-ms-input-placeholder{ /*Internet Explorer*/
+
+  color: #fff;
+
+}

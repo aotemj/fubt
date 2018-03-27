@@ -9,4 +9,15 @@ export const m = {
   login:'登录',//登录
   register:'注册',//注册
   logout:'退出登录',//退出登录
+  tradingArea:'交易区',//交易区
+  pairs:'市场',//市场
+  latestprice:'最新价格',//最新价格
+  all:'全部',//全部
+  like:'我的收藏',//收藏
+  maxPrice:'最高价',//最高价
+  minPrice:'最低价',//最低价
+  tfHVolume:'24H成交量',//24小时成交量
+  change:'24H涨跌',//24小时涨跌
+  sixChange:'6小时走势',//6小时走势
+  search:'搜索',//搜索
 }
