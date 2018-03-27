@@ -10,7 +10,12 @@ Vue.config.productionTip = false
 
 import '../static/reset.css'
 import '../static/common.css'
-import '../static/iconfont.css'
+import '../static/iconfont/iconfont.css'
+import '../static/iconfont/iconfont.js'
+import '../static/iconfont/iconfont.eot'
+import '../static/iconfont/iconfont.svg'
+import '../static/iconfont/iconfont.ttf'
+import '../static/iconfont/iconfont.woff'
 
 //国际化
 import VueI18n from  'vue-i18n'

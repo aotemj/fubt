@@ -6,22 +6,27 @@
 				<div class="nav fl">
 					<ul class="clearfix" v-on:click="selected">
 						<li class="fl active"><router-link to="/">首页</router-link></li>
-						<li class="fl"><router-link to="/trading">交易中心</router-link></li>
-						<li class="fl"><a href="#">财务中心</a></li>
-						<li class="fl"><a href="#">行情中心</a></li>
-						<li class="fl"><a href="#">新币投票</a></li>
-						<li class="fl"><a href="#">新闻中心</a></li>
-						<li class="fl"><a href="#">C2C</a></li>
+						<li class="fl"><router-link to="/exchange">交易中心</router-link></li>
+						<li class="fl"><router-link to="/finance">财务中心</router-link></li>
+						<li class="fl"><router-link to="/market">行情中心</router-link></li>
+						<li class="fl"><router-link to="/newCoins">新币投票</router-link></li>
+						<li class="fl"><router-link to="/news">新闻中心</router-link></li>
+						<li class="fl"><router-link to="/c2c">C2C</router-link></li>
 					</ul>
 				</div>
 			</div>
-			<div class="right fr">
-				<div class="login">
+			<div class="right fr clearfix">
+				<div class="login fl">
 					<ul class="clearfix">
 						<li class="fl"><a href="#">注册</a></li>
 						<li class="fl"><a href="#">登录</a></li>
 					</ul>
 				</div>
+        <!--切换语言-->
+        <div class="change-lang">
+          <i class="iconfont icon-zhongguo"></i>
+
+        </div>
 			</div>
 		</div>
 	</div>
@@ -70,4 +75,11 @@
 	.nav ul li a,.login ul li a {
 		color:#fff;
 	}
+  .login ul li{
+    padding:0 20px;
+  }
+  /*切换语言*/
+  .change-lang{
+
+  }
 </style>
