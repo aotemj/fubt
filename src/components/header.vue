@@ -8,14 +8,14 @@
           </a>
         </div>
 				<div class="nav fl">
-					<ul class="clearfix" v-on:click="selected">
-						<li class="fl active"><router-link to="/">{{$t('m.home')}}</router-link></li>
-						<li class="fl"><router-link to="/exchange">{{$t('m.tradingCenter')}}</router-link></li>
-						<li class="fl"><router-link to="/finance">{{$t('m.financeCenter')}}</router-link></li>
-						<li class="fl"><router-link to="/market">{{$t('m.marketCenter')}}</router-link></li>
-						<li class="fl"><router-link to="/newCoins">{{$t('m.voteForNewCurrency')}}</router-link></li>
-						<li class="fl"><router-link to="/news">{{$t('m.news')}}</router-link></li>
-						<li class="fl"><router-link to="/c2c">{{$t('m.C2C')}}</router-link></li>
+					<ul class="clearfix" >
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==1}" data-no="1" to="/">{{$t('m.home')}}</router-link></li>
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==2}" data-no="2" to="/exchange">{{$t('m.tradingCenter')}}</router-link></li>
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==3}" data-no="3" to="/finance">{{$t('m.financeCenter')}}</router-link></li>
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==4}" data-no="4" to="/market">{{$t('m.marketCenter')}}</router-link></li>
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==5}" data-no="5" to="/newCoins">{{$t('m.voteForNewCurrency')}}</router-link></li>
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==6}" data-no="6" to="/news">{{$t('m.news')}}</router-link></li>
+						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==7}" data-no="7" to="/c2c">{{$t('m.C2C')}}</router-link></li>
 					</ul>
 				</div>
 			</div>
@@ -23,12 +23,12 @@
 				<div class="login fl">
 					<ul class="clearfix">
 						<li class="fl"><a href="#">{{$t('m.login')}}</a></li>
-						<li class="fl"><a href="#">{{$t('m.logout')}}</a></li>
+						<li class="fl"><a href="#">{{$t('m.register')}}</a></li>
 					</ul>
 				</div>
         <!--切换语言-->
-        <div class="change-lang fl">
-          <i class="selected-country" v-on:mouseover="showCountryList"></i>
+        <div class="change-lang fl" v-on:mouseover="showCountryList" v-on:mouseleave="hiddenCountryList">
+          <i class="selected-country"  ></i>
           <!--国家列表-->
           <div class="country-list" v-show="countryListIsShow">
             <ul v-on:mouseleave="hiddenCountryList">
@@ -46,6 +46,7 @@
 		data(){
 			return {
         countryListIsShow:false,//语言列表切换
+        activeId:-1,//当前激活标签标记
 			}
 		},
 		created(){
@@ -54,7 +55,8 @@
 		methods:{
 			// 点击切换active
 			selected(e){
-				console.log(e.target);
+				console.dir(e.target.dataset.no);
+				this.activeId = e.target.dataset.no;
 			},
       showCountryList(){
 			  this.countryListIsShow =true;
@@ -93,12 +95,12 @@
 	.nav ul li {
 		padding:0 20px;
 	}
-	/*.nav ul li.active a {
-		color:;
-	}*/
-	.nav ul li.active a,.nav ul li a:hover{
+	.nav ul li a.active{
 		color:#2d76d1;
 	}
+	/*.nav ul li.active a,.nav ul li a:hover{*/
+		/*color:#2d76d1;*/
+	/*}*/
 	.nav ul li a,.login ul li a {
 		color:#fff;
 	}
@@ -107,6 +109,7 @@
   }
   /*切换语言*/
   .change-lang{
+    width: 20px;
     height:85px;
     line-height:85px;
     position:relative;
@@ -143,7 +146,7 @@
   .country-list{
     position:absolute;
     bottom:-55px;
-    right: -21px;
+    right: 0;
   }
   .country-list ul{
     cursor:pointer;
