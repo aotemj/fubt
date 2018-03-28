@@ -8,32 +8,52 @@
           </a>
         </div>
 				<div class="nav fl">
-					<ul class="clearfix" >
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==1}" data-no="1" to="/">{{$t('m.home')}}</router-link></li>
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==2}" data-no="2" to="/exchange">{{$t('m.tradingCenter')}}</router-link></li>
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==3}" data-no="3" to="/finance">{{$t('m.financeCenter')}}</router-link></li>
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==4}" data-no="4" to="/market">{{$t('m.marketCenter')}}</router-link></li>
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==5}" data-no="5" to="/newCoins">{{$t('m.voteForNewCurrency')}}</router-link></li>
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==6}" data-no="6" to="/news">{{$t('m.news')}}</router-link></li>
-						<li class="fl" ><router-link v-on:click="selected" v-bind:class="{active:activeId==7}" data-no="7" to="/c2c">{{$t('m.C2C')}}</router-link></li>
+					<ul class="clearfix">
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='home'}" data-no="1" to="/">{{$t('m.home')}}</router-link></li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='exchange'}" data-no="2" to="/exchange">{{$t('m.tradingCenter')}}</router-link></li>
+						<li class="fl finance-center" v-on:mouseover="showLink" v-on:mouseleave="hideLink">
+              <!--<router-link v-bind:class="{active:activeRoute=='finance'}" data-no="3" to="/finance">{{$t('m.financeCenter')}}-->
+              <!--</router-link>-->
+              <span>{{$t('m.financeCenter')}}</span>
+              <i class="iconfont icon-htmal5icon03" v-show="!financeListIsShow"></i>
+              <i class="iconfont icon-htmal5icon03-copy" v-show="financeListIsShow"></i>
+              <ul class="router-box" v-show="financeListIsShow">
+                <li class="router-link"><router-link v-bind:class="{active:activeRoute=='rechangeAndwithdrawDeposit'}" data-no="3" to="/rechangeAndwithdrawDeposit">充值&提现</router-link></li>
+                <li class="router-link"><router-link v-bind:class="{active:activeRoute=='rechangeRecord'}" data-no="4" to="/rechangeRecord">充值记录</router-link></li>
+                <li class="router-link"><router-link v-bind:class="{active:activeRoute=='withdrawDepositRecord'}" data-no="5" to="/withdrawDepositRecord">提现记录</router-link></li>
+              </ul>
+            </li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='market'}" data-no="6" to="/market">{{$t('m.marketCenter')}}</router-link></li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='newCoins'}" data-no="7" to="/newCoins">{{$t('m.voteForNewCurrency')}}</router-link></li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='news'}" data-no="8" to="/news">{{$t('m.news')}}</router-link></li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='c2c'}" data-no="9" to="/c2c">{{$t('m.C2C')}}</router-link></li>
 					</ul>
 				</div>
 			</div>
 			<div class="right fr clearfix">
-				<div class="login fl">
+        <!--登录注册-->
+				<div class="login fl" v-if="!isLogin">
 					<ul class="clearfix">
 						<li class="fl"><a href="#">{{$t('m.login')}}</a></li>
 						<li class="fl"><a href="#">{{$t('m.register')}}</a></li>
 					</ul>
 				</div>
+        <!--欢迎页面-->
+        <div class="welcome login fl" v-else="isLogin">
+          <ul class="clearfix">
+            <li class="fl"><a href="#">您好，小明</a></li>
+            <li class="fl"><a href="#">{{$t('m.logout')}}</a></li>
+          </ul>
+        </div>
         <!--切换语言-->
-        <div class="change-lang fl" v-on:mouseover="showCountryList" v-on:mouseleave="hiddenCountryList">
+        <div class="change-lang fl" v-on:mousover="showCountryList" v-on:mouseleave="hideCountryList">
           <i class="selected-country"  ></i>
           <!--国家列表-->
           <div class="country-list" v-show="countryListIsShow">
-            <ul v-on:mouseleave="hiddenCountryList">
+            <ul v-on:mouseleave="hideCountryList">
               <li class="clearfix" v-on:click="chooseLang('zh-CN')"><span class="fl">简体中文</span> <i class="fr country chinese"></i></li>
               <li class="clearfix" v-on:click="chooseLang('en-US')"><span class="fl" >English</span> <i class="fr country english"></i></li>
+              <li class="clearfix" v-on:click="chooseLang('zh-FN')"><span class="fl" >繁體中文</span> <i class="fr country fanti"></i></li>
             </ul>
           </div>
         </div>
@@ -46,38 +66,49 @@
 		data(){
 			return {
         countryListIsShow:false,//语言列表切换
-        activeId:-1,//当前激活标签标记
+        activeRoute:'home',//当前激活标签标记
+        isLogin:this.$store.state.isLogin,//用户当前登录状态
+        financeListIsShow:false,//财务中心连接显示状态
 			}
 		},
 		created(){
-
+      this.activeRoute = this.$route.name;//头部点击样式添加
 		},
+
 		methods:{
 			// 点击切换active
 			selected(e){
-				console.dir(e.target.dataset.no);
-				this.activeId = e.target.dataset.no;
+			  // console.log(123);
+				// console.dir(e.target.dataset.no);
+				// this.activeRoute = e.target.dataset.no;
 			},
-      showCountryList(){
+      showCountryList(){//语言列表显示
 			  this.countryListIsShow =true;
       },
-      hiddenCountryList(){
+      hideCountryList(){//语言列表隐藏
 			  this.countryListIsShow = false;
+      },
+      showLink(){//财务中心显示
+        this.financeListIsShow=true;
+      },
+      hideLink(){//财务中心隐藏
+        this.financeListIsShow=false;
       },
       chooseLang(e){
 
 			  if(e==this.$store.state.lang){
-          this.hiddenCountryList();
+          this.hideCountryList();
 			    return;
         }
         this.$store.state.lang = e;
         this.$i18n.locale = this.$store.state.lang;
 			  // console.log(this.$store.state.lang);
-			  this.hiddenCountryList();
-      }
+			  this.hideCountryList();
+      },
+
 		},
-		computed:{}
-	}
+		computed:{},
+  }
 </script>
 <style scoped>
 	.header-box{
@@ -101,25 +132,34 @@
 	/*.nav ul li.active a,.nav ul li a:hover{*/
 		/*color:#2d76d1;*/
 	/*}*/
+  .right{
+
+  }
+  .login,.welcome{
+    margin-right:20px;
+  }
 	.nav ul li a,.login ul li a {
 		color:#fff;
 	}
   .login ul li{
-    padding:0 20px;
+    padding:0 10px;
   }
   /*切换语言*/
   .change-lang{
+    right:10px;
     width: 20px;
     height:85px;
     line-height:85px;
     position:relative;
+    top:2px;
   }
   .selected-country{
     display:block;
     width:21px;
-    height:28px;
-    background:url('../assets/country.png') no-repeat center bottom;
-    background-size:21px 46px;
+    height:16px;
+    background:green url('../assets/country.png') no-repeat;
+    background-position: center center;
+    background-size:21px 70px;
     /*margin-top:8px;*/
     position: absolute;
     top:50%;
@@ -130,23 +170,31 @@
   .country {
     display:block;
     width:21px;
-    height:17px;
+    height:16px;
     background:url('../assets/country.png') no-repeat center bottom;
-    background-size:21px 46px;
+    background-size:21px 70px;
     /*margin-top:8px;*/
   }
   /*中文*/
   .chinese{
-    background-position: center bottom;
+    background-position: center center;
   }
   /*英文*/
   .english{
     background-position: center top;
   }
+  /*中文繁体*/
+  .fanti{
+    background-position:center bottom;
+  }
   .country-list{
     position:absolute;
-    bottom:-55px;
-    right: 0;
+    bottom:-90px;
+    right: -10px;
+    background-color: rgba(0,0,0,.7);
+    /*background-color: pink;*/
+    box-sizing: border-box;
+    padding:0 10px;
   }
   .country-list ul{
     cursor:pointer;
@@ -163,5 +211,24 @@
     right:0;
     top:50%;
     transform: translate(0,-50%);
+  }
+  /*财务中心下拉图标*/
+  .icon-htmal5icon03,.icon-htmal5icon03-copy{
+    font-size: 12px;
+  }
+  /*财务中心li*/
+  .finance-center{
+    position: relative;
+  }
+  .finance-center .router-box{
+    background-color:#1d2639;
+    position: absolute;
+    top:60px;
+    left:0;
+    width:100%;
+    line-height:30px;
+  }
+  .finance-center .router-box a{
+    font-size: 12px;
   }
 </style>

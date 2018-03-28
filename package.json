@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.0.4",
     "element-ui": "^2.2.2",
+    "highcharts": "^6.0.7",
     "iview": "^2.11.0",
     "mint-ui": "^2.2.13",
     "vue": "^2.5.2",

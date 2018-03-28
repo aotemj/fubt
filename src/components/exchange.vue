@@ -5,8 +5,9 @@
 		<div class="currencyData">
 		  <div class="inner-box clearfix">
         <div class="left fl clearfix">
-          <button class="chg-cur-btn fl" v-on:click="toggleCurList">{{currentCurrency01.name}}/{{currentCurrency02.name}}</button><i class="iconfont fl" v-bind:class="{'icon-xiala':!curListIsShow,'icon-shangla-copy':curListIsShow}"></i>
-          <button class="cur-desc fl" v-on:click="toggleCurDesc"><i class= "iconfont icon-bianji"></i>币种资料</button>
+          <button class="chg-cur-btn fl" v-on:click="toggleCurList">{{currentCurrency01.name}}/{{currentCurrency02.name}}</button>
+          <i class="iconfont fl" v-bind:class="{'icon-xiala':!curListIsShow,'icon-shangla-copy':curListIsShow}"></i>
+          <router-link to="/currencyInfo" class="cur-desc fff fl"><i class= "iconfont icon-bianji"></i>币种资料</router-link>
         </div>
         <div class="right fr">
           <ul class="clearfix">
@@ -31,6 +32,89 @@
               <span>{{0.00000254}}</span>
             </li>
           </ul>
+        </div>
+        <!--币种列表-->
+        <div class="currencyList" v-show="curListIsShow">
+          <el-tabs type="">
+            <el-tab-pane>
+              <span slot="label"><span style="font-size:18px;">●</span> FBT交易</span>
+              <div class="table">
+                <ul class="th">
+                  <li class="td">币种</li>
+                  <li class="td">最新成交价</li>
+                  <li class="td">24H成交量</li>
+                  <li class="td">日涨跌</li>
+                </ul>
+                <div class="tbody" v-on:click="selectedCurrency">
+                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover" :data-cur-name="item.name+'/FBT'">
+                    <li class="data-item">{{item.name}}</li>
+                    <li class="data-item">{{item.newestPrice}}</li>
+                    <li class="data-item">{{item.tfDoneCunt}}</li>
+                    <li class="data-item">{{item.upAndDown}}</li>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane>
+              <span slot="label"><span style="font-size:18px;">●</span> BTC交易</span>
+              <div class="table">
+                <ul class="th">
+                  <li class="td">币种</li>
+                  <li class="td">最新成交价</li>
+                  <li class="td">24H成交量</li>
+                  <li class="td">日涨跌</li>
+                </ul>
+                <div class="tbody" v-on:click="selectedCurrency">
+                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover" :data-cur-name="item.name+'/BTC'">
+                    <li class="data-item">{{item.name}}</li>
+                    <li class="data-item">{{item.newestPrice}}</li>
+                    <li class="data-item">{{item.tfDoneCunt}}</li>
+                    <li class="data-item">{{item.upAndDown}}</li>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane>
+              <span slot="label"><span style="font-size:18px;">●</span> FUC交易</span>
+              <div class="table">
+                <ul class="th">
+                  <li class="td">币种</li>
+                  <li class="td">最新成交价</li>
+                  <li class="td">24H成交量</li>
+                  <li class="td">日涨跌</li>
+                </ul>
+                <div class="tbody" v-on:click="selectedCurrency">
+                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover" :data-cur-name="item.name+'/FUC'">
+                    <li class="data-item" data-cur-name="item.name">{{item.name}}</li>
+                    <li class="data-item">{{item.newestPrice}}</li>
+                    <li class="data-item">{{item.tfDoneCunt}}</li>
+                    <li class="data-item">{{item.upAndDown}}</li>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane>
+              <span slot="label"><span style="font-size: 10px;">★ </span>收藏</span>
+              <div class="table">
+                <ul class="th">
+                  <li class="td">币种</li>
+                  <li class="td">最新成交价</li>
+                  <li class="td">24H成交量</li>
+                  <li class="td">日涨跌</li>
+                </ul>
+                <div class="tbody">
+                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover">
+                    <li class="data-item">{{item.name}}</li>
+                    <li class="data-item">{{item.newestPrice}}</li>
+                    <li class="data-item">{{item.tfDoneCunt}}</li>
+                    <li class="data-item">{{item.upAndDown}}</li>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+
+          </el-tabs>
+          <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i class="el-icon-search search-icon"></i>
         </div>
       </div>
 		</div>
@@ -298,14 +382,94 @@
             status:'未成交',
             todos:'撤销'
           }
-        ]
+        ],
+        currencyList:[//币种列表
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          },
+          {
+            name:'DOGE',//币种名称
+            img:'',//币种图标
+            newestPrice:'0.00000054',//最新成交价
+            tfDoneCunt:41072.0,//24小时成交量
+            upAndDown:'35%',//日涨跌
+          }
+        ],
 			}
 
 		},
 		methods:{
 			//显示隐藏币种选择框
 			toggleCurList(){
-				this.isShow = !this.isShow;
+				// this.isShow = !this.isShow;
+				this.curListIsShow=!this.curListIsShow;
 			},
 			toggleCurDesc(){
 
@@ -323,6 +487,11 @@
         }
         e.target.parentNode.classList.add('active')
 
+      },
+      selectedCurrency(e){
+			  console.dir(e.target.parentNode.dataset.curName);
+			  let curName = e.target.parentNode.dataset.curName;
+			  this.curListIsShow = false;
       }
 		},
 		created(){
@@ -347,11 +516,40 @@
     background-color: #10172d;
     width:100%;
     height:100%;
+    position: relative;
   }
 
-	.chg-cur-btn,.cur-desc{
+  .currencyList {
+    padding:0 10px;
+    position: absolute;
+    top:71px;
+    left:0;
+    width:500px;
+    height:400px;
+    line-height: 50px;
+    background-color:#12182b;
+    z-index: 100000;
+    border:1px solid #131a2c;
+    /*overflow: auto;*/
+  }
+  /*遮挡elementui底边框*/
+  .currencyList:before{
+    position: absolute;
+    top:46px;
+    left:0;
+    content:'';
+    height:4px;
+    /*background-color:pink;*/
+    background-color:#12192b;
+    width:100%;
+    z-index: 100000000;
+
+  }
+
+  .chg-cur-btn,.cur-desc{
+    cursor:pointer;
 		height:70px;
-		margin-right:30px;
+		margin:0 30px;
 	}
   .chg-cur-btn{
     font-weight: 700;
@@ -503,5 +701,28 @@
   }
   .tbody .item .data-item{
     flex:1;
+  }
+  /*币种列表*/
+  .currencyList .tbody{
+    max-height: 400px;
+    overflow: auto;
+    background-color:green;
+  }
+  .search-btn{
+    position: absolute;
+    right:10px;
+    top:15px;
+    width:100px;
+    border:1px solid #fff;
+    border-radius:25px;
+    box-sizing: border-box;
+    padding:0 20px;
+    color:#fff;
+    text-align: center;
+  }
+  .search-icon{
+    position: absolute;
+    right:80px;
+    top:17px;
   }
 </style>

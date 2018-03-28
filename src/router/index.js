@@ -7,10 +7,13 @@ import market from "@/components/market"
 import newCoins from "@/components/newCoins"
 import news from "@/components/news"
 import c2c from "@/components/c2c"
-
+import rechangeAndwithdrawDeposit from "@/components/rechange&widthdrawDeposit"//充值&提现
+import rechangeRecord from "@/components/rechangeRecord"//充值
+import withdrawDepositRecord from "@/components/withdrawDepositRecord"//提现
+import currencyInfo from "@/components/subcom/currencyInfo"//币种资料
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
 	routes: [{
 		path: '/',
 		name: 'home',
@@ -25,6 +28,21 @@ export default new Router({
     name:'finance',
     component:finance
   },
+    {
+      path:'/rechangeAndwithdrawDeposit',//充值&提现
+      name:'rechangeAndwithdrawDeposit',
+      component:rechangeAndwithdrawDeposit
+    },
+    {
+      path:'/rechangeRecord',//充值记录
+      name:'rechangeRecord',
+      component:rechangeRecord
+    },
+    {
+      path:'/withdrawDepositRecord',//提现记录
+      name:'withdrawDepositRecord',
+      component:withdrawDepositRecord
+    },
   {
     path:'/market',//行情中心
     name:'market',
@@ -44,6 +62,18 @@ export default new Router({
       path:'/c2c',//c2c
       name:'c2c',
       component:c2c
+    },
+    {
+      path:'/currencyInfo',//币种资料
+      name:'currencyInfo',
+      component:currencyInfo
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  // console.log(to);
+  // console.log(from);
+  next()
+})
+
+export default router

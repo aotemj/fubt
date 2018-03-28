@@ -28,8 +28,9 @@ Vue.use(VueI18n)
 const i18n = new VueI18n({
   locale:'zh-CN',//语言标识
   messages:{
-    'zh-CN':require('../static/lang/zh'),//中文语言包
-    'en-US':require('../static/lang/en')//英文语言包
+    'zh-CN':require('../static/lang/zh'),//简体中文语言包
+    'en-US':require('../static/lang/en'),//英文语言包
+    'zh-FN':require('../static/lang/fan'),//繁体中文
   }
 })
 

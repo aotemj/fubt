@@ -48,4 +48,6 @@ el-carousel-item img{
 }
 .el-tabs__item{
 	color:#fff;
+  padding:0 10px;
 }
+
