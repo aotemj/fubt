@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 1.0 头部 -->
-    <!-- <fcHeader></fcHeader> -->
+     <Header class="header"></Header>
 
     <!-- 2.0 投票记录列表 -->
     <div class="newCoins">
@@ -38,8 +38,7 @@
   </div>
 </template>
 <script>
-  import Vue from "vue"
-  // import fcHeader from './header'
+  import Header from './header'
   export default {
     data(){
       return {
@@ -79,7 +78,7 @@
     computed:{},
     created(){},
     components:{
-      // fcHeader
+      Header
     }
   }
 </script>
@@ -87,7 +86,9 @@
 <style scoped>
   .newCoins{
     padding: 0 100px;
-
+    line-height:70px;
+    margin-top:100px;
+    padding:0 100px;
   }
   header {
     height: 80px;

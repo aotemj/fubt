@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 1.0 头部 -->
-    <!-- <fcHeader></fcHeader> -->
+     <Header class="header"></Header>
 
     <!-- 2.0 内容 -->
     <div class="finContent">
@@ -51,8 +51,7 @@
 </template>
 
 <script>
-  import Vue from "vue"
-  // import fcHeader from './header'
+  import Header from './header'
 
   export default {
     data(){
@@ -80,14 +79,17 @@
     computed:{},
     created(){},
     components:{
-      // fcHeader
+      Header
     }
   }
 </script>
 
 <style scoped>
   .finContent{
-    padding: 0 100px;
+    /*height:70px;*/
+    line-height:70px;
+    margin-top:100px;
+    padding:0 100px;
   }
   /*充值提现表头*/
   header {
