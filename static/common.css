@@ -50,4 +50,48 @@ el-carousel-item img{
 	color:#fff;
   padding:0 10px;
 }
+/* 任付为加的面包屑导航样式---开始 */
+.el-breadcrumb__inner, .el-breadcrumb__inner a{
+  color: #DCDFD8;
+}
+.el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover{
+  color: #1275DA;
+}
+/* 任付为加的面包屑导航样式---结束 */
 
+
+
+/*孝喜改element样式*/
+.el-collapse-item__header {
+  background: #11182c;
+  color: #c2c3c8;
+  text-align: left;
+  font-size: 16px;
+  padding-left: 2.5%;
+  box-sizing: border-box;
+}
+
+.el-collapse {
+  border: 0;
+}
+
+.el-collapse-item__content {
+  padding-bottom: 0;
+}
+
+.el-collapse-item__wrap {
+  border: 0;
+  background: #11182c;
+  padding-top: 3%;
+}
+
+.el-form {
+  width: 36.5%;
+  margin: 0 auto;
+  color: #c2c3c8;
+}
+
+.el-input__inner {
+  background: #11182c;
+  border: 1px solid #a0a3ab;
+}

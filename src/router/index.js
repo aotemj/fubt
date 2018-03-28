@@ -11,6 +11,8 @@ import rechangeAndwithdrawDeposit from "@/components/rechange&widthdrawDeposit"/
 import rechangeRecord from "@/components/rechangeRecord"//充值
 import withdrawDepositRecord from "@/components/withdrawDepositRecord"//提现
 import currencyInfo from "@/components/subcom/currencyInfo"//币种资料
+import newsDetails from "@/components/newsDetails"
+import user from "@/components/user"
 Vue.use(Router)
 
 const router =  new Router({
@@ -67,6 +69,16 @@ const router =  new Router({
       path:'/currencyInfo',//币种资料
       name:'currencyInfo',
       component:currencyInfo
+    },
+    {
+      path:'/news/newsDetails',
+      name:'newsDetails',
+      component:newsDetails
+    },
+    {
+      path:'/user',
+      name:'user',
+      component:user
     }
   ]
 })
