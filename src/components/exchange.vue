@@ -678,17 +678,16 @@
   }
   .th .td{
     flex:1;
-    font-size: 16px;
-    height:60px;
-    line-height: 60px;
+    height:40px;
+    line-height: 40px;
     color:#fff;
   }
   .tbody{
   }
   .tbody .item{
     display:flex;
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     background-color: #10172d;
     color:#fff;
   }

@@ -58,7 +58,7 @@
 <style scoped>
 .account-info,
 .subMenu>li {
-    line-height: 60px;
+    line-height: 50px;
 }
 .subMenu,.account-info{
     color: #c2c3c8;
@@ -73,7 +73,7 @@
 }
 .account-info {
     width: 100%;
-    height: 60px;
+    height: 50px;
     margin-bottom: 9px;
     font-size: 16px;
     font-family: '微软雅黑';
@@ -90,15 +90,26 @@ ul.subMenu>li:first-child {
 }
 
 ul.subMenu>li {
-    height: 60px;
+    height: 50px;
     border-top: 1px solid #1c253a;
     margin: 0 30px;
     font-family: '微软雅黑';
-    font-size: 16px;
+    font-size: 12px;
     cursor: pointer;
     text-align:left;
 }
-
+ul.subMenu>li:nth-child(3)>span:last-child{
+    float:right;
+}
+ul.subMenu>li:nth-child(4)>span:last-child{
+    float:right;
+}
+ul.subMenu>li:nth-child(5)>span:last-child{
+    float:right;
+}
+ul.subMenu>li:nth-child(6)>span:last-child{
+    float:right;
+}
 .subMenu>li:first-child>span:last-child,
 .subMenu>li:nth-child(2)>span:last-child {
     margin-left: 10%;
@@ -109,7 +120,7 @@ li:nth-child(4)>span:nth-child(2),
 li:nth-child(5)>span:nth-child(2),
 li:nth-child(6)>span:nth-child(2),
 li:nth-child(7)>span:nth-child(2) {
-    margin-left: 8%;
+    margin-left: 8.5%;
 }
 
 .subMenu>li:nth-child(3)>span:nth-child(3),

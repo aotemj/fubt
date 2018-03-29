@@ -1,22 +1,22 @@
 <template>
   <div class="put-up">
     <header>市场挂单</header>
-    <div class="put-info">
+    <div class="put-info" v-for="(item,index) in putList">
       <ul>
-        <li>商户</li>
-        <li>类型</li>
-        <li>成交数量</li>
-        <li>状态</li>
-        <li>付款方式</li>
+        <li>{{item.com}}</li>
+        <li>{{item.type}}</li>
+        <li>{{item.quantity}}</li>
+        <li>{{item.state}}</li>
+        <li>{{item.way}}</li>
       </ul>
     </div>
-    <div id="merchant-info">
+    <div id="merchant-info" v-for="(item,index) in bazaarList">
       <ul>
         <li>
-          <span>普通商户</span>
-          <span>卖单</span>
-          <span>1.025687974</span>
-          <span>待审核</span>
+          <span>{{item.merchants}}</span>
+          <span>{{item.pay}}</span>
+          <span>{{item.quantity}}</span>
+          <span>{{item.state}}</span>
           <span>
             <img src="../../assets/cion_y.png" alt="银行卡">
             <img src="../../assets/cion_z.png" alt="支付宝">
@@ -29,7 +29,25 @@
 <script>
   export default {
     data(){
-      return {}
+      return {
+        putList:[
+          {
+            com:'商户',
+            type:'类型',
+            quantity:'成交数量',
+            state:'状态',
+            way:'付款方式'
+          }
+        ],
+        bazaarList:[
+          {
+            merchants:'普通商户',
+            pay:'卖单',
+            quantity:'1.032356565',
+            state:'待审核'
+          }
+        ]
+      }
     },
     methods:{},
     computed:{},
@@ -58,6 +76,7 @@
     border-bottom: 1px solid #11182c;
     color: #c2c3c8;
     text-align: left;
+    padding-left: 2%;
 }
 
 .put-info {

@@ -43,8 +43,8 @@
 <style scoped>
 
 ul {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     color: #c2c3c8;
     background: #11182c;
     font-size: 16px;
@@ -53,12 +53,13 @@ ul {
 ul>li {
     width: 20%;
     float: left;
+    font-size: 14px;
 }
 
 
 article>ul {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     color: #c2c3c8;
     padding-left: 2.5%;
     background: #0e1326;
@@ -72,13 +73,14 @@ article>ul>li {
 }
 
 .user-rewards>article {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
 }
 
 .user-rewards>article>span {
     float: left;
     width: 20%;
     color: #c2c3c8;
+    font-size: 12px;
 }
 </style>

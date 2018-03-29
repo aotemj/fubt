@@ -6,53 +6,53 @@
           <el-tab-pane label="FBT交易" name="first">
             <div class="C2c-header">
               <div class="C2C-header-right">
-                <ul>
-                  <li><a href="#"><button>提现</button></a></li>
-                  <li><a href="#"><button>充值</button></a></li>
-                  <li><a href="../C2C/information.html"><span>操作说明</span></a></li>
+                <ul v-for="(item,index) in datalink">
+                  <li><a href="#"><button>{{item.bring}}</button></a></li>
+                  <li><a href="#"><button>{{item.full}}</button></a></li>
+                  <li><a href="../C2C/information.html"><span>{{item.state}}</span></a></li>
                 </ul>
               </div>
             </div>
             <div id="trading-table">
               <div class="trading-C2C" style="display:block;">
                 <div class="C2C-box">
-                  <div class="trading-left trading1">
-                      <p class="C2C-buy">买入FBT</p>
+                  <div class="trading-left trading1" v-for="(item,index) in databuy">
+                      <p class="C2C-buy">{{item.title}}</p>
                       <div class="C2C-tab">
-                          <p class="tab_input">买入价&nbsp;CNY</p>
-                          <p class="tab_input">7.28</p>
+                          <p class="tab_input">{{item.site}}&nbsp;{{item.cny}}</p>
+                          <p class="tab_input">{{item.buynum}}</p>
                       </div>
                       <div class="trading-left">
                           <div class="C2C-tab C2C-input">
-                              <p>买入量&nbsp;FBT</p>
+                              <p>{{item.scale}}&nbsp;{{item.fbt}}</p>
                               <input id="inp1" type="text" placeholder="0">
                           </div>
                           <div class="C2C-tab C2C-input">
-                              <p>金额&nbsp;CNY</p>
+                              <p>{{item.sum}}&nbsp;{{item.cny}}</p>
                               <input id="inp2" type="text" placeholder="0">
                           </div>
                           <div class="C2C-tab">
-                              <button>买入</button>
+                              <button>{{item.buying}}</button>
                           </div>
                       </div>
                   </div>
-                  <div class="trading-right">
-                    <p class="C2C-buy">卖出FBT</p>
+                  <div class="trading-right" v-for="(item,index) in datasale">
+                    <p class="C2C-buy">{{item.title}}</p>
                     <div class="C2C-tab">
-                        <p class="tab_input">卖出价&nbsp;CNY</p>
-                        <p class="tab_input">7.28</p>
+                        <p class="tab_input">{{item.site}}&nbsp;{{item.cny}}</p>
+                        <p class="tab_input">{{item.buynum}}</p>
                     </div>
                     <div class="trading-right1">
                       <div class="C2C-tab C2C-input">
-                        <p>卖出量&nbsp;FBT</p>
+                        <p>{{item.scale}}&nbsp;{{item.fbt}}</p>
                         <input id="inp3" type="text" placeholder="0">
                       </div>
                       <div class="C2C-tab C2C-input">
-                        <p>金额&nbsp;CNY</p>
+                        <p>{{item.sum}}&nbsp;{{item.cny}}</p>
                         <input id="inp4" type="text" placeholder="0">
                       </div>
                       <div class="C2C-tab">
-                        <button>卖出</button>
+                        <button>{{item.buying}}</button>
                       </div>
                     </div>
                   </div>
@@ -155,9 +155,39 @@
       	return {
 				activeName: 'first',
 				value:'',
-				dataList:[
-				]
+				datalink:[
+          {
+            bring:'提现',
+            full:'充值',
+            state:'操作说明',
+          }
+        ],
+        databuy:[
+          {
+            title:'买入FBT',
+            site:'买入价',
+            cny:'CNY',
+            buynum:'7.88',
+            scale:'买入量',
+            fbt:'FBT',
+            sum:'金额',
+            buying:'买入'
+          }
+        ],
+        datasale:[
+          {
+            title:'卖出FBT',
+            site:'卖入价',
+            cny:'CNY',
+            buynum:'7.88',
+            scale:'卖入量',
+            fbt:'FBT',
+            sum:'金额',
+            buying:'卖入'
+          }
+        ]
 			}
+
     },
     methods:{},
     computed:{},

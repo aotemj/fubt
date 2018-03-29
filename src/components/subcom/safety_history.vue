@@ -4,7 +4,7 @@
       <div id="user-panel">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="用户管理" name="first">
-            <div class="user_panel" style="display:block;">
+            <div class="user_panel">
               <ul>
                   <li>登录时间</li>
                   <li>登录IP</li>
@@ -27,6 +27,13 @@
                 <li>登录时间</li>
                 <li>最近安全设置</li>
                 <li>登录IP</li>
+              </ul>
+              <ul>
+                <li>
+                  <span>18-02-27 10:53:48</span>
+                  <span>安全</span>
+                  <span>192.168.1.96</span>
+                </li>
               </ul>
             </div>
           </el-tab-pane>
@@ -62,6 +69,7 @@
 
 #user-panel {
     width: 100%;
+    margin-bottom: 3%;
 }
 
 #user-panel>ul>li:first-child {
@@ -69,15 +77,15 @@
 }
 
 #user-panel>ul {
-    height: 60px;
+    height: 50px;
     margin-bottom: 9px;
 }
 
 #user-panel>ul>li {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     float: left;
-    font-size: 18px;
+    font-size: 12px;
     font-family: '微软雅黑';
     cursor: pointer;
 }
@@ -95,6 +103,7 @@
 
 .user_panel>ul:first-child {
     display: flex;
+    font-size: 16px;
 }
 
 .user_panel>ul:first-child>li {
@@ -102,13 +111,14 @@
 }
 
 .user_panel>ul>li {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     display: flex;
 }
 
 .user_panel>ul>li>span {
     flex: 1;
     text-align: left;
+    font-size: 12px;
 }
 </style>

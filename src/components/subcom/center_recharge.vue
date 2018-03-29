@@ -17,7 +17,22 @@
       </div>
     </el-tab-pane>
     <el-tab-pane label="充值记录" name="second">
-
+      <ul>
+        <li>序号</li>
+        <li>币种</li>
+        <li>数量</li>
+        <li>说明</li>
+        <li>创建时间</li>
+      </ul>
+      <div class="user-rewards">
+        <article>
+          <span>1</span>
+          <span>FBT</span>
+          <span>1352.021</span>
+          <span>asdfasdasd</span>
+          <span>2018 3 12 11:30</span>
+        </article>
+      </div>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -50,90 +65,46 @@
   }
 </script>
 <style scoped>
-.user-main>header {
-    height: 60px;
-    line-height: 60px;
-    color: #338ff5;
-    background: #0e1326;
-    margin: 20px 0 10px;
-    font-size: 18px;
-    padding-left: 2.5%;
-}
-
-.user-main>ul {
-    height: 60px;
-    line-height: 60px;
+ul {
+    height: 50px;
+    line-height: 50px;
     color: #c2c3c8;
     background: #11182c;
     font-size: 16px;
 }
 
-.user-main>ul>li {
+ul>li {
     width: 20%;
     float: left;
-    padding-left: 2.5%;
+    font-size: 14px;
 }
 
-.user-main>article {
-    margin: 20px 0 10px;
-}
 
-.user-main>article>ul {
-    height: 60px;
-    line-height: 60px;
+article>ul {
+    height: 50px;
+    line-height: 50px;
     color: #c2c3c8;
     padding-left: 2.5%;
     background: #0e1326;
 }
-.user-main>article>ul>li {
+article>ul>li {
     float: left;
     margin-right: 30px;
 }
-
-.user-recharge {
+.user-rewards {
     background: #11182c;
-    height:300px;
 }
 
-p {
-    height: 60px;
-    border-bottom: 1px solid #262c3e;
+.user-rewards>article {
+    height: 50px;
+    line-height: 50px;
+}
+
+.user-rewards>article>span {
+    float: left;
+    width: 20%;
     color: #c2c3c8;
-    line-height: 60px;
-    padding-left: 2.5%;
-    text-align: left;
-    font-size: 16px;
-}
-
-section {
-    height: 260px;
-    font-family: '微软雅黑';
-    font-size: 14px;
-    color: #c2c3c8;
-    text-align: center;
-    padding-top: 80px;
-    background: #11182c !important;
-}
-
-input {
-    width: 540px;
-    height: 35px;
-    border-radius: 5px;
-    border: 1px solid #a0a3ab;
-    background: transparent;
-    margin-bottom: 13px;
-    padding-left: 10px;
-}
-
-label {
-    margin-right: 10px;
-    font-size: 15px;
-    line-height: 33px;
-    float:left;
-}
-.recharge-text{
-  margin: 0 auto;
-  width: 710px;
+    font-size: 12px;
 }
 button {
     width: 542px;

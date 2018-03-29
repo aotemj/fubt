@@ -1,36 +1,36 @@
 <template>
 	<div class="header-box">
-		<div class="inner-content clearfix">
-			<div class="left fl clearfix">
-				<div class="logo fl">
+		<!--<div class="inner-content clearfix">-->
+		<div class="inner-content">
+			<!--<div class="left fl clearfix">-->
+			<div class="left">
+				<!--<div class="logo fl">-->
+				<div class="logo">
           <a href="https://www.fubt.top"><img src="https://www.fubt.top//front/images/index/logo_03.png" alt="">
 
           </a>
         </div>
-				<div class="nav fl">
-					<ul class="clearfix">
+				<!--<div class="nav fl">-->
+				<div class="nav">
+					<ul class="">
 						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='home'}" data-no="1" to="/">{{$t('m.home')}}</router-link></li>
 						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='exchange'}" data-no="2" to="/exchange">{{$t('m.tradingCenter')}}</router-link></li>
 						<li class="fl finance-center" v-on:mouseover="showLink" v-on:mouseleave="hideLink">
-              <!--<router-link v-bind:class="{active:activeRoute=='finance'}" data-no="3" to="/finance">{{$t('m.financeCenter')}}-->
-              <!--</router-link>-->
-              <span>{{$t('m.financeCenter')}}</span>
-              <i class="iconfont icon-htmal5icon03" v-show="!financeListIsShow"></i>
-              <i class="iconfont icon-htmal5icon03-copy" v-show="financeListIsShow"></i>
-              <ul class="router-box" v-show="financeListIsShow">
-                <li class="router-link"><router-link v-bind:class="{active:activeRoute=='rechangeAndwithdrawDeposit'}" data-no="3" to="/rechangeAndwithdrawDeposit">充值&提现</router-link></li>
-                <li class="router-link"><router-link v-bind:class="{active:activeRoute=='rechangeRecord'}" data-no="4" to="/rechangeRecord">充值记录</router-link></li>
-                <li class="router-link"><router-link v-bind:class="{active:activeRoute=='withdrawDepositRecord'}" data-no="5" to="/withdrawDepositRecord">提现记录</router-link></li>
-              </ul>
+              <router-link v-bind:class="{active:activeRoute=='finance'}" data-no="3" to="/finance">{{$t('m.financeCenter')}}
+              </router-link>
             </li>
-						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='market'}" data-no="6" to="/market">{{$t('m.marketCenter')}}</router-link></li>
-						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='newCoins'}" data-no="7" to="/newCoins">{{$t('m.voteForNewCurrency')}}</router-link></li>
-						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='news'}" data-no="8" to="/news">{{$t('m.news')}}</router-link></li>
-						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='c2c'}" data-no="9" to="/c2c">{{$t('m.C2C')}}</router-link></li>
+						<li class="fl" >
+              <!--<router-link v-bind:class="{active:activeRoute=='market'}" data-no="4" to="/market">{{$t('m.marketCenter')}}</router-link>-->
+              <a href="https://www.fubt.top/trademarket.html">{{$t('m.marketCenter')}}</a>
+            </li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='newCoins'}" data-no="5" to="/newCoins">{{$t('m.voteForNewCurrency')}}</router-link></li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='news'}" data-no="6" to="/news">{{$t('m.news')}}</router-link></li>
+						<li class="fl" ><router-link v-bind:class="{active:activeRoute=='c2c'}" data-no="7" to="/c2c">{{$t('m.C2C')}}</router-link></li>
 					</ul>
 				</div>
 			</div>
-			<div class="right fr clearfix">
+			<!--<div class="right fr clearfix">-->
+			<div class="right">
         <!--登录注册-->
 				<div class="login fl" v-if="!isLogin">
 					<ul class="clearfix">
@@ -44,6 +44,8 @@
             <li class="fl"><a href="#">您好，小明</a></li>
             <li class="fl"><a href="#">{{$t('m.logout')}}</a></li>
           </ul>
+          <!--个人信息-->
+          <div class="user-info"></div>
         </div>
         <!--切换语言-->
         <div class="change-lang fl" v-on:mousover="showCountryList" v-on:mouseleave="hideCountryList">
@@ -102,7 +104,6 @@
         }
         this.$store.state.lang = e;
         this.$i18n.locale = this.$store.state.lang;
-			  // console.log(this.$store.state.lang);
 			  this.hideCountryList();
       },
 
@@ -119,12 +120,30 @@
 		/*background-color: pink;*/
 		width:100%;
 		height:100%;
+    display:flex;
 	}
+  .inner-content .left {
+    flex:4;
+    display:flex;
+  }
+  .inner-content .left .logo{
+    flex:1;
+  }
+  .inner-content .left .nav{
+    flex:4;
+  }
+  .inner-content .left .nav ul {
+  }
+  .inner-content .right{
+    flex:1;
+    display:flex;
+  }
 	.logo img{
 		vertical-align: middle;
 	}
 	.nav ul li {
-		padding:0 20px;
+		padding:0 10px;
+    /*flex:1;*/
 	}
 	.nav ul li a.active{
 		color:#2d76d1;

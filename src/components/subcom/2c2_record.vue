@@ -1,29 +1,29 @@
 <template>
     <div class="exchange">
-      <header>最近交易记录 <span id="toggle-info">收起-</span></header>
-      <div class="exchange-list">
+      <header>最近交易记录</header>
+      <div class="exchange-list" v-for="(item,index) in tabList">
         <ul>
-          <li>时间</li>
-          <li>类别</li>
-          <li>流水号</li>
-          <li>数量</li>
-          <li>单价</li>
-          <li>总价</li>
-          <li>状态</li>
-          <li>操作</li>
+          <li>{{item.time}}</li>
+          <li>{{item.type}}</li>
+          <li>{{item.serial}}</li>
+          <li>{{item.quantity}}</li>
+          <li>{{item.unit}}</li>
+          <li>{{item.total}}</li>
+          <li>{{item.state}}</li>
+          <li>{{item.oper}}</li>
         </ul>
       </div>
-      <div id="exchange-info" style="display: block;">
+      <div id="exchange-info" v-for="(item,index) in businessListings">
         <ul>
           <li>
-            <span>2018/3/27 17:27</span>
-            <span>买单</span>
-            <span>15978464531</span>
-            <span>976416312252</span>
-            <span>0.2154</span>
-            <span>97975466</span>
-            <span>已完成</span>
-            <span>确定</span>
+            <span>{{item.time}}</span>
+            <span>{{item.type}}</span>
+            <span>{{item.serial}}</span>
+            <span>{{item.quantity}}</span>
+            <span>{{item.unit}}</span>
+            <span>{{item.total}}</span>
+            <span>{{item.state}}</span>
+            <span>{{item.oper}}</span>
           </li>
         </ul>
       </div>
@@ -32,7 +32,32 @@
 <script>
   export default {
     data(){
-      return {}
+      return {
+        tabList:[
+          {
+            time:'时间',
+            type:'类别',
+            serial:'流水号',
+            quantity:'数量',
+            unit:'单价',
+            total:'总价',
+            state:'状态',
+            oper:'操作'
+          }
+        ],
+        businessListings:[
+          {
+            time:'2018.3.26',
+            type:'买单',
+            serial:'4534433465',
+            quantity:'87645',
+            unit:'0.125',
+            total:'12354',
+            state:'已审核',
+            oper:'操作'
+          }
+        ]
+      }
     },
     methods:{},
     computed:{},
@@ -53,6 +78,7 @@
   line-height: 60px;
   color: #c2c3c8;
   text-align: left;
+  padding-left: 2%;
 }
 
 .exchange-list>ul{
@@ -83,14 +109,6 @@
 .exchange-list>ul>li:nth-child(7),
 .exchange-list>ul>li:nth-child(8) {
     text-align: center;
-}
-
-#toggle-info {
-    cursor: pointer;
-    float: right;
-    padding-right: 3%;
-    font-size: 15px;
-    color: #333;
 }
 
 #exchange-info>ul>li>span:first-child {

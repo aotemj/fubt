@@ -86,13 +86,13 @@
 <style scoped>
   .newCoins{
     padding: 0 100px;
-    line-height:70px;
+    line-height:60px;
     margin-top:100px;
     padding:0 100px;
   }
   header {
-    height: 80px;
-    line-height: 80px;
+    height: 60px;
+    line-height: 60px;
     overflow: hidden;
     background-color: #0E1326;
   }
@@ -107,12 +107,13 @@
     background-color: #11182B;
   }
   .data-list>ul{
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     overflow: hidden;
   }
   .data-list>ul:first-child{
     background-color: #0E1326;
+    font-size: 14px;
   }
   .data-list>ul:not(:first-child):hover{
     background:#0E1326;
@@ -122,14 +123,17 @@
     width: 16.666%;
     float: left;
   }
+  .data-list>ul+ul{
+    font-size: 12px;
+  }
   /*操作按钮部分*/
   button{
-    width: 78px;
-    height: 28px;
+    width: 70px;
+    height: 25px;
     background: transparent;
     border: 1px solid #c2c3c8;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 18px;
     display: inline-block;
     margin: 0 2px;

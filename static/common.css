@@ -1,4 +1,7 @@
-
+body{
+  font-size: 14px;
+  color:#c7cde5;
+}
 .con-box{
 	width:100%;
 	/*background-color: green;*/
@@ -27,16 +30,12 @@ el-carousel,el-carousel-item{
 el-carousel-item img{
 	width:100%;
 }
-.news {
-	height:60px;
-	width:100%;
-	background-color: pink;
-	line-height: 60px;
-}
-.news-item {
-	color:#fff;
-	background-color: rgba(14, 19, 40,1);
-}
+
+/*.news-item {*/
+	/*color:#fff;*/
+	/*background-color: rgba(14, 19, 40,1);*/
+/*}*/
+
 /*表单内容*/
 .content{
 	width:100%;
@@ -58,7 +57,42 @@ el-carousel-item img{
   color: #1275DA;
 }
 /* 任付为加的面包屑导航样式---结束 */
+/* 新闻公告部分开始 */
+.news {
+  height:60px;
+  width:100%;
+  /* 任付伟改动公告滚动背景颜色 :background-color: #0E1327; */
+  background-color: #0E1327;
+  line-height: 60px;
+}
 
+/* 新闻公告部分结束 */
+
+/* 任付伟财务中心样式覆盖修改---开始 */
+.financeContent .el-tabs__item{
+  width: 170px;
+  height: 60px;
+  line-height: 60px;
+  font-size: 16px;
+}
+.financeContent .el-tabs--left .el-tabs__item.is-left{
+  text-align: center;
+}
+.financeContent .el-tabs__item.is-disabled{
+  color: #fff;
+  background-color: #0E1326;
+  box-shadow: 2px 4px 6px #000;
+  z-index: 99;
+}
+.financeContent .el-tabs--left .el-tabs__active-bar.is-left, .el-tabs--left .el-tabs__nav-wrap.is-left::after{
+  width: 16px;
+  background-color: #1D2538;
+  z-index: 999;
+}
+.financeContent .el-tabs__item.is-active{
+  background-color: #081025;
+}
+/* 任付伟财务中心样式覆盖修改---结束 */
 
 
 /*孝喜改element样式*/
@@ -95,3 +129,37 @@ el-carousel-item img{
   background: #11182c;
   border: 1px solid #a0a3ab;
 }
+
+/*!*表头*!*/
+/*.el-table th{*/
+  /*background-color:#272b41;*/
+  /*color:#c7cde5;*/
+  /*font-weight: 700;*/
+/*}*/
+/*!*表格主色*!*/
+/*.el-table, .el-table__expanded-cell, .el-table tr{*/
+  /*background-color:#212537;*/
+  /*color:#c7cde5;*/
+/*}*/
+
+/*.el-table td, .el-table th.is-leaf{*/
+  /*border:none;*/
+  /*text-align: center;*/
+  /*height:40px;*/
+  /*padding:0;*/
+  /*line-hieght:40px;*/
+  /*font-weight: 700;*/
+/*}*/
+/*!*表格hover变色*!*/
+/*.el-table--enable-row-hover .el-table__body tr:hover>td{*/
+  /*background-color:#1b1f2e;*/
+
+/*}*/
+
+/*.el-table .cell .up{*/
+  /*color:#ac4f55;*/
+/*}*/
+
+/*.el-table .cell .down{*/
+  /*color:#598f66;*/
+/*}*/

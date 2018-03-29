@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
+  <el-tabs v-model="activeName" @tab-click="handleClick" style="margin-bottom:3%;">
     <el-tab-pane label="一级推广" name="first">
       <div class="promotion">
         <article>
@@ -81,9 +81,6 @@
     background: #11182c;
 }
 
-.promotion>ul>li{
-  margin-left:1.5%;
-}
 
 .promotion>article>p,
 .promotion>ul>li,
@@ -118,14 +115,14 @@
 }
 
 .promotion>ul {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
 }
 
 .promotion>ul>li {
-    width: 16%;
+    width: 16.5%;
     float: left;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .promotion-list>ul>li {
@@ -143,7 +140,7 @@ li:nth-child(5) {
     display: inline-block;
     width: 16%;
     color: #c2c3c8;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 </style>
