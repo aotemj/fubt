@@ -34,8 +34,8 @@
         <!--登录注册-->
 				<div class="login fl" v-if="!isLogin">
 					<ul class="clearfix">
-						<li class="fl"><a href="#">{{$t('m.login')}}</a></li>
-						<li class="fl"><a href="#">{{$t('m.register')}}</a></li>
+						<li class="fl"><router-link to="/login">{{$t('m.login')}}</router-link></li>
+						<li class="fl"><router-link to="/register">{{$t('m.register')}}</router-link></li>
 					</ul>
 				</div>
         <!--欢迎页面-->
@@ -48,8 +48,8 @@
           <div class="user-info"></div>
         </div>
         <!--切换语言-->
-        <div class="change-lang fl" v-on:mousover="showCountryList" v-on:mouseleave="hideCountryList">
-          <i class="selected-country"  ></i>
+        <div class="change-lang fl" v-on:mouseover="showCountryList" v-on:mouseleave="hideCountryList">
+          <i class="selected-country"></i>
           <!--国家列表-->
           <div class="country-list" v-show="countryListIsShow">
             <ul v-on:mouseleave="hideCountryList">

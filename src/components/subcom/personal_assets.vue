@@ -1,24 +1,121 @@
 <template>
-
   <div>
-  个人资产个人资产个人资产个人资产
-    
+    <!-- 个人资产数据展示部分 -->
+      <div class="data">
+        <div class="data-list">
+          <ul>
+            <li>币种</li>
+            <li>可用资产</li>
+            <li>冻结资产</li>
+            <li>总量</li>
+          </ul>
+          <ul v-for="(item,index) in dataList">
+            <li>{{item.bizhong}}</li>
+            <li>{{item.keyongzichan}}</li>
+            <li>{{item.dongjiezichan}}</li>
+            <li>{{item.zongliang}}</li>
+          </ul>
+        </div>
+      </div>
+
   </div>
 </template>
 <script>
-  
+
   export default {
     data(){
-      return {}
+      return {
+        dataList:[
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+          {
+            bizhong:'FHU',
+            keyongzichan:'211.1234567',
+            dongjiezichan:'54.1234567',
+            zongliang:234.1234567,
+          },
+        ]
+      }
     },
     methods:{},
     created(){},
     computed:{},
-    components:{
-      
-    }
+    components:{}
   }
 </script>
 <style scoped>
-
+  /*个人资产数据展示部分*/
+  .data{
+    /*margin-top: 10px;*/
+    background-color: #11182B;
+  }
+  .data-list>ul{
+    height: 40px;
+    line-height: 40px;
+  }
+  .data-list>ul:first-child{
+    background-color: #0E1326;
+  }
+  .data-list>ul:not(:first-child):hover{
+    background:#0E1326;
+    cursor: pointer;
+  }
+  .data-list>ul>li {
+    width: 25%;
+    float: left;
+    text-align: left;
+    padding-left: 60px;
+  }
 </style>

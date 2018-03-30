@@ -1,4 +1,4 @@
-body,div,html,.con-box,li,ul{
+body,div,html,.con-box,li,ul,p{
 	margin:0;
 	padding:0;
 	box-sizing: border-box;
@@ -7,7 +7,7 @@ a{
 	text-decoration: none;
 	color:#000;
 }
-input,button,textarea{
+input,button,textarea,select{
 	border:none;
 	outline:none;
 	background-color: transparent;
@@ -16,6 +16,15 @@ input,button,textarea{
 	box-sizing: border-box;
   font-size: 14px;
 }
+select{
+  border-radius:0;
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll rightright center transparent;
+  /*border:1px solid #fff;*/
+}
+select::-ms-expand { display: none; }
 ul,li{
 	list-style: none;
 }
@@ -41,19 +50,19 @@ ul,li{
 input::-webkit-input-placeholder{ /*WebKit browsers*/
 
   color: #fff;
-
+  font-size: 12px;
 }
 
 input::-moz-input-placeholder{ /*Mozilla Firefox*/
 
   color: #fff;
-
+  font-size: 12px;
 }
 
 input::-ms-input-placeholder{ /*Internet Explorer*/
 
   color: #fff;
-
+  font-size: 12px;
 }
 
 .fff{
@@ -61,4 +70,23 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 }
 .blue{
   color:#407edf;
+}
+.pr{
+  position: relative;
+}
+.pa{
+  position: absolute;
+}
+.fz16{
+  font-size: 16px;
+}
+.fz12{
+  font-size: 12px;
+}
+.middle{
+  top:50%;
+  transform: translateY(-50%);
+}
+.dis-in-blk{
+  display:inline-block;
 }

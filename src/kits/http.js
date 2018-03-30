@@ -46,11 +46,11 @@ export function ajax(url, ajaxType, params, success) {
       url,
       params,
       // config
-      // {
-      // headers: {
-      // "Accept": "application/json"
-      // }
-      // }
+      {
+        headers: {
+        "Accept":"application/json"
+        }
+      }
     ).then((res) => {
       success(res);
     });

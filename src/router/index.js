@@ -13,6 +13,8 @@ import withdrawDepositRecord from "@/components/withdrawDepositRecord"//提现
 import currencyInfo from "@/components/subcom/currencyInfo"//币种资料
 import newsDetails from "@/components/newsDetails"
 import user from "@/components/user"
+import login from "@/components/login"
+import register from "@/components/register"
 Vue.use(Router)
 
 const router =  new Router({
@@ -79,6 +81,16 @@ const router =  new Router({
       path:'/user',
       name:'user',
       component:user
+    },
+    {
+      path:'/login',
+      name:'login',
+      component:login
+    },
+    {
+      path:'/register',
+      name:'register',
+      component:register
     }
   ]
 })

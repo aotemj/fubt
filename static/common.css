@@ -73,10 +73,11 @@ el-carousel-item img{
   width: 170px;
   height: 60px;
   line-height: 60px;
-  font-size: 16px;
+  /*font-size: 16px;*/
 }
 .financeContent .el-tabs--left .el-tabs__item.is-left{
-  text-align: center;
+  text-align: left;
+  padding-left:46px;
 }
 .financeContent .el-tabs__item.is-disabled{
   color: #fff;
@@ -96,6 +97,7 @@ el-carousel-item img{
 
 
 /*孝喜改element样式*/
+
 .el-collapse-item__header {
   background: #11182c;
   color: #c2c3c8;
@@ -130,32 +132,174 @@ el-carousel-item img{
   border: 1px solid #a0a3ab;
 }
 
-/*!*表头*!*/
-/*.el-table th{*/
-  /*background-color:#272b41;*/
-  /*color:#c7cde5;*/
-  /*font-weight: 700;*/
-/*}*/
-/*!*表格主色*!*/
-/*.el-table, .el-table__expanded-cell, .el-table tr{*/
-  /*background-color:#212537;*/
-  /*color:#c7cde5;*/
+.el-date-editor.el-input {
+  width: 140px;
+  color: #c2c3c8;
+  z-index: 99;
+}
+
+.el-input__inner {
+  height: 30px;
+  color: #c2c3c8;
+}
+
+.el-input__prefix {
+  top: -5px;
+}
+
+.el-picker-panel {
+  border: 1px solid rgb(102, 106, 117);
+  background: #11182B;
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow {
+  top: -7px;
+  border-bottom-color: rgb(102, 106, 117);
+}
+
+.el-col-12 {
+  width: 8%;
+  height: 60px;
+  float: left;
+  line-height: 25px;
+  margin-left: 1%;
+}
+
+.el-dropdown {
+  width: 75px;
+  height: 29px;
+  margin-top: 15px;
+  border: 1px solid #a0a3ab;
+  border-radius: 3px;
+  line-height: 29px;
+  margin: 15px 0 0 7px;
+  color: #c2c3c8;
+}
+
+.el-dropdown-menu {
+  background: #11182c;
+  border: 1px solid rgb(102, 106, 117);
+  border-bottom-color: rgb(102, 106, 117);
+}
+
+.el-dropdown-menu__item {
+  line-height: 25px;
+  color: #c2c3c8;
+  font-size: 12px;
+}
+
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  color: #66b1ff;
+  background: transparent;
+}
+
+.el-select-dropdown {
+  background: #11182c;
+  border: 1px solid rgb(102, 106, 117);
+  border-bottom-color: rgb(102, 106, 117);
+}
+
+.el-select-dropdown__item {
+  color: #c2c3c8;
+}
+
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  background-color: #081025;
+  color: #1275DA;
+}
+
+.el-input--suffix .el-input__inner,
+.el-form-item__label {
+  color: #c2c3c8;
+}
+
+.el-dialog {
+  background: rgb(38, 42, 66);
+}
+
+
+
+
+
+
+
+/*.el-collapse-item__header {*/
+  /*background: #11182c;*/
+  /*color: #c2c3c8;*/
+  /*text-align: left;*/
+  /*!*font-size: 16px;*!*/
+  /*padding-left: 2.5%;*/
+  /*box-sizing: border-box;*/
 /*}*/
 
-/*.el-table td, .el-table th.is-leaf{*/
-  /*border:none;*/
-  /*text-align: center;*/
-  /*height:40px;*/
-  /*padding:0;*/
-  /*line-hieght:40px;*/
-  /*font-weight: 700;*/
-/*}*/
-/*!*表格hover变色*!*/
-/*.el-table--enable-row-hover .el-table__body tr:hover>td{*/
-  /*background-color:#1b1f2e;*/
-
+/*.el-collapse {*/
+  /*border: 0;*/
 /*}*/
 
+/*.el-collapse-item__content {*/
+  /*padding-bottom: 0;*/
+/*}*/
+
+/*.el-collapse-item__wrap {*/
+  /*border: 0;*/
+  /*background: #11182c;*/
+  /*padding-top: 3%;*/
+/*}*/
+
+/*.el-form {*/
+  /*width: 36.5%;*/
+  /*margin: 0 auto;*/
+  /*color: #c2c3c8;*/
+/*}*/
+
+/*.el-input__inner {*/
+  /*background: #11182c;*/
+  /*border: 1px solid #a0a3ab;*/
+/*}*/
+/*.el-tabs--left .el-tabs__header.is-left{*/
+  /*margin-right:0;*/
+/*}*/
+
+
+
+/*表头*/
+.el-table th{
+  background-color:#0e1425;
+  color:#c7cde5;
+  font-weight: 700;
+}
+/*表格主色*/
+.el-table, .el-table__expanded-cell, .el-table tr{
+  background-color:#212537;
+  color:#c7cde5;
+}
+
+.el-table td, .el-table th.is-leaf{
+  border:none;
+  text-align: center;
+  height:40px;
+  padding:0;
+  line-hieght:40px;
+  font-weight: 700;
+}
+/*表格hover变色*/
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+  background-color:#1b1f2e;
+
+}
+.el-tabs--left .el-tabs__nav-wrap.is-left{
+  margin-right:0px;
+}
+.el-table--border::after, .el-table--group::after, .el-table::before{
+  background-color: transparent;
+}
+.financeContent .el-tabs--left .el-tabs__item.is-left{
+  background-color:#0e1425;
+}
+.financeContent .el-tabs--left .el-tabs__item.is-left.is-active{
+  background-color:#081024;
+}
 /*.el-table .cell .up{*/
   /*color:#ac4f55;*/
 /*}*/

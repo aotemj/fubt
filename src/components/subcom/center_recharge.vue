@@ -107,7 +107,7 @@ article>ul>li {
     font-size: 12px;
 }
 button {
-    width: 542px;
+    width: 100%;
     height: 35px;
     border-radius: 5px;
     background: #19233c;
