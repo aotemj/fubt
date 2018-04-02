@@ -218,7 +218,13 @@ el-carousel-item img{
   background: rgb(38, 42, 66);
 }
 
+.el-dialog__title {
+  color: #c2c3c8;
+}
 
+.el-form-item__label {
+  width: 16%;
+}
 
 
 

@@ -4,27 +4,25 @@
     <div class="empty"></div>
     <div class="voteNew">
     <ul v-for="(item,index) in pushTab">
-        <li>{{item.time}}</li>
         <li>{{item.currency}}</li>
-        <li>{{item.address}}</li>
+        <li>{{item.type}}</li>
         <li>{{item.number}}</li>
-        <li>{{item.confirmation}}</li>
+        <li>{{item.earnings}}</li>
+        <li>{{item.grantTime}}</li>
+        <li>{{item.creationTime}}</li>
         <li>{{item.state}}</li>
-        <li>{{item.state}}</li>
-        <li>{{item.state}}</li>
-        <li>{{item.state}}</li>
+        <li>{{item.operation}}</li>
     </ul>
     <div id="voteNew-list" v-for="(item,index) in pushList">
       <article>
-        <span>{{item.time}}</span>
         <span>{{item.currency}}</span>
-        <span>{{item.address}}</span>
+        <span>{{item.type}}</span>
         <span>{{item.number}}</span>
-        <span>{{item.confirmation}}</span>
+        <span>{{item.earnings}}</span>
+        <span>{{item.grantTime}}</span>
+        <span>{{item.creationTime}}</span>
         <span>{{item.state}}</span>
-        <span>{{item.state}}</span>
-        <span>{{item.state}}</span>
-        <span>{{item.state}}</span>
+        <span>{{item.operation}}</span>
       </article>
     </div>
     </div>
@@ -37,29 +35,26 @@
       return {
         pushTab:[
           {
-            time:'时间',
             currency:'币种',
-            address:'提现地址',
-            number:'提现数量',
-            confirmation:'确认数',
+            type:'收益类型',
+            number:'数量',
+            earnings:'预计收益',
+            grantTime:'预计发放时间',
+            creationTime:'创建时间',
             state:'状态',
-            state:'状态',
-            state:'状态',
-            state:'状态',
+            operation:'操作',
           }
         ],
         pushList:[
           {
-            time:'2018.3.29 20:30:20',
-            currency:'FTB',
-            address:'河南省',
-            number:'155631',
-            confirmation:'6',
-            state:'已确认',
-            state:'已确认',
-            state:'已确认',
-            state:'已确认',
-            state:'已确认',
+            currency:'FBT',
+            type:'类型',
+            number:'954642',
+            earnings:'12.1345',
+            grantTime:'2018/3/30 14:31',
+            creationTime:'2018/3/30 14:31',
+            state:'已存入',
+            operation:'已审核',
           }
         ]
       }
@@ -79,7 +74,7 @@ header {
     height: 40px;
     padding-left: 20px;
     line-height: 40px;
-    font-size: 16px;
+    font-size: 14px;
     text-align: left;
 }
 .empty{
@@ -100,12 +95,11 @@ header,
 .voteNew>ul {
     height: 40px;
     line-height: 40px;
-    font-size: 14px;
     border-bottom: 1px solid #0c101e;
 }
 
 .voteNew>ul>li {
-    width: 11%;
+    width: 12.5%;
     float: left;
     font-size: 12px;
 }
@@ -122,7 +116,7 @@ header,
 
 #voteNew-list>article>span {
     display: inline-block;
-    width: 11%;
+    width: 12.5%;
     color: #c2c3c8;
     float: left;
     font-size: 12px;

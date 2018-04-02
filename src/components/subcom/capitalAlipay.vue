@@ -3,23 +3,19 @@
     <div class="cards">
         <div class="add_card" @click="dialogFormVisible = true">
             <p>+</p>
-            <span>添加币种地址</span>
+            <span>添加支付宝</span>
         </div>
-        <el-dialog title="添加币种地址" :visible.sync="dialogFormVisible" width="30%" center>
+        <el-dialog title="添加支付宝" :visible.sync="dialogFormVisible" width="30%" center>
             <el-form :model="form" id="from_add">
-                <el-form-item label="提现管理" class="border_bottom">
+                <el-form-item label="姓名" class="border_bottom">
                     <div class="add_right">
-                        <el-input v-model="form.adminis" auto-complete="off"></el-input>
+                        <el-input v-model="form.name" auto-complete="off"></el-input>
                     </div>
+                    <span class="hint_information">*支付宝姓名必须与您实名认证姓名一致</span>
                 </el-form-item>
-                <el-form-item label="备注" class="border_bottom">
+                <el-form-item label="账号" class="border_bottom">
                     <div class="add_right">
-                        <el-input v-model="form.remarks" auto-complete="off"></el-input>
-                    </div>
-                </el-form-item>
-                <el-form-item label="交易密码" prop="pass" class="border_bottom">
-                    <div class="add_right">
-                        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入交易密码"></el-input>
+                        <el-input v-model="form.account" auto-complete="off"></el-input>
                     </div>
                 </el-form-item>
                 <el-form-item label="短信验证" class="border_bottom">
@@ -33,7 +29,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">提交</el-button>
             </div>
         </el-dialog>
     </div>
@@ -43,27 +39,24 @@
   
   export default {
     data(){
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.ruleForm2.checkPass !== '') {
-            this.$refs.ruleForm2.validateField('checkPass');
-          }
-          callback();
-        }
-      };
       return {
+        active: false,
+        sites:[
+            {name:'FBT'},
+            {name:'FUC'},
+            {name:'BTC'},
+            {name:'FUC'},
+            {name:'FUC'},
+            {name:'FUC'},
+            {name:'FUC'},
+            {name:'FUC'}
+        ],
         dialogFormVisible: false,
         form: {
-          adminis: '',
-          remarks: '',
+          name: '',
+          account: '',
           ver: ''
-        },
-         ruleForm2: {
-          pass: '',
-          checkPass: '',
-        },
+        }
       }
     },
     methods:{
@@ -93,6 +86,10 @@
     border: 1px solid #c2c3c8;
     border-radius:5px;
     cursor: pointer;
+}
+.hint_information{
+    display: inline-block;
+    margin-left: 20%;
 }
 .add_card>p{
     width: 30px;

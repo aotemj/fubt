@@ -1,28 +1,28 @@
 <template>
   <div class="push_box">
     <el-form ref="form" :model="form" label-width="80px">
-       <el-form-item class="Unit" label="账户余额">
+       <el-form-item class="Unit border_bottom" label="账户余额">
         <span>0.2507245</span>
       </el-form-item>
-      <el-form-item label="卖方UID">
+      <el-form-item label="卖方UID" class="border_bottom">
         <el-input v-model="form.id"></el-input>
       </el-form-item>
-      <el-form-item label="资产类型">
+      <el-form-item label="资产类型" class="border_bottom">
         <el-select class="reg_select" v-model="form.region" placeholder="TKC">
           <el-option label="TKC" value="TKC"></el-option>
           <el-option label="FUC" value="FUC"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="数量">
+      <el-form-item label="数量" class="border_bottom">
         <el-input v-model="form.num" placeholder="最小数量为100"></el-input>
       </el-form-item>
-      <el-form-item label="价格">
+      <el-form-item label="价格" class="border_bottom">
         <el-input v-model="form.price"></el-input>
       </el-form-item>
-      <el-form-item label="交易密码" prop="pass">
+      <el-form-item label="交易密码" prop="pass" class="border_bottom">
         <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入交易密码"></el-input>
       </el-form-item>
-      <el-form-item label="短信验证">
+      <el-form-item label="短信验证" class="border_bottom">
         <el-input v-model="form.ver" placeholder="请输入验证码"></el-input>
         <p class="Verification">
           <span>|</span>&nbsp;
@@ -85,6 +85,9 @@
   }
 </script>
 <style scoped>
+.border_bottom{
+  margin-bottom: 10px;
+}
 .push_box{
   padding-top: 2%;
 }
@@ -94,8 +97,9 @@
 button {
     width: 100%;
     height: 35px;
+    line-height: 9px;
     border-radius: 5px;
-    background: #19233c;
+    background: #0e1326;
     outline: medium;
     border: 0;
     margin: 0 auto;
@@ -117,7 +121,7 @@ button {
 .Verification{
   float: right;
   position:absolute;
-  top: -14px;
+  top: 0px;
   right: 4%;
   cursor: pointer;
 }
