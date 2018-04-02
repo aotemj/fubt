@@ -13,7 +13,7 @@
           </el-date-picker>
         </div>
         <el-row class="block-col-2">
-          <el-col :span="12"> 
+          <el-col :span="12">
             <span>市场</span>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
@@ -26,7 +26,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
-          <el-col :span="12"> 
+          <el-col :span="12">
             <span>币种</span>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
@@ -39,7 +39,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
-          <el-col :span="12"> 
+          <el-col :span="12">
             <span>类型</span>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
@@ -55,7 +55,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
-          <el-col :span="12"> 
+          <el-col :span="12">
             <span>状态</span>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
@@ -144,8 +144,8 @@
 }
 
 .voteNew>ul {
-    height: 60px;
-    line-height: 60px;
+    height: 40px;
+    line-height: 40px;
     font-size: 16px;
     border-bottom: 1px solid #0c101e;
 }
@@ -161,8 +161,8 @@
 }
 
 #voteNew-list>article {
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     cursor: pointer;
 }
 
@@ -178,7 +178,7 @@
   margin-top: 15px;
 }
 .picker>span:first-child{
-  margin: 0 10px 0 15px; 
+  margin: 0 10px 0 15px;
 }
 .picker>.to{
  margin: 0 5px;

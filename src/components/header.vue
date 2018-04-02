@@ -49,7 +49,7 @@
         </div>
         <!--切换语言-->
         <div class="change-lang fl" v-on:mouseover="showCountryList" v-on:mouseleave="hideCountryList">
-          <i class="selected-country"></i>
+          <i class="selected-country" v-bind:class="{'ch':lang['zh-CN'],'es':lang['en-US'],'ch-fan':lang['zh-FN']}"></i>
           <!--国家列表-->
           <div class="country-list" v-show="countryListIsShow">
             <ul v-on:mouseleave="hideCountryList">
@@ -71,6 +71,11 @@
         activeRoute:'home',//当前激活标签标记
         isLogin:this.$store.state.isLogin,//用户当前登录状态
         financeListIsShow:false,//财务中心连接显示状态
+        lang:{
+          'zh-CN':true,//中文
+          'en-US':false,//英文
+          'zh-FN':false,//中文繁体
+        }
 			}
 		},
 		created(){
@@ -102,6 +107,10 @@
           this.hideCountryList();
 			    return;
         }
+        for(let k in this.lang){
+			    this.lang[k] = false;
+        }
+        this.lang[e]=true;
         this.$store.state.lang = e;
         this.$i18n.locale = this.$store.state.lang;
 			  this.hideCountryList();
@@ -184,6 +193,16 @@
     top:50%;
     transform:translateY(-75%);
     cursor:pointer;
+  }
+
+  .selected-country.ch{
+    background-position: center center !important;
+  }
+  .selected-country.es{
+    background-position: center top !important;
+  }
+  .selected-country.ch-fan{
+    background-position: center bottom !important;
   }
 
   .country {

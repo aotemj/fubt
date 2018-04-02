@@ -90,3 +90,12 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 .dis-in-blk{
   display:inline-block;
 }
+.tr{
+  text-align:right;
+}
+.tl{
+  text-align:left;
+}
+.bn{
+  border:none !important;
+}

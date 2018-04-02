@@ -1,7 +1,7 @@
 <template>
  <div>
     <div class="container-screen">
-      <header>新币投票</header>
+      <!--<header>新币投票</header>-->
       <div class="voteNew">
         <ul v-for="(item,index) in newrecordTab">
             <li>{{item.time}}</li>
@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-  
+
   export default {
     data(){
       return {
@@ -56,33 +56,33 @@
     created(){},
     computed:{},
     components:{
-      
+
     }
   }
 </script>
 <style scoped>
-header {
-    height: 60px;
-    padding-left: 20px;
-    line-height: 60px;
-    font-size: 16px;
-    margin-top: 25px;
-    text-align: left;
-}
+/*header {*/
+    /*height: 60px;*/
+    /*padding-left: 20px;*/
+    /*line-height: 60px;*/
+    /*font-size: 16px;*/
+    /*margin-top: 25px;*/
+    /*text-align: left;*/
+/*}*/
 
-header,
+
 .voteNew>ul {
     background: #0e1326;
     color: #c2c3c8;
 }
 
 .voteNew {
-    margin: 10px 0 50px;
+    margin:0px 0 50px;
 }
 
 .voteNew>ul {
-    height: 60px;
-    line-height: 60px;
+    height: 40px;
+    line-height: 40px;
     font-size: 16px;
     border-bottom: 1px solid #0c101e;
 }
@@ -98,8 +98,8 @@ header,
 }
 
 #voteNew-list>article {
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     cursor: pointer;
 }
 

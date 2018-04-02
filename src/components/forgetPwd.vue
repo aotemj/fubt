@@ -3,19 +3,14 @@
     <Header class="header"></Header>
     <div class="inner-box">
       <div class="login-box">
-        <h4>登录</h4>
-       <div class="username">
-         <input type="text" placeholder="请输入手机号/邮箱" v-model="username"><span class="username-tips">正确提示</span>
-       </div>
+        <h4>找回密码</h4>
+        <div class="username">
+          <input type="text" disabled placeholder="手机号找回"><router-link to="/changePwdByPhone" class="username-tips blue">点击找回>></router-link>
+        </div>
         <div class="pwd">
-          <input type="password" placeholder="请输入密码" v-model="password"><span class="pwd-tips">错误提示</span>
+          <input type="password" disabled placeholder="邮箱找回"><router-link to="/changePwdByEmail" class="pwd-tips blue">点击找回>></router-link>
         </div>
-        <div class="todos">
-          <router-link to="/forgetPwd">忘记密码？</router-link><router-link to="/register">免费注册</router-link>
-        </div>
-        <input type="button" value="登录" class="login-btn" v-on:click="login">
       </div>
-
     </div>
   </div>
 </template>
@@ -59,7 +54,7 @@
     text-align: left;
   }
   .login-box{
-    font-size: 16px;
+    font-size: 20px;
 
   }
   .username,.pwd{
@@ -82,17 +77,17 @@
   .pwd-tips{
     /*top:110px;*/
   }
- .todos a {
-   color:#fff;
-   font-size: 12px;
-   flex:1;
- }
- .todos{
-   /*border:1px solid #fff;*/
-   position: relative;
-   width:150px;
-   display:flex;
- }
+  .todos a {
+    color:#fff;
+    font-size: 12px;
+    flex:1;
+  }
+  .todos{
+    /*border:1px solid #fff;*/
+    position: relative;
+    width:150px;
+    display:flex;
+  }
 
   .todos::before{
     position: absolute;

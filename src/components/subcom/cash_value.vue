@@ -1,7 +1,24 @@
 <template>
   <div>
+  <!-- 充值提现表头 --> 
     <div class="title">
-
+      <div class="left">充值&提现</div>
+        <div class="right-con">
+          <section>
+            <div class="all">
+              <input type="radio" id="female" name="radioGroup" checked="checked" />
+              <label for="female">显示全部</label>
+            </div>
+            <div class="part">
+              <input type="radio" id="male" name="radioGroup" />
+              <label for="male">隐藏资产为0的币种</label>
+            </div>
+            <div class="search">
+              <input type="text" placeholder="搜索">
+              <img src="../../assets/search_01.png" height="14" width="14" alt="">
+            </div>
+          </section>
+      </div> 
     </div>
     <div class="margin-bottom"></div>
     <div class="body">
@@ -149,11 +166,78 @@
   }
 </script>
 <style scoped>
+  /*充值提现表头*/
   .title {
     height: 60px;
+    line-height: 60px;
     width: 100%;
     background-color: #0e1425;
     /*margin-bottom:10px;*/
+  }
+  .left{
+    float: left;
+    font-size: 16px;
+    padding-left: 20px;
+  }
+  .right-con{
+    float: right;
+    overflow: hidden;
+  }
+  .right-con .all,.right-con .part,.right-con .search{
+    float: left;
+    width: 200px;
+  }
+  .right-con .all input,.right-con .part input{
+    display: inline-block;
+  }
+  .right-con .all label,.right-con .part label{
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .right-con .part{
+    margin-right: 60px;
+  }
+  .right-con .search{
+    position: relative;
+  }
+  .right-con .search input{
+    display: inline-block;
+    width: 145px;
+    height: 30px;
+    border: 1px solid #c2c2c8;
+    border-radius: 15px;
+    padding-left: 45px;
+    background: transparent;
+  }
+  .right-con .search img{
+    position: absolute;
+    top: 24px;
+    left: 43px;
+  }
+  input[type="radio"]+label::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    width: 1em;
+    height: 1em;
+    margin-right: .4em;
+    border-radius: 50%;
+    border: 1px solid #338ff5;
+    text-indent: .15em;
+    line-height: 1;
+  }
+  input[type="radio"]:checked+label::before {
+    width: .6em;
+    height: .6em;
+    vertical-align: middle;
+    background-color: #338ff5;
+    background-clip: content-box;
+    padding: .2em;
+  }
+  input[type="radio"] {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
   }
 
   .margin-bottom {

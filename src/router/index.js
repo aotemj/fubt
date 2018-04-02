@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store/store'
 import home from '@/components/home'
 import exchange from "@/components/exchange"
 import finance from "@/components/finance"
@@ -15,6 +16,12 @@ import newsDetails from "@/components/newsDetails"
 import user from "@/components/user"
 import login from "@/components/login"
 import register from "@/components/register"
+import forgetPwd from "@/components/forgetPwd"
+import changePwdByPhone from "@/components/changePwdByCellPhone"
+import changePwdByEmail from "@/components/changePwdByEmail"
+import addNewPwdByPhone from "@/components/subcom/addNewPwdByPhone"
+import addNewPwdByEmail from "@/components/subcom/addNewPwdByEmail"
+
 Vue.use(Router)
 
 const router =  new Router({
@@ -30,7 +37,8 @@ const router =  new Router({
   {
     path:'/finance',//财务中心
     name:'finance',
-    component:finance
+    component:finance,
+    meta:{auth:true}
   },
     {
       path:'/rechangeAndwithdrawDeposit',//充值&提现
@@ -91,13 +99,55 @@ const router =  new Router({
       path:'/register',
       name:'register',
       component:register
+    },
+    {
+      path:'/forgetPwd',
+      name:'forgetPwd',
+      component:forgetPwd
+    },
+    {
+      path:'/changePwdByPhone',
+      name:'changePwdByPhone',
+      component:changePwdByPhone
+    },
+    {
+      path:'/changePwdByEmail',
+      name:'changePwdByEmail',
+      component:changePwdByEmail
+    },
+    {
+      path:'/addNewPwdByPhone',
+      name:'addNewPwdByPhone',
+      component:addNewPwdByPhone
+    },
+    {
+      path:'/addNewPwdByEmail',
+      name:'addNewPwdByEmail',
+      component:addNewPwdByEmail
     }
   ]
 })
-router.beforeEach((to, from, next) => {
-  // console.log(to);
-  // console.log(from);
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   // console.log(to);
+//   // console.log(from);
+//   next()
+// })
+
+router.beforeEach((to,from,next) => {
+
+  if(to.matched.some( m => m.meta.auth)){
+
+// 对路由进行验证
+    if(store.state.isLogin=='100') { // 已经登陆
+      next()   // 正常跳转到你设置好的页面
+    }else{
+    // 未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
+      next({path:'/login',query:{ Rurl: to.fullPath} })
+    }
+    }else{
+      next()
+    }
+  })
+
 
 export default router
