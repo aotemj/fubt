@@ -8,7 +8,7 @@
       <!-- 新币投票表头 -->
       <header>
         <div class="left">新币投票</div>
-        <div class="left">记录</div>
+        <!--<div class="left">记录</div>-->
       </header>
       <!-- 数据展示部分 -->
       <div class="data">
@@ -107,8 +107,8 @@
     background-color: #11182B;
   }
   .data-list>ul{
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     overflow: hidden;
   }
   .data-list>ul:first-child{

@@ -40,6 +40,7 @@ Vue.filter('keepTwoNum',function(value){
   return value.toFixed(2);
 })
 
+
 new Vue({
 	el: '#app',
 	router,

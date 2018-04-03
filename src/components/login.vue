@@ -32,15 +32,16 @@
     },
     methods:{
       login(){
-        console.log('123');
         let loginUrl = common.apidomain+'login';
 
         let formData = new FormData();
         formData.append('loginName',this.username);
         formData.append('password',this.password);
 
-        ajax(loginUrl,'post',data,(res)=>{
+        ajax(loginUrl,'post',formData,(res)=>{
           console.log(res);
+          this.$store.commit('userLogin',true)
+          console.log(this.$store.state.isLogin);
         })
       }
     },

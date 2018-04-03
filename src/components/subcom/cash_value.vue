@@ -2,14 +2,14 @@
   <div>
   <!-- 充值提现表头 --> 
     <div class="title">
-      <div class="left">充值&提现</div>
+      <div class="left-con">充值&提现</div>
         <div class="right-con">
           <section>
-            <div class="all">
+            <div class="all" @click="show">
               <input type="radio" id="female" name="radioGroup" checked="checked" />
               <label for="female">显示全部</label>
             </div>
-            <div class="part">
+            <div class="part" @click="hide">
               <input type="radio" id="male" name="radioGroup" />
               <label for="male">隐藏资产为0的币种</label>
             </div>
@@ -30,7 +30,8 @@
           <div class="td">操作</div>
         </div>
         <div class="tbody">
-          <div class="tr" v-for="(item,index) in currencyList">
+          <div class="tr" v-for="(item,index) in filteredData">
+          <!-- <div class="tr" v-for="(item,index) in filteredData2"> -->
             <div class="item">
               <div class="td">{{item.name}}</div>
               <div class="td">{{item.availableCount}}</div>
@@ -97,26 +98,27 @@
   export default {
     data() {
       return {
+        seen:true,
         withdrawDepositIsShowList:[],
         currencyList: [//币种列表
           {
             name:'FUC',
-            availableCount:500.00,
+            availableCount:0,
             disabledCount:500.00
           },
           {
             name:'FUC',
-            availableCount:500.00,
+            availableCount:0,
             disabledCount:500.00
           },
           {
             name:'FUC',
-            availableCount:500.00,
+            availableCount:0,
             disabledCount:500.00
           },
           {
             name:'FUC',
-            availableCount:500.00,
+            availableCount:0,
             disabledCount:500.00
           },
           {
@@ -130,10 +132,17 @@
             disabledCount:500.00
           }
 
-        ]
+        ],
+        filteredData:[],//渲染数组
       }
     },
     methods: {
+      show:function(){
+        this.filteredData = this.filteredData1;
+      }, 
+      hide:function(){
+        this.filteredData = this.filteredData2;
+      },
       //显示充值框
       showRechargeBox(index){
         this.withdrawDepositIsShowList.forEach((item,index)=>{
@@ -160,23 +169,37 @@
         this.withdrawDepositIsShowList.push({allIsShow:false,rechargeIsShow:false,withdrawDepositIsShow:false});
       }
       // console.log(this.withdrawDepositIsShowList);
+      this.filteredData = this.currencyList;
     },
-    computed: {},
+    computed: {
+      // 显示所有
+      filteredData1: function () {
+        return this.currencyList.filter(function (item) {
+          return item;
+        })
+      },
+      // 隐藏资产为0的币种
+      filteredData2: function () {
+        return this.currencyList.filter(function (item) {
+          return item.availableCount!==0;
+        })
+      },
+    },
     components: {}
   }
 </script>
 <style scoped>
   /*充值提现表头*/
   .title {
-    height: 60px;
-    line-height: 60px;
+    height: 40px;
+    line-height: 40px;
     width: 100%;
     background-color: #0e1425;
     /*margin-bottom:10px;*/
   }
-  .left{
+  .left-con{
     float: left;
-    font-size: 16px;
+    font-size: 14px;
     padding-left: 20px;
   }
   .right-con{
@@ -211,7 +234,7 @@
   }
   .right-con .search img{
     position: absolute;
-    top: 24px;
+    top: 14px;
     left: 43px;
   }
   input[type="radio"]+label::before {
@@ -286,7 +309,8 @@
   .tbody .tr{
     position: relative;
     /*margin:0 20px;*/
-    background-color:#12192b
+    background-color:#12192b;
+    text-align: left; 
   }
   .tbody .tr .item {
     display: flex;

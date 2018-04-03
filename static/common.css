@@ -95,6 +95,52 @@ el-carousel-item img{
 }
 /* 任付伟财务中心样式覆盖修改---结束 */
 
+/*  任付伟改新闻部分导航样式-开始 */
+.newNavs .el-tabs__nav{
+  float: none;
+// position: relative;
+}
+.newNavs .el-tabs__nav-wrap{
+  height: 60px;
+  line-height: 60px;
+}
+.newNavs .el-tabs__item{
+  font-size: 16px;
+  margin: 0 14%;
+}
+.newNavs .el-tabs__header{
+  background-color: #0F1427;
+}
+.newNavs .el-tabs__nav-wrap::after{
+  background-color: #0F1427;
+}
+.newNavs .el-tabs__content{
+// overflow: none;
+}
+.newNavs .el-tabs__active-bar{
+  background-color: transparent;
+}
+.newNavs .titleNavs{
+// display:inline-block;
+  padding:10px;
+  box-sizing: border-box;
+  position: relative;
+
+}
+.newNavs .titleNavs>i {
+  position: absolute;
+  left:-3px;
+  bottom:0;
+  width:88px;
+  height:2px;
+// background-color:transparent;
+}
+.newNavs .titleNavs>i.active{
+  background-color: #2769B3;
+}
+
+/*  任付伟改新闻部分导航样式-结束 */
+
 
 /*孝喜改element样式*/
 

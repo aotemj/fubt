@@ -7,9 +7,12 @@
       <img src="../assets/newsBanner.png">
     </div>
     <!-- 3.0 tabs标签页 -->
-    <div class="newsTabs">
+    <div class="newsTabs newNavs">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="新闻中心" name="first">
+        <el-tab-pane name="first">
+         <div slot="label" class="titleNavs">新闻中心<i :class="{active:activeId}"></i>
+         </div>
+          <div class="bar"></div>
           <!-- 新闻中心内容 -->
           <div class="newsCenter">
             <!-- 时间轴 -->
@@ -45,7 +48,9 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="官方公告" name="second">
+        <el-tab-pane name="second">
+        <div slot="label" class="titleNavs">官方公告<i :class="{active:!activeId}"></i>
+        </div>
           <!-- 官方公告内容 -->
           <div class="newsCenter">
             <!-- 时间轴 -->
@@ -222,12 +227,15 @@
             date:'2013年01月23日',
             overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
           },
-        ]
+        ],
+        activeId:true
       }
     },
     methods:{
-      handleClick(tab, event) {
-        // console.log(tab, event);
+      handleClick(tab, e) {
+        // console.log(tab, event);  
+        // console.log(e.target);
+        this.activeId =!this.activeId;
       }
     },
     computed:{},
@@ -240,6 +248,7 @@
   /*1.0 banner图部分*/
   .banner{
     margin-top: 85px;
+    margin-bottom: -3px;
     width: 100%;
   }
   .banner>img{
@@ -253,6 +262,7 @@
   }
   /*时间轴*/
   .timeAxis{
+    font-size: 16px;
     height: 260px;
     width: 100%;
     background: url(../assets/newsTime.png) no-repeat center;
@@ -310,6 +320,7 @@
     width: 100%;
     padding: 0 25%;
     margin-top: 50px;
+    font-size: 16px;
   }
   .newsList>ul>li{
     padding: 10px 0;
@@ -333,6 +344,9 @@
   }
   .newsList>ul>li>.contents>.date{
     float: right;
+  }
+  .newsList>ul>li>.overview{
+    margin: 15px 0 ;
   }
   .newsList>ul>li>.overview>p{
     text-align: left;

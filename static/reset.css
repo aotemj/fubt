@@ -123,3 +123,9 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 .ml80{
   margin-left:80px;
 }
+.fw4{
+  font-weight: 400;
+}
+.fw7{
+  font-weight: 700;
+}

@@ -17,56 +17,26 @@
           </ul>
           <div class="tbody">
             <div class="item" v-for="(item,index) in filteredData" v-on:mouseover="hover">
-              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.market}}</li>
-              <li class="data-item"><span class="ml40">{{item.recentQuotation}}</span></li>
+              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.sellsymbol}}/<span class="fw4">{{item.buysymbol}}</span>
+              </li>
+              <li class="data-item"><span class="ml40">{{item.price}}</span></li>
               <li class="data-item"><span class="ml50">{{item.buy}}</span></li>
               <li class="data-item"><span class="ml50">{{item.sell}}</span></li>
-              <li class="data-item"><span class="ml50">{{item.tfHdone|keepTwoNum}}</span></li>
-              <li class="data-item" v-bind:class="{'up':item.tfupAndDown>0,'down':item.tfupAndDown<0}">
-                <span class="ml50">{{item.tfupAndDown*100| keepTwoNum}}%</span>
+              <li class="data-item"><span class="ml50">{{item.total|keepTwoNum}}</span></li>
+              <li class="data-item" v-bind:class="{'up':item.rose>0,'down':item.rose<0}">
+                <span class="ml50">{{item.rose*100| keepTwoNum}}%</span>
               </li>
               <li class="data-item"></li>
               <li class="data-item">
-                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}" v-on:click="toggleCollection(index)">
+                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}"
+                   v-on:click="toggleCollection(index)">
                 </i>
               </li>
             </div>
           </div>
         </div>
       </el-tab-pane>
-      <!--FTB交易区-->
-      <el-tab-pane name="second">
-        <span slot="label">FBT {{$t('m.tradingArea')}}</span>
-        <div class="table">
-          <ul class="th">
-            <li class="td">{{$t('m.pairs')}}</li>
-            <li class="td">{{$t('m.latestprice')}}(FBT)</li>
-            <li class="td">买一(FBT)</li>
-            <li class="td">卖一(FBT)</li>
-            <li class="td">{{$t('m.tfHVolume')}}</li>
-            <li class="td">{{$t('m.change')}}</li>
-            <li class="td">{{$t('m.sixChange')}}</li>
-            <li class="td">{{$t('m.like')}}</li>
-          </ul>
-          <div class="tbody">
-            <div class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover">
-              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.market}}</li>
-              <li class="data-item"><span class="ml40">{{item.recentQuotation}}</span></li>
-              <li class="data-item"><span class="ml50">{{item.buy}}</span></li>
-              <li class="data-item"><span class="ml50">{{item.sell}}</span></li>
-              <li class="data-item"><span class="ml50">{{item.tfHdone|keepTwoNum}}</span></li>
-              <li class="data-item" v-bind:class="{'up':item.tfupAndDown>0,'down':item.tfupAndDown<0}">
-                <span class="ml50">{{item.tfupAndDown*100| keepTwoNum}}%</span>
-              </li>
-              <li class="data-item"></li>
-              <li class="data-item">
-                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}" v-on:click="toggleCollection(index)">
-                </i>
-              </li>
-            </div>
-          </div>
-        </div>
-      </el-tab-pane>
+
       <!--BTC交易区-->
       <el-tab-pane label="" name="third">
         <span slot="label">BTC {{$t('m.tradingArea')}}</span>
@@ -83,27 +53,28 @@
           </ul>
           <div class="tbody">
             <div class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover">
-              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.market}}</li>
-              <li class="data-item"><span class="ml40">{{item.recentQuotation}}</span></li>
+              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.sellsymbol}}/<span class="fw4">{{item.buysymbol}}</span>
+              </li>
+              <li class="data-item"><span class="ml40">{{item.price}}</span></li>
               <li class="data-item"><span class="ml50">{{item.buy}}</span></li>
               <li class="data-item"><span class="ml50">{{item.sell}}</span></li>
-              <li class="data-item"><span class="ml50">{{item.tfHdone|keepTwoNum}}</span></li>
-              <li class="data-item" v-bind:class="{'up':item.tfupAndDown>0,'down':item.tfupAndDown<0}">
-                <span class="ml50">{{item.tfupAndDown*100| keepTwoNum}}%</span>
+              <li class="data-item"><span class="ml50">{{item.total|keepTwoNum}}</span></li>
+              <li class="data-item" v-bind:class="{'up':item.rose>0,'down':item.rose<0}">
+                <span class="ml50">{{item.rose*100| keepTwoNum}}%</span>
               </li>
               <li class="data-item"></li>
               <li class="data-item">
-                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}" v-on:click="toggleCollection(index)">
+                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}"
+                   v-on:click="toggleCollection(index)">
                 </i>
               </li>
             </div>
           </div>
         </div>
-
       </el-tab-pane>
-      <!--FUC交易区-->
-      <el-tab-pane label="" name="fourth">
-        <span slot="label">FUC {{$t('m.tradingArea')}}</span>
+      <!--FBT交易区-->
+      <el-tab-pane name="second">
+        <span slot="label">FBT {{$t('m.tradingArea')}}</span>
         <div class="table">
           <ul class="th">
             <li class="td">{{$t('m.pairs')}}</li>
@@ -116,25 +87,30 @@
             <li class="td">{{$t('m.like')}}</li>
           </ul>
           <div class="tbody">
-            <div class="item" v-for="(item,index) in filteredData" v-on:mouseover="hover">
-              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.market}}</li>
-              <li class="data-item"><span class="ml40">{{item.recentQuotation}}</span></li>
+            <div class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover">
+              <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.sellsymbol}}/<span class="fw4">{{item.buysymbol}}</span>
+              </li>
+              <li class="data-item"><span class="ml40">{{item.price}}</span></li>
               <li class="data-item"><span class="ml50">{{item.buy}}</span></li>
               <li class="data-item"><span class="ml50">{{item.sell}}</span></li>
-              <li class="data-item"><span class="ml50">{{item.tfHdone|keepTwoNum}}</span></li>
-              <li class="data-item" v-bind:class="{'up':item.tfupAndDown>0,'down':item.tfupAndDown<0}">
-                <span class="ml50">{{item.tfupAndDown*100| keepTwoNum}}%</span>
+              <li class="data-item"><span class="ml50">{{item.total|keepTwoNum}}</span></li>
+              <li class="data-item" v-bind:class="{'up':item.rose>0,'down':item.rose<0}">
+                <span class="ml50">{{item.rose*100| keepTwoNum}}%</span>
               </li>
               <li class="data-item"></li>
               <li class="data-item">
-                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}" v-on:click="toggleCollection(index)">
+                <i class="iconfont icon-shoucang ml70" v-bind:class="{'active':item.isCollection}"
+                   v-on:click="toggleCollection(index)">
                 </i>
               </li>
             </div>
           </div>
         </div>
-
       </el-tab-pane>
+      <!--FUC交易区-->
+      <!--<el-tab-pane label="" name="fourth">-->
+        <!--<span slot="label">FUC {{$t('m.tradingArea')}}</span>-->
+      <!--</el-tab-pane>-->
       <!--收藏-->
       <el-tab-pane label="" name="five">
         <span slot="label">{{$t('m.like')}}</span>
@@ -148,12 +124,13 @@
   import common from "../../kits/domain.js";
   import {ajax} from "../../kits/http.js";
 
+
   export default {
     data() {
       return {
         activeName: 'first',
         value: '',
-        sName:'',//搜索过滤
+        sName: '',//搜索过滤
         dataList: [
           // {
           //   buy:0.18,//卖一
@@ -166,17 +143,38 @@
           //   sellname:"FUC",//币种名称
           //   status:1,//状态
           //   tfHdone:'',//24h成交量
-          //   tfupAndDown:'',//涨跌
+          //   rose:'',//涨跌
           //   type:2,//交易区代号
           //
           // }
+          // {
+          // buy:0.8
+          // buysymbol:"BTC"
+          // id:52
+          // image:"https://fubt.oss-ap-southeast-1.aliyuncs.com/fubt/upload/coin/d22bd34c20324d1086a839ceb0e34459FUBT.png"
+          // price:0.8
+          // rose:263.6363636
+          // sell:0.122
+          // sellname:"FBT"
+          // sellsymbol:"FBT"
+          // status:1
+          // total:731.72
+          // type:2
+          // }
         ],
-        collectionList:[],//收藏列表
+        collectionList: [],//收藏列表
       }
     },
     methods: {
       toggleCollection(index) {
-        this.dataList[index].isCollection = !this.dataList[index].isCollection
+
+        // this.dataList[0].isCollection = !this.dataList[0].isCollection
+        // this.filteredData = this.dataList.filter((item,index)=>{
+        //   return item['sellname'].indexOf((this.sName).toLocaleUpperCase()) !== -1;
+
+        // })
+        // this.filteredData[0].isCollection = !this.filteredData[0].isCollection
+        // console.log(this.filteredData[0].isCollection);
       },
       hover(e) {
         // console.log(e.target);
@@ -196,22 +194,26 @@
           return item['sellname'].indexOf((self.sName).toLocaleUpperCase()) !== -1;
         })
       },
-      fbtFilteredData:function(){
-
+      fbtFilteredData: function () {
+        return this.filteredData.filter(function (item) {
+          return item['type'] == 2;
+        })
       },
-      btcFilteredData:function(){
-        return this.filteredData.filter(function(item){
-          return item['type']==1;
+      btcFilteredData: function () {
+        return this.filteredData.filter(function (item) {
+          return item['type'] == 1;
         })
       },
 
     },
     created() {
-      var url = common.apidomain+'real/indexmarket';
-      ajax(url,'get',{},(res)=>{
-      	console.log(res);
-      	this.dataList = res.data.data;
-      	console.log(this.dataList);
+      var url = common.apidomain + 'real/indexmarket';
+      ajax(url, 'get', {}, (res) => {
+        // console.log(res);
+        this.dataList = res.data.data;
+        // this.dataList.forEach((item, index) => {
+        //   item['isCollection'] = false;
+        // })
       });
     }
   }
@@ -234,10 +236,12 @@
     right: 180px;
     top: 12px;
   }
-.table{
-  font-weight: 700;
-  min-height:300px;
-}
+
+  .table {
+    font-weight: 700;
+    min-height: 300px;
+  }
+
   .th {
     display: flex;
     background-color: #272b41;
@@ -259,7 +263,7 @@
     display: flex;
     height: 40px;
     line-height: 40px;
-    background-color:#212537;
+    background-color: #212537;
     color: #fff;
   }
 
@@ -269,7 +273,7 @@
   }
 
   .tbody .item.active {
-    background-color:#1b1f2e;
+    background-color: #1b1f2e;
   }
 
   .tbody .item .data-item {
@@ -279,13 +283,15 @@
     text-align: left;
     /*text-align: left;*/
   }
-  .tbody .item .data-item img{
+
+  .tbody .item .data-item img {
     /*display:inline-block !important;*/
-    display:inline-block;
+    display: inline-block;
     width: 16px;
     vertical-align: middle;
-    margin-right:5px;
+    margin-right: 5px;
   }
+
   .data-item.up {
     color: #ac4f55;
   }
