@@ -271,7 +271,9 @@ el-carousel-item img{
 .el-form-item__label {
   width: 16%;
 }
-
+.el-tooltip__popper.is-dark {
+  background: transparent;
+}
 
 
 

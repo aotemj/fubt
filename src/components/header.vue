@@ -33,8 +33,14 @@
 			<div class="right">
         <!--登录注册-->
 				<div class="login fl" v-if="!isLogin">
+         
 					<ul class="clearfix">
-						<li class="fl"><router-link to="/login">{{$t('m.login')}}</router-link></li>
+             <el-tooltip placement="bottom" style="color:#fff;background: rgba(0,0,0,0.5);">
+              <div slot="content" class="personal_center">
+                <Personal></Personal>
+              </div>
+              <li class="fl"><router-link to="/login">{{$t('m.login')}}</router-link></li>
+            </el-tooltip>
 						<li class="fl"><router-link to="/register">{{$t('m.register')}}</router-link></li>
 					</ul>
 				</div>
@@ -64,6 +70,7 @@
 	</div>
 </template>
 <script>
+import Personal from './subcom/userpersonal_center'
 	export default {
 		data(){
 			return {
@@ -79,7 +86,7 @@
 			}
 		},
 		created(){
-      this.activeRoute = this.$route.name;//头部点击样式添加
+      this.activeRoute = this.$route.name;//头部点击样式添加 
 		},
 
 		methods:{
@@ -115,9 +122,10 @@
         this.$i18n.locale = this.$store.state.lang;
 			  this.hideCountryList();
       },
-
 		},
-		computed:{},
+    computed:{},
+    components:{Personal}
+
   }
 </script>
 <style scoped>
@@ -268,5 +276,15 @@
   }
   .finance-center .router-box a{
     font-size: 12px;
+  }
+
+  /* 个人中心 */
+  .personal_center{
+    width: 400px;
+    height: 500px;
+    background: rgba(0,0,0,0.5);
+    position:absolute;
+    top:-15px;
+    right:-100px;
   }
 </style>

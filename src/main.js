@@ -4,6 +4,10 @@ import router from './router'
 import Vuex from 'vuex'
 import store from '../src/store/store'
 
+import SIdentify from './components/subcom/identify'//图片验证码
+Vue.use(SIdentify)
+
+
 Vue.use(Vuex)
 
 import ElementUI from 'element-ui';

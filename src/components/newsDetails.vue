@@ -12,39 +12,67 @@
 			</el-breadcrumb>
 
     		<!-- 3.0 新闻详细内容 -->
-    		<div class="article" v-for="(item,index) in newList">
-    			<h2 class="title">{{item.title}}</h2>
-    			<p class="publishDate">发布时间： {{item.publishDate}}</p>
-    			<p class="hello">{{item.hello}}:</p>
-    			<p class="details">{{item.details}}</p>
-    			<p class="inscribe">{{item.inscribe}}</p>
-    			<p class="releaseDate">{{item.releaseDate}}</p>
+    		<div class="article" v-for="(item,index) in newcontentList">
+    			<!-- <h2 class="title">{{item.ftitle}}</h2> -->
+    			<!-- <p class="publishDate">发布时间： {{item.fcreatedate}}</p> -->
+    			<!-- <p class="hello">尊敬的用户：</p> -->
+
+    			<!-- <p class="details">{{item.fcontent_short}}</p> -->
+    			<!-- <p class="details">{{item.fcontent}}</p> -->
+    			<!-- <p class="details" id="content">{{srcData}}</p> -->
+    			<!-- <div class="details" ref="content"></div> -->
+    			<div class="details" v-html="datas">
+    				<div>{{datas}}</div>
+    			</div>
+
+    			<!-- <p class="inscribe">香港富比特</p> -->
+    			<!-- <p class="releaseDate">{{item.fcreatedate}}</p> -->
     		</div>
+    		
     	</div>
 	</div>
 </template>
 
 <script>
 	import Header from './header'
-
+	import common from "../kits/domain"
+  	import {ajax} from "../kits/http"
 	export default {
 	data(){
 		return {
-			newList:[
-				{
-					title:'关于FUC更换充值地址的公告',
-					publishDate:'2018-03-26 10:28:54',
-					hello:'尊敬的用户',
-					details:'FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。',
-					inscribe:'香港富比特',
-					releaseDate:'2018年2月18日'
-				}
+			datas:'',
+			newsId:-1,
+			newcontentList:[
+				// {
+				// 	title:'关于FUC更换充值地址的公告',
+				// 	publishDate:'2018-03-26 10:28:54',
+				// 	hello:'尊敬的用户',
+				// 	details:'FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。FUC充值地址已更换，需要转入充值FUC的用户，请核对地址无误后进行操作，否则将可能造成充值的FUC丢失。如超过24小时未到账，请联系客服处理。',
+				// 	inscribe:'香港富比特',
+				// 	releaseDate:'2018年2月18日'
+				// }
 			]
 		}
 	},
-	methods:{},
+	methods:{
+	},
 	computed:{},
-	created(){},
+	created(){
+		// console.log(this.$route.params.newsId);
+		this.newsId = this.$route.params.newsId;
+		var URL = common.apidomain+'notice/detail';
+		let formData = new FormData();
+		formData.append('id',this.newsId);
+		
+		ajax(URL,'post',formData,(res)=>{
+			// console.log(res.data);
+			this.newcontentList = res.data.data;
+			// console.log(res.data.data.farticle.fcontent);
+			this.datas = res.data.data.farticle.fcontent;
+		})
+	},
+	mounted(){
+	},
 	components:{Header}
 	}
 </script>
@@ -79,6 +107,7 @@
 	}
 	.notice .article .releaseDate{
 		margin-bottom: 0px;
+		margin-top: 10px;
 		padding-bottom: 16px;
 	}
 	

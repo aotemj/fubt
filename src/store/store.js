@@ -11,6 +11,7 @@ export default new Vuex.Store({
     username:null,//用户名
     password:null,//密码
     userInfo:{},//用户信息
+    routerTo:'',//要跳转到的页面
 	},
 	mutations:{
     //用户登录
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     userLogOut(state){
       state.isLogin = false;
+    },
+    changeRouterPath(state,path){
+      state.routerTo = path;
     }
 	}
 })

@@ -24,130 +24,135 @@ import addNewPwdByEmail from "@/components/subcom/addNewPwdByEmail"
 
 Vue.use(Router)
 
-const router =  new Router({
-	routes: [{
-		path: '/',
-		name: 'home',
-		component: home
-	}, {
-		path: '/exchange', //交易中心
-		name: 'exchange',
-		component: exchange
-	},
-  {
-    path:'/finance',//财务中心
-    name:'finance',
-    component:finance,
-    meta:{auth:true}
+const router = new Router({
+  routes: [{
+    path: '/',
+    name: 'home',
+    component: home
+  }, {
+    path: '/exchange', //交易中心
+    name: 'exchange',
+    component: exchange
   },
     {
-      path:'/rechangeAndwithdrawDeposit',//充值&提现
-      name:'rechangeAndwithdrawDeposit',
-      component:rechangeAndwithdrawDeposit
+      path: '/finance',//财务中心
+      name: 'finance',
+      component: finance,
+      meta: {auth: true}
     },
     {
-      path:'/rechangeRecord',//充值记录
-      name:'rechangeRecord',
-      component:rechangeRecord
+      path: '/rechangeAndwithdrawDeposit',//充值&提现
+      name: 'rechangeAndwithdrawDeposit',
+      component: rechangeAndwithdrawDeposit
     },
     {
-      path:'/withdrawDepositRecord',//提现记录
-      name:'withdrawDepositRecord',
-      component:withdrawDepositRecord
-    },
-  {
-    path:'/market',//行情中心
-    name:'market',
-    component:market
-  },
-    {
-      path:'/newCoins',//新币投票
-      name:'newCoins',
-      component:newCoins
+      path: '/rechangeRecord',//充值记录
+      name: 'rechangeRecord',
+      component: rechangeRecord
     },
     {
-      path:'/news',//新闻
-      name:'news',
-      component:news
+      path: '/withdrawDepositRecord',//提现记录
+      name: 'withdrawDepositRecord',
+      component: withdrawDepositRecord
     },
     {
-      path:'/c2c',//c2c
-      name:'c2c',
-      component:c2c
+      path: '/market',//行情中心
+      name: 'market',
+      component: market
     },
     {
-      path:'/currencyInfo',//币种资料
-      name:'currencyInfo',
-      component:currencyInfo
+      path: '/newCoins',//新币投票
+      name: 'newCoins',
+      component: newCoins
     },
     {
-      path:'/news/newsDetails',
-      name:'newsDetails',
-      component:newsDetails
+      path: '/news',//新闻
+      name: 'news',
+      component: news
     },
     {
-      path:'/user',
-      name:'user',
-      component:user
+      path: '/c2c',//c2c
+      name: 'c2c',
+      component: c2c
     },
     {
-      path:'/login',
-      name:'login',
-      component:login
+      path: '/currencyInfo',//币种资料
+      name: 'currencyInfo',
+      component: currencyInfo
     },
     {
-      path:'/register',
-      name:'register',
-      component:register
+      path: '/news/newsDetails/:newsId',
+      name: 'newsDetails',
+      component: newsDetails
     },
     {
-      path:'/forgetPwd',
-      name:'forgetPwd',
-      component:forgetPwd
+      path: '/user',
+      name: 'user',
+      component: user
     },
     {
-      path:'/changePwdByPhone',
-      name:'changePwdByPhone',
-      component:changePwdByPhone
+      path: '/login',
+      name: 'login',
+      component: login
     },
     {
-      path:'/changePwdByEmail',
-      name:'changePwdByEmail',
-      component:changePwdByEmail
+      path: '/register',
+      name: 'register',
+      component: register
     },
     {
-      path:'/addNewPwdByPhone',
-      name:'addNewPwdByPhone',
-      component:addNewPwdByPhone
+      path: '/forgetPwd',
+      name: 'forgetPwd',
+      component: forgetPwd
     },
     {
-      path:'/addNewPwdByEmail',
-      name:'addNewPwdByEmail',
-      component:addNewPwdByEmail
+      path: '/changePwdByPhone',
+      name: 'changePwdByPhone',
+      component: changePwdByPhone
+    },
+    {
+      path: '/changePwdByEmail',
+      name: 'changePwdByEmail',
+      component: changePwdByEmail
+    },
+    {
+      path: '/addNewPwdByPhone',
+      name: 'addNewPwdByPhone',
+      component: addNewPwdByPhone
+    },
+    {
+      path: '/addNewPwdByEmail',
+      name: 'addNewPwdByEmail',
+      component: addNewPwdByEmail
     }
   ]
 })
-// router.beforeEach((to, from, next) => {
-//   // console.log(to);
-//   // console.log(from);
-//   next()
-// })
 
-router.beforeEach((to,from,next) => {
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/login') {
+    store.commit('changeRouterPath', to.path);
+  }
+  //
+  // if (!store.state.isLogin && (to.path === '/exchange')) {
+  //   next({ path: '/login' })
+  // }else{
+  //   next()
+  // }
 
-  if(to.matched.some( m => m.meta.auth)){
+
+  if (to.matched.some(m => m.meta.auth)) {
 
 // 对路由进行验证
-    if(store.state.isLogin) { // 已经登陆
+    if (store.state.isLogin) { // 已经登陆
       next()   // 正常跳转到你设置好的页面
-    }else{
-    // 未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
-      next({path:'/login',query:{ Rurl: to.fullPath} })
+    } else {
+      // 未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
+      next({path: '/login', query: {Rurl: to.fullPath}})
     }
-    }else{
-      next()
-    }
-  })
+  } else {
+    next()
+  }
+})
 
 
 export default router
