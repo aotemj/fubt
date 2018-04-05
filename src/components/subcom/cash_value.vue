@@ -47,10 +47,12 @@
                 <div class="inner-box clearfix">
                   <div class="left fl">
                     <p class="title">充值地址</p>
-                    <div class="address">
-                      <span class="fl">{{rechargeAddress.fadderess}}</span>
+                    <div class="address" v-show="rechargeAddress.fadderess">
+                      <span class="fl" >{{rechargeAddress.fadderess}}</span>
                       <span class="fr copy-btn">复制</span>
                     </div>
+                    <el-button type="primary" v-show="!rechargeAddress.fadderess">点击获取充值地址</el-button>
+
                   </div>
                   <div class="right fl">
                     <div class="qr-code"></div>
