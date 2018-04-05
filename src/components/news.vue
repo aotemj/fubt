@@ -10,8 +10,7 @@
     <div class="newsTabs newNavs">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane name="first">
-         <div slot="label" class="titleNavs">新闻中心<i :class="{active:activeId}"></i>
-         </div>
+          <div slot="label" class="titleNavs">新闻中心<i :class="{active:activeId}"></i></div>
           <div class="bar"></div>
           <!-- 新闻中心内容 -->
           <div class="newsCenter">
@@ -50,26 +49,27 @@
             </div>
           </div>
         </el-tab-pane>
+
         <el-tab-pane name="second">
-        <div slot="label" class="titleNavs">官方公告<i :class="{active:!activeId}"></i>
-        </div>
+          <div slot="label" class="titleNavs">官方公告<i :class="{active:!activeId}"></i></div>
           <!-- 官方公告内容 -->
           <div class="newsCenter">
             <!-- 时间轴 -->
             <div class="timeAxis">
               <ul>
-                <li v-for="(item,index) in noticeTimeList">
-                  <router-link to="./news/newsDetails">
-                    <h4>{{item.order}}</h4>
-                    <p>{{item.time}}</p>
+                <li v-for="(item,index) in noticeLists">
+                  <!-- <router-link to="./news/newsDetails"> -->
+                  <router-link :to="'./news/newsDetails/'+item.id">
+                    <h4>{{index}}</h4>
+                    <p>{{item.date}}</p>
                   </router-link>
                 </li>
               </ul>
             </div>
-            <!-- 新闻列表 -->
+            <!-- 公告列表 -->
             <div class="newsList">
-              <ul>
-                <li v-for="(item,index) in noticeNewsLists">
+              <ul v-show="noticeLists.length!=0">
+                <li v-for="(item,index) in noticeLists">
                   <div class="contents">
                     <div class="sign">
                       <span>{{item.sign}}</span>
@@ -79,12 +79,14 @@
                   </div>
                   <div class="overview">
                     <p>
-                      {{item.overview}}<router-link to="./news/newsDetails" class="more">&nbsp;&nbsp;[查看更多]</router-link>
+                      <!-- {{item.content}}<router-link to="./news/newsDetails" class="more">&nbsp;&nbsp;[查看更多]</router-link> -->
+                      {{item.content}}<router-link :to="'./news/newsDetails/'+item.id" class="more">&nbsp;&nbsp;[查看更多]</router-link>
                     </p>
                   </div>
                   <div class="verticalLine"></div>
                 </li>
               </ul>
+              <div class="no-data" v-show ="noticeLists.length==0">暂无数据</div>
             </div>
           </div>
         </el-tab-pane>
@@ -102,18 +104,13 @@
   export default {
     data(){
       return {
-        activeName: 'first',
-        newsLists:[
-         
-        ],
-        newList:[
-        ],
-        noticeTimeList:[
-          
-        ],
-        noticeNewsLists:[
-        ],
-        activeId:true
+        activeName: 'first', 
+        activeId:true,
+        newsLists:[],// 返回的10条新闻
+        newList:[],//截取的前7条新闻
+        noticeLists:[],//返回的5条公告
+        // 截取的前7条公告
+        // noticeList:[],  
       }
     },
     methods:{
@@ -125,15 +122,29 @@
     },
     computed:{},
     created(){
+
+      // 1.0 新闻列表请求数据
       var url = common.apidomain + 'notice/index';
       var formData = new FormData();
       formData.append('id',2);
       formData.append('currentPage',1);
       ajax(url, 'post', formData, (res) => {
         // console.log(res.data.data.farticles);
-        this.newsLists = res.data.data.farticles;
-        this.newList = this.newsLists.slice(0,7);
-        console.log(res.data.data.farticles)
+        this.newsLists = res.data.data.farticles;//返回的10条新闻
+        this.newList = this.newsLists.slice(0,7);//截取的前7条新闻
+        // console.log(res.data.data.farticles)
+      });
+
+      // 2.0 公告列表请求数据
+      var url = common.apidomain + 'service/appnewmore';
+      var formData = new FormData();
+      formData.append('id',2);
+      formData.append('cur',1);
+      ajax(url, 'post', formData, (res) => {
+        // console.log(res)
+        // console.log(res.data)
+        // console.log(res.data.data.items)
+        this.noticeLists = res.data.data.items;
       });
     },
     components:{Header,Customer}

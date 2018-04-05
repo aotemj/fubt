@@ -1,5 +1,5 @@
 <template>
-<!-- 财务中心 -->
+  <!-- 财务中心 -->
   <div>
     <!-- 1.0头部引入 -->
     <Header class="header"></Header>
@@ -10,7 +10,7 @@
 
           <el-tab-pane label="财务中心" disabled></el-tab-pane>
 
-          <el-tab-pane label="充值&提现" name="first" >
+          <el-tab-pane label="充值&提现" name="first">
             <cashValue></cashValue>
           </el-tab-pane>
 
@@ -62,23 +62,33 @@
   import Customer from './subcom/customer_service'//在线客服
 
   export default {
-    data(){
+    data() {
       return {
         tabPosition: 'left',
         activeName: 'first',
       }
     },
-    methods:{},
-    created(){},
-    computed:{},
-    components:{
-      Header,cashValue,rechargeRecord,withdrawalRecord,personalAssets,billingDetails,fundAccount,pushAsset,moneyIncome,Customer
+    methods: {},
+    created() {
+    },
+    computed: {},
+    components: {
+      Header,
+      cashValue,
+      rechargeRecord,
+      withdrawalRecord,
+      personalAssets,
+      billingDetails,
+      fundAccount,
+      pushAsset,
+      moneyIncome,
+      Customer
     }
   }
 </script>
 
 <style scoped>
-  .financeContent{
+  .financeContent {
     width: 81%;
     margin: 0 auto;
     margin-top: 85px;

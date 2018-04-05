@@ -2,10 +2,10 @@
   <div class="con-box">
     <Header class="header"></Header>
     <div class="inner-box">
-      <h4><span v-bind:class="{active:activeId==1}" v-on:click="changeRegisterMode">手机注册</span><span
-        v-bind:class="{active:activeId==2}" v-on:click="changeRegisterMode">邮箱注册</span></h4>
+      <h4><span v-bind:class="{active:regType==0}" v-on:click="changeRegisterMode">手机注册</span><span
+        v-bind:class="{active:regType==1}" v-on:click="changeRegisterMode">邮箱注册</span></h4>
       <!--电话注册-->
-      <div class="mobileReg-box" v-show="activeId==1">
+      <div class="mobileReg-box" v-show="regType==0">
         <!--国家选取-->
         <div class="select-box">
           <select class="inner-box">
@@ -26,7 +26,7 @@
         <!--</div>-->
       </div>
       <!--邮箱注册-->
-      <div class="emailReg-box mobileReg-box" v-show="activeId==2">
+      <div class="emailReg-box mobileReg-box" v-show="regType==1">
 
         <div class="select-box">
           <input type="text" v-model="registerInfo.emailAddress" placeholder="邮箱地址">
@@ -44,14 +44,14 @@
           <sIdentify class="image" :identifyCode="identifyCode"></sIdentify>
         </div>
       </div>
-      <div class="mobileReg-box" v-show="activeId==1">
+      <div class="mobileReg-box" v-show="regType==0">
         <div class="select-box verify-box">
           <input type="text" v-model="msgCode" placeholder="短信验证码">
           <input class="verify-btn cp middle fz12" :disabled="msgDisabled" type="button" v-on:click="sendCode"
                  v-model="msgBtnTxt">
         </div>
       </div>
-      <div class="emailReg-box mobileReg-box" v-show="activeId ==2">
+      <div class="emailReg-box mobileReg-box" v-show="regType ==1">
         <div class="select-box verify-box">
           <input type="text" v-model="emailCode" placeholder="邮箱验证码">
           <input class="verify-btn cp middle fz12" :disabled="emailDisabled" type="button" v-model="emailBtnTxt"
@@ -88,15 +88,14 @@
   export default {
     data() {
       return {
-        activeId: 1,//激活面板
+        regType: 0,//激活面板
         msgDisabled: false,//短信验证码按钮状态
         msgTime: 0,//短信验证码时间
         msgBtnTxt: "发送验证码",//短信验证码按钮文字
         msgCode: '',//短信验证码
-        trueMsgCode: '',//正确的短信验证码
         // msgCodeStatus: false,//短信验证码状态
         errorMsg: '',//错误提示
-        refreshStatus:false,//是否允许刷新
+        refreshStatus: false,//是否允许刷新
         imgCode: '',//图形验证码
         trueImgCode: '',//正确的图形验证码
         // imgCodeStatus: false,//图形验证码状态
@@ -106,17 +105,18 @@
         emailTime: 0,//邮箱验证码时间
         emailBtnTxt: '发送验证码',//邮箱验证码按钮文字
         identifyCode: "",//验证码'
+        imageRedisKey: "",//图片验证码key
         password: '',//密码
         confirmPwd: '',//确认密码
         invitationCode: '',//邀请码
         agree: false,//用户协议
+        // regType:0,//注册方式（手机：0，邮箱：1）
         registerInfo: {//注册信息
           phoneNum: null,
           emailAddress: '',//邮箱地址
-
         },
         phoneReg: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/,
-        pwdReg: /^(?!(?:\\d+|[a-zA-Z]+)$)[\\da-zA-Z]{6,}$/,
+        pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
         emailReg: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
       }
     },
@@ -124,7 +124,7 @@
       //注册
       register() {
         //手机号注册
-        if (this.activeId == 1) {
+        if (this.regType == 0) {
           if (!this.phoneNumReg() || !this.imgCodeReg() || !this.msgCodeReg()) {
             return;
           }
@@ -152,35 +152,82 @@
         } else {
           this.errorMsg = '';
         }
+        let regUrl = common.apidomain +'register';
+        let fd = new FormData();
+        if(this.regType==0){
+          fd.append('regName',this.registerInfo.phoneNum);//手机号
+          fd.append('pcode',this.msgCode);//短信验证码
+        }else {
+          fd.append('regName',this.registerInfo.emailAddress);//邮箱地址
+          fd.append('pcode',this.emailCode);//邮箱验证码
+        }
+        fd.append('password',this.password);//密码
+        fd.append('regType',this.regType);//注册类型
+        fd.append('vcode',this.imgCode);//图片验证码
+        fd.append('ecode',0);//图片验证码
+        fd.append('areaCode','+86');//地区代码
+        fd.append('intro_user','');//
+        ajax(regUrl,'post',fd,(res)=>{
+          console.log(res);
+        })
+        /*
+        * 手机号注册参数
+        * regName: 18625512982 ,//注册手机号
+          password:zhaoxinlei1,//密码
+          regType:0,//注册方式（手机注册）
+          vcode:52d8,//图片验证码
+          pcode:111111,//短信验证码
+          ecode:0,//
+          areaCode:+86,//地区标识码
+          intro_user:,//
+          */
+        /*
+        * 邮箱注册参数
+        * regName: 991807272@qq.com
+          password: zhaoxinlei1
+          regType:1,//注册方式（邮箱注册）
+          vcode:52d8
+          pcode:0,//
+          ecode:0
+          areaCode:+86
+          intro_user:
+        * */
+
       },
       //发送验证码
       sendCode() {
         //手机号注册
-        if (this.activeId == 1) {
+        if (this.regType == 0) {
           if (!this.phoneNumReg() || !this.imgCodeReg()) {
             return;
           }
-          this.phoneNumExistTest().then((res)=>{
-            // console.log(res);
-            if(res.data.code!==200){
+          this.phoneNumExistTest().then((res) => {
+            // console.log(res.data);
+            if (res.data.code !== 200) {
               this.errorMsg = res.data.msg;
               return;
-            }else {
-              this.msgTime = 60;
-              this.msgDisabled = true;
-              this.msgTimer();
+            } else {
               let msgUrl = common.apidomain + 'user/send_sms';
 
               let fd = new FormData();
 
-              fd.append('type',111);
-              fd.append('msgtype',1);
-              fd.append('areaCode','+86');
-              fd.append('phone',this.registerInfo.phoneNum);
-              fd.append('vcode',this.imgCode);
-              fd.append('uid',0);
-              ajax(msgUrl,'post',fd,(res)=>{
+              fd.append('type', 111);
+              fd.append('msgtype', 1);
+              fd.append('areaCode', '+86');
+              fd.append('phone', this.registerInfo.phoneNum);
+              fd.append('vcode', this.imgCode);
+              fd.append('imageRedisKey', this.imageRedisKey);
+              fd.append('uid', 0);
+              ajax(msgUrl, 'post', fd, (res) => {
                 console.log(res);
+                if(res.data.code!==200){
+                  this.errorMsg = res.data.msg;
+                  return;
+                }else{
+                  this.msgTime = 60;
+                  this.msgDisabled = true;
+                  this.msgTimer();
+                }
               })
             }
           });
@@ -235,7 +282,7 @@
         return Math.floor(Math.random() * (max - min) + min);
       },
       refreshCode() {
-        if (this.activeId == 1) {
+        if (this.regType == 0) {
           if (!this.phoneNumReg()) {
             return;
           }
@@ -254,6 +301,8 @@
             return;
           }
           this.identifyCode = res.data.data.verifyCode;
+          this.imageRedisKey = res.data.data.imageRedisKey;
+          // console.log(this.imageRedisKey);
           this.trueImgCode = this.identifyCode;
           console.log(this.trueImgCode)
         })
@@ -267,20 +316,20 @@
         } else if (!this.phoneReg.test(this.registerInfo.phoneNum)) {
           this.errorMsg = '您输入的手机号格式不正确';
           return 0;
-        }else{
+        } else {
           this.errorMsg = '';
           return 1;
         }
       },
       //手机号是否存在验证
-      phoneNumExistTest(){
+      phoneNumExistTest() {
 
-        let promise = new Promise((resolve)=>{
-          let testUrl = common.apidomain+'user/check_user_exist';
+        let promise = new Promise((resolve) => {
+          let testUrl = common.apidomain + 'user/check_user_exist';
           let fd = new FormData();
-          fd.append('name',this.registerInfo.phoneNum);
-          fd.append('type','0');
-          ajax(testUrl,'post',fd,(res)=>{
+          fd.append('name', this.registerInfo.phoneNum);
+          fd.append('type', '0');
+          ajax(testUrl, 'post', fd, (res) => {
             // console.log(res);
             // if(res.data.code!==200){
             //   this.errorMsg = res.data.msg;
@@ -325,10 +374,7 @@
         if (!this.msgCode) {
           this.errorMsg = '请输入短信验证码';
           return 0;
-        } else if (!this.msgCodeStatus) {
-          this.errorMsg = '您输入的验证码不正确';
-          return 0;
-        } else {
+        }else {
           return 1;
         }
       },
@@ -348,10 +394,10 @@
       //  切换手机注册，邮箱注册
       changeRegisterMode() {
         this.errorMsg = '';
-        if (this.activeId == 1) {
-          this.activeId = 2;
+        if (this.regType == 0) {
+          this.regType = 1;
         } else {
-          this.activeId = 1;
+          this.regType = 0;
         }
       }
     },
@@ -359,10 +405,6 @@
       this.makeCode();
     },
     computed: {
-      //短信验证码状态
-      msgCodeStatus() {
-        return this.msgCode == !this.trueMsgCode
-      },
       //邮箱验证码状态
       emailCodeStatus() {
         return this.emailCode == !this.trueEmailCode
@@ -410,9 +452,10 @@
     margin-bottom: 15px;
     height: 42px;
   }
-.select-box input[type='text'],.select-box input[type='password']{
-  width:100%;
-}
+
+  .select-box input[type='text'], .select-box input[type='password'] {
+    width: 100%;
+  }
 
   .select-box > .inner-box {
     background-color: transparent;
@@ -429,9 +472,11 @@
     border-right: 1px solid #fff;
 
   }
-.mobile-input {
-  width:89% !important;
-}
+
+  .mobile-input {
+    width: 89% !important;
+  }
+
   option {
     border-radius: 0;
     /*color:#fff;*/

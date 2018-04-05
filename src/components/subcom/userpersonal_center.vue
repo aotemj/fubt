@@ -22,7 +22,7 @@
                     <button>{{ item.charge }}</button>
                     <button>{{ item.provided }}</button>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -78,14 +78,14 @@ export default {
         }
     },
     created(){
-        var url = common.apidomain + 'login';
-        var formData = new FormData();
-        formData.append('loginName','15994026836');
-        formData.append('password','fbt15994026836');
-        ajax(url, 'post', formData, (res) => {
-            console.log(res.data);
-            this.userCenter = res.data.data.user;
-        });
+        // var url = common.apidomain + 'login';
+        // var formData = new FormData();
+        // formData.append('loginName','15994026836');
+        // formData.append('password','fbt15994026836');
+        // ajax(url, 'post', formData, (res) => {
+        //     console.log(res.data);
+        //     this.userCenter = res.data.data.user;
+        // });
 
     },
     methods:{
@@ -109,7 +109,7 @@ export default {
         width: 100%;
         padding-left: 13%;
     }
-    
+
     .userid span:first-child{
         display: inline-block;
         width: 46%;
@@ -171,7 +171,7 @@ export default {
     .currencylist::-webkit-scrollbar {
         width: 2px;
     }
-    
+
     .currencylist::-webkit-scrollbar-track-piece {
         background-color: #c2c3c8;
     }

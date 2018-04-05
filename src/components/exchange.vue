@@ -13,23 +13,23 @@
           <ul class="clearfix">
             <li class="fl today-max">
               今日最高
-              <span>{{0.00000254}}</span>
+              <span>0.235256</span>
             </li>
             <li class="fl today-min">
               今日最低
-              <span>{{0.00000254}}</span>
+              <span>0.00000254</span>
             </li>
             <li class="fl tf-done-count">
               24小时成交量
-              <span>{{0.00000254}}</span>
+              <span>{{activeCoinInfo.total}}</span>
             </li>
             <li class="fl up-and-down">
               跌涨幅
-              <span>{{0.00000254}}</span>
+              <span>{{activeCoinInfo.rose}}</span>
             </li>
             <li class="fl now-price">
               最新成交价
-              <span>{{0.00000254}}</span>
+              <span>{{activeCoinInfo.price}}</span>
             </li>
           </ul>
         </div>
@@ -46,11 +46,11 @@
                   <li class="td">日涨跌</li>
                 </ul>
                 <div class="tbody" v-on:click="selectedCurrency">
-                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover" :data-cur-name="item.name+'/FBT'">
-                    <li class="data-item">{{item.name}}</li>
-                    <li class="data-item">{{item.newestPrice}}</li>
-                    <li class="data-item">{{item.tfDoneCunt}}</li>
-                    <li class="data-item">{{item.upAndDown}}</li>
+                  <div :id="item.id" class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id)">
+                    <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
+                    <li class="data-item">{{item.price}}</li>
+                    <li class="data-item">{{item.total}}</li>
+                    <li class="data-item">{{item.rose}}</li>
                   </div>
                 </div>
               </div>
@@ -65,11 +65,11 @@
                   <li class="td">日涨跌</li>
                 </ul>
                 <div class="tbody" v-on:click="selectedCurrency">
-                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover" :data-cur-name="item.name+'/BTC'">
-                    <li class="data-item">{{item.name}}</li>
-                    <li class="data-item">{{item.newestPrice}}</li>
-                    <li class="data-item">{{item.tfDoneCunt}}</li>
-                    <li class="data-item">{{item.upAndDown}}</li>
+                  <div :id="item.id" class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id)">
+                    <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
+                    <li class="data-item">{{item.price}}</li>
+                    <li class="data-item">{{item.total}}</li>
+                    <li class="data-item">{{item.rose}}</li>
                   </div>
                 </div>
               </div>
@@ -84,11 +84,11 @@
                   <li class="td">日涨跌</li>
                 </ul>
                 <div class="tbody" v-on:click="selectedCurrency">
-                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover" :data-cur-name="item.name+'/FUC'">
-                    <li class="data-item" data-cur-name="item.name">{{item.name}}</li>
-                    <li class="data-item">{{item.newestPrice}}</li>
-                    <li class="data-item">{{item.tfDoneCunt}}</li>
-                    <li class="data-item">{{item.upAndDown}}</li>
+                  <div :id="item.id" class="item" v-for="(item,index) in fucFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id)">
+                    <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
+                    <li class="data-item">{{item.price}}</li>
+                    <li class="data-item">{{item.total}}</li>
+                    <li class="data-item">{{item.rose}}</li>
                   </div>
                 </div>
               </div>
@@ -112,7 +112,6 @@
                 </div>
               </div>
             </el-tab-pane>
-
           </el-tabs>
           <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i class="el-icon-search search-icon"></i>
         </div>
@@ -272,6 +271,8 @@
 	</div>
 </template>
 <script>
+  import common from "../kits/domain"
+  import {ajax} from "../kits/http"
   import Header from "./header.vue";
   //在线客服
   import Customer from './subcom/customer_service'
@@ -386,87 +387,11 @@
             todos:'撤销'
           }
         ],
-        currencyList:[//币种列表
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          },
-          {
-            name:'DOGE',//币种名称
-            img:'',//币种图标
-            newestPrice:'0.00000054',//最新成交价
-            tfDoneCunt:41072.0,//24小时成交量
-            upAndDown:'35%',//日涨跌
-          }
-        ],
+        //所有币种列表
+        currencyList:[],
+        //部分行情数据展示
+        activeCoinInfo:{},
 			}
-
 		},
 		methods:{
 			//显示隐藏币种选择框
@@ -495,14 +420,62 @@
 			  console.dir(e.target.parentNode.dataset.curName);
 			  let curName = e.target.parentNode.dataset.curName;
 			  this.curListIsShow = false;
-      }
+      },
+      // 所有币种列表
+      say:function (id) {
+        // e.cancelBubble = true;
+        console.log(id);
+        console.log(this.currencyList);
+        this.currencyList.forEach((item,index)=>{
+          if(item.id==id){
+            this.activeCoinInfo = item;
+          }
+        })
+        console.log(this.activeCoinInfo);
+      },
 		},
 		created(){
+      var url = common.apidomain + 'real/indexmarket';
+      var formData = new FormData();
+      ajax(url, 'get', formData, (res) => {
+        this.currencyList = res.data.data;
+        // console.log(this.currencyList)
+      });
 
 		},
 		computed:{
-
-		},
+      // 币种列表过滤
+      fbtFilteredData: function () {
+        return this.currencyList.filter(function (item) {
+          return item['type'] == 2;
+        });
+      },
+      btcFilteredData: function () {
+        return this.currencyList.filter(function (item) {
+          return item['type'] == 1;
+        })
+      },
+      fucFilteredData: function () {
+        return this.currencyList.filter(function (item) {
+          return item['type'] == 3;
+        })
+      },
+        // filteredArticles: function () {
+        //   var articles_array = this.articles,
+        //     searchString = this.searchString;
+        //   if(!searchString){
+        //     return articles_array;
+        //   }
+        //   searchString = searchString.trim().toLowerCase();
+        //   articles_array = articles_array.filter(function(item){
+        //     if(item.title.toLowerCase().indexOf(searchString) !== -1){
+        //       return item;
+        //     }
+        //   })
+        //   // Return an array with the filtered data.
+        //   return articles_array;;
+        // }
+    },
 		components:{
       Header,//头部
       Customer,//在线客服

@@ -6,9 +6,7 @@
 			<div class="left">
 				<!--<div class="logo fl">-->
 				<div class="logo">
-          <a href="https://www.fubt.top"><img src="https://www.fubt.top//front/images/index/logo_03.png" alt="">
-
-          </a>
+          <a href="https://www.fubt.top"><img src="https://www.fubt.top//front/images/index/logo_03.png" alt=""></a>
         </div>
 				<!--<div class="nav fl">-->
 				<div class="nav">
@@ -31,27 +29,28 @@
 			</div>
 			<!--<div class="right fr clearfix">-->
 			<div class="right">
+
         <!--登录注册-->
 				<div class="login fl" v-if="!isLogin">
-
 					<ul class="clearfix">
-             <el-tooltip placement="bottom" style="color:#fff;background: rgba(0,0,0,0.5);">
-              <div slot="content" class="personal_center">
-                <Personal></Personal>
-              </div>
-              <li class="fl"><router-link to="/login">{{$t('m.login')}}</router-link></li>
-            </el-tooltip>
+            <li class="fl"><router-link to="/login">{{$t('m.login')}}</router-link></li>
 						<li class="fl"><router-link to="/register">{{$t('m.register')}}</router-link></li>
 					</ul>
 				</div>
+
         <!--欢迎页面-->
         <div class="welcome login fl" v-else="isLogin">
           <ul class="clearfix">
-            <li class="fl"><a href="#">您好，小明</a></li>
-            <li class="fl"><a href="#">{{$t('m.logout')}}</a></li>
+            <li class="fl percenter" @mouseover="onMouseOver" @mouseleave="upMouseOut">
+              <a href="#">您好，小明</a>
+              <!-- 悬浮弹窗个人信息在此展示 -->
+              <div slot="content" class="personal_center" v-show="per">
+                <Personal></Personal>
+              </div>
+            </li>
+            <!-- <li class="fl"><router-link to="/" @click.prevent="quit">{{$t('m.logout')}}</router-link></li> -->
+            <li class="fl"><a href="#" @click.prevent="quit">{{$t('m.logout')}}</a></li>
           </ul>
-          <!--个人信息-->
-          <div class="user-info"></div>
         </div>
         <!--切换语言-->
         <div class="change-lang fl" v-on:mouseover="showCountryList" v-on:mouseleave="hideCountryList">
@@ -70,20 +69,23 @@
 	</div>
 </template>
 <script>
-import Personal from './subcom/userpersonal_center'
-// import common from "./"
+  import Personal from './subcom/userpersonal_center'
+  import common from "../kits/domain"
+  import {ajax} from "../kits/http"
+  // import common from "./"
 	export default {
 		data(){
 			return {
         countryListIsShow:false,//语言列表切换
         activeRoute:'home',//当前激活标签标记
-        isLogin:this.$store.state.isLogin,//用户当前登录状态
+        // isLogin:this.$store.state.isLogin,//用户当前登录状态
         financeListIsShow:false,//财务中心连接显示状态
         lang:{
           'zh-CN':true,//中文
           'en-US':false,//英文
           'zh-FN':false,//中文繁体
-        }
+        },
+        per:false,//悬浮弹窗个人信息默认是隐藏的
 			}
 		},
 		created(){
@@ -101,7 +103,6 @@ import Personal from './subcom/userpersonal_center'
       // ajax(msgUrl,'post',fd,(res)=>{
       //   console.log(res);
       // })
-
 		},
 
 		methods:{
@@ -124,7 +125,6 @@ import Personal from './subcom/userpersonal_center'
         this.financeListIsShow=false;
       },
       chooseLang(e){
-
 			  if(e==this.$store.state.lang){
           this.hideCountryList();
 			    return;
@@ -137,10 +137,32 @@ import Personal from './subcom/userpersonal_center'
         this.$i18n.locale = this.$store.state.lang;
 			  this.hideCountryList();
       },
+      onMouseOver(){// 鼠标移入名字悬浮弹窗个人信息显示事件
+        this.per = true
+      },
+      upMouseOut(){// 鼠标移出名字悬浮弹窗个人信息隐藏事件
+        this.per = false
+      },
+      // 退出系统
+      quit:function(){//点击退出按钮触发事件
+        // console.log("1")
+        this.$router.push({path:'/'});//点击退出到首页
+        this.$store.commit('userLogOut');//从前端退出系统：改变用户的登陆状态->未登陆
+        // 发送请求接口：从后台 退出 系统
+        var url = common.apidomain + 'user/logout';
+        // var formData = new FormData();
+        ajax(url, 'post', {}, (res) => {
+          // console.log(res.data)
+        });
+        // console.log(this.userInfo)
+      },
 		},
-    computed:{},
+    computed:{
+		  isLogin(){
+		    return this.$store.state.isLogin;
+      }
+    },
     components:{Personal}
-
   }
 </script>
 <style scoped>
@@ -149,7 +171,6 @@ import Personal from './subcom/userpersonal_center'
 		padding:0 100px;
 	}
 	.inner-content{
-		/*background-color: pink;*/
 		width:100%;
 		height:100%;
     display:flex;
@@ -253,7 +274,6 @@ import Personal from './subcom/userpersonal_center'
     bottom:-90px;
     right: -10px;
     background-color: rgba(0,0,0,.7);
-    /*background-color: pink;*/
     box-sizing: border-box;
     padding:0 10px;
   }
@@ -263,7 +283,6 @@ import Personal from './subcom/userpersonal_center'
   .country-list ul li {
     height:40px;
     width:100px;
-    /*background-color:pink;*/
     line-height:40px;
     position: relative;
   }
@@ -294,12 +313,15 @@ import Personal from './subcom/userpersonal_center'
   }
 
   /* 个人中心 */
+  .percenter{
+    position: relative;
+  }
   .personal_center{
     width: 400px;
     height: 500px;
     background: rgba(0,0,0,0.5);
     position:absolute;
-    top:-15px;
-    right:-100px;
+    top:85px;
+    right:-108px;
   }
 </style>

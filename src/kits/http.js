@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 // import * as types from '../store/types.js'
-// import store from "../store/store.js"
+import store from "../store/store.js"
 // import qs from 'qs';
 import router from '../router/index'
 
@@ -11,6 +11,12 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.headers['Content-Type'] = 'application/form-data';
   }
+  if(store.state.token){
+    config.headers['authorization'] = store.state.token;
+  }
+  // console.log(config);
+  // console.log(store.state);
+
   return config;
 }, (error) => {
   alert("错误的传参");
