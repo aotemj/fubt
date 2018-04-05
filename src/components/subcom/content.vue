@@ -15,7 +15,7 @@
             <li class="td">{{$t('m.sixChange')}}</li>
             <li class="td">{{$t('m.like')}}</li>
           </ul>
-          <div class="tbody">
+          <div class="tbody" v-show="filteredData.length!=0">
             <div class="item" v-for="(item,index) in filteredData" v-on:mouseover="hover">
               <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.sellsymbol}}/<span class="fw4">{{item.buysymbol}}</span>
               </li>
@@ -34,6 +34,7 @@
               </li>
             </div>
           </div>
+          <div class="no-data" v-show ="filteredData.length==0">暂无数据</div>
         </div>
       </el-tab-pane>
 
@@ -51,7 +52,7 @@
             <li class="td">{{$t('m.sixChange')}}</li>
             <li class="td">{{$t('m.like')}}</li>
           </ul>
-          <div class="tbody">
+          <div class="tbody" v-show="btcFilteredData.length!=0">
             <div class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover">
               <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.sellsymbol}}/<span class="fw4">{{item.buysymbol}}</span>
               </li>
@@ -70,6 +71,7 @@
               </li>
             </div>
           </div>
+          <div class="no-data" v-show ="filteredData.length==0">暂无数据</div>
         </div>
       </el-tab-pane>
       <!--FBT交易区-->
@@ -86,7 +88,7 @@
             <li class="td">{{$t('m.sixChange')}}</li>
             <li class="td">{{$t('m.like')}}</li>
           </ul>
-          <div class="tbody">
+          <div class="tbody" v-show="btcFilteredData.length!=0">
             <div class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover">
               <li class="data-item"><img :src="item.image" alt="" class="ml30">{{item.sellsymbol}}/<span class="fw4">{{item.buysymbol}}</span>
               </li>
@@ -105,6 +107,7 @@
               </li>
             </div>
           </div>
+          <div class="no-data" v-show ="fbtFilteredData.length==0">暂无数据</div>
         </div>
       </el-tab-pane>
       <!--FUC交易区-->
@@ -123,7 +126,6 @@
 <script>
   import common from "../../kits/domain.js";
   import {ajax} from "../../kits/http.js";
-
 
   export default {
     data() {
@@ -310,5 +312,8 @@
 
   .icon-shoucang.active {
     color: #f4ea2a;
+  }
+  .no-data{
+    line-height: 200px;
   }
 </style>

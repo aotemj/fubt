@@ -3,30 +3,31 @@
     <header>记录</header>
     <div class="empty"></div>
     <div class="voteNew">
-    <ul v-for="(item,index) in pushTab">
-        <li>{{item.time}}</li>
-        <li>{{item.currency}}</li>
-        <li>{{item.address}}</li>
-        <li>{{item.number}}</li>
-        <li>{{item.confirmation}}</li>
-        <li>{{item.state}}</li>
-        <li>{{item.state}}</li>
-        <li>{{item.state}}</li>
-        <li>{{item.state}}</li>
-    </ul>
-    <div id="voteNew-list" v-for="(item,index) in pushList">
-      <article>
-        <span>{{item.time}}</span>
-        <span>{{item.currency}}</span>
-        <span>{{item.address}}</span>
-        <span>{{item.number}}</span>
-        <span>{{item.confirmation}}</span>
-        <span>{{item.state}}</span>
-        <span>{{item.state}}</span>
-        <span>{{item.state}}</span>
-        <span>{{item.state}}</span>
-      </article>
-    </div>
+        <ul v-for="(item,index) in pushTab">
+            <li>{{item.time}}</li>
+            <li>{{item.currency}}</li>
+            <li>{{item.address}}</li>
+            <li>{{item.number}}</li>
+            <li>{{item.confirmation}}</li>
+            <li>{{item.state}}</li>
+            <li>{{item.state}}</li>
+            <li>{{item.state}}</li>
+            <li>{{item.state}}</li>
+        </ul>
+        <div id="voteNew-list">
+            <article v-for="(item,index) in pushList" v-show="pushList.length!==0">
+                <span>{{item.time}}</span>
+                <span>{{item.currency}}</span>
+                <span>{{item.address}}</span>
+                <span>{{item.number}}</span>
+                <span>{{item.confirmation}}</span>
+                <span>{{item.state}}</span>
+                <span>{{item.state}}</span>
+                <span>{{item.state}}</span>
+                <span>{{item.state}}</span>
+            </article>
+        </div>
+        <div class="noRecord" v-show="pushList.length==0">暂无记录</div>  
     </div>
   </div>
 </template>
@@ -75,6 +76,10 @@
   }
 </script>
 <style scoped>
+.noRecord{
+    height: 150px;
+    line-height: 150px;
+}
 header {
     height: 40px;
     padding-left: 20px;

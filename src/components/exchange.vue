@@ -268,10 +268,13 @@
       </el-tabs>
 
     </div>
+    <Customer></Customer>
 	</div>
 </template>
 <script>
-	import Header from "./header.vue";
+  import Header from "./header.vue";
+  //在线客服
+  import Customer from './subcom/customer_service'
 	export default {
 		data(){
 			return {
@@ -501,7 +504,8 @@
 
 		},
 		components:{
-			Header,//头部
+      Header,//头部
+      Customer,//在线客服
 		}
 	}
 </script>

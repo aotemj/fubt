@@ -33,7 +33,7 @@
 			<div class="right">
         <!--登录注册-->
 				<div class="login fl" v-if="!isLogin">
-         
+
 					<ul class="clearfix">
              <el-tooltip placement="bottom" style="color:#fff;background: rgba(0,0,0,0.5);">
               <div slot="content" class="personal_center">
@@ -71,6 +71,7 @@
 </template>
 <script>
 import Personal from './subcom/userpersonal_center'
+// import common from "./"
 	export default {
 		data(){
 			return {
@@ -86,7 +87,21 @@ import Personal from './subcom/userpersonal_center'
 			}
 		},
 		created(){
-      this.activeRoute = this.$route.name;//头部点击样式添加 
+      this.activeRoute = this.$route.name;//头部点击样式添加
+      // let msgUrl = common.apidomain + 'user/send_sms';
+      //
+      // let fd = new FormData();
+      //
+      // fd.append('type',111);
+      // fd.append('msgtype',1);
+      // fd.append('areaCode','+86');
+      // fd.append('phone',this.registerInfo.phoneNum);
+      // fd.append('vcode',this.imgCode);
+      // fd.append('uid',0);
+      // ajax(msgUrl,'post',fd,(res)=>{
+      //   console.log(res);
+      // })
+
 		},
 
 		methods:{

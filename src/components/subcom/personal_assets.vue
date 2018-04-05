@@ -9,12 +9,13 @@
             <li>冻结资产</li>
             <li>总量</li>
           </ul>
-          <ul v-for="(item,index) in dataList">
+          <ul v-for="(item,index) in dataList" v-show="dataList.length!==0">
             <li>{{item.bizhong}}</li>
             <li>{{item.keyongzichan}}</li>
             <li>{{item.dongjiezichan}}</li>
             <li>{{item.zongliang}}</li>
           </ul>
+          <div class="noRecord" v-show="dataList.length==0">暂无记录</div>
         </div>
       </div>
 
@@ -117,5 +118,12 @@
     float: left;
     text-align: left;
     padding-left: 60px;
+  }
+
+  /*暂无记录*/
+  .noRecord{
+    height: 500px;
+    line-height:500px;
+    /*background-color: #11182C;*/
   }
 </style>

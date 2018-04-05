@@ -11,7 +11,7 @@
             <li>{{item.confirmation}}</li>
             <li>{{item.state}}</li>
         </ul>
-        <div id="voteNew-list" v-for="(item,index) in newrecordList">
+        <div id="voteNew-list" v-for="(item,index) in newrecordList" v-show="newrecordList.length!==0">
           <article>
             <span>{{item.time}}</span>
             <span>{{item.currency}}</span>
@@ -21,6 +21,7 @@
             <span>{{item.state}}</span>
           </article>
         </div>
+        <div class="wu" v-show="newrecordList.length==0">暂无记录</div>
       </div>
     </div>
   </div>
@@ -56,7 +57,6 @@
     created(){},
     computed:{},
     components:{
-
     }
   }
 </script>
@@ -69,7 +69,11 @@
     /*margin-top: 25px;*/
     /*text-align: left;*/
 /*}*/
-
+.wu{
+    height: 500px;
+    line-height: 500px;
+    background: #0e1326;
+}
 
 .voteNew>ul {
     background: #0e1326;

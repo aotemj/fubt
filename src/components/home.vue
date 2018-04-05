@@ -12,7 +12,7 @@ import Header from "./header.vue"
 // 轮播模块
 import slider from "./subcom/slider.vue"
 // 新闻模块
-import news from "./subcom/news.vue"
+import news from "./subcom/homeNews.vue"
 // 主要内容
 import Content from "./subcom/content.vue"
 	export default {
@@ -29,5 +29,8 @@ import Content from "./subcom/content.vue"
 	}
 </script>
 <style scoped>
-
+  /*轮播图*/
+  .slider{
+    margin-top: 85px;
+  }
 </style>

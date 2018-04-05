@@ -13,8 +13,8 @@
         <li>{{item.state}}</li>
         <li>{{item.operation}}</li>
     </ul>
-    <div id="voteNew-list" v-for="(item,index) in pushList">
-      <article>
+    <div id="voteNew-list">
+      <article v-for="(item,index) in pushList" v-show="pushList.length!==0">
         <span>{{item.currency}}</span>
         <span>{{item.type}}</span>
         <span>{{item.number}}</span>
@@ -25,11 +25,12 @@
         <span>{{item.operation}}</span>
       </article>
     </div>
+    <div class="noRecord" v-show="pushList.length==0">暂无记录</div>
     </div>
   </div>
 </template>
 <script>
-  
+
   export default {
     data(){
       return {
@@ -46,30 +47,34 @@
           }
         ],
         pushList:[
-          {
-            currency:'FBT',
-            type:'类型',
-            number:'954642',
-            earnings:'12.1345',
-            grantTime:'2018/3/30 14:31',
-            creationTime:'2018/3/30 14:31',
-            state:'已存入',
-            operation:'已审核',
-          }
+          // {
+          //   currency:'FBT',
+          //   type:'类型',
+          //   number:'954642',
+          //   earnings:'12.1345',
+          //   grantTime:'2018/3/30 14:31',
+          //   creationTime:'2018/3/30 14:31',
+          //   state:'已存入',
+          //   operation:'已审核',
+          // }
         ]
       }
     },
     methods:{
-      
+
     },
     created(){},
     computed:{},
     components:{
-     
+
     }
   }
 </script>
 <style scoped>
+.noRecord{
+    height: 150px;
+    line-height: 150px;
+}
 header {
     height: 40px;
     padding-left: 20px;

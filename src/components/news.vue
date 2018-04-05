@@ -29,7 +29,7 @@
             </div>
             <!-- 新闻列表 -->
             <div class="newsList">
-              <ul>
+              <ul v-show="newsLists.length!=0">
                 <li v-for="(item,index) in newsLists">
                   <div class="contents">
                     <div class="sign">
@@ -46,6 +46,7 @@
                   <div class="verticalLine"></div>
                 </li>
               </ul>
+              <div class="no-data" v-show ="newsLists.length==0">暂无数据</div>
             </div>
           </div>
         </el-tab-pane>
@@ -89,6 +90,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <Customer></Customer>
   </div>
 </template>
 
@@ -96,112 +98,20 @@
   import Header from './header'
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
-
+  import Customer from './subcom/customer_service'//在线客服
   export default {
     data(){
       return {
         activeName: 'first',
         newsLists:[
-          // {
-            // sign:'壹',
-          //   title:'UFH介绍',
-          //   date:'2018年9月18日',
-          //   overview:'亲爱的富比特用户富比特将在2018年3月28日开启PC PromotionChain交易，支持PC/FBT交易对，邀您体验！具体时间安排如下：3月28日上午10:00开启充提服务。3月28日下午15:00开放PC交易。PC介绍破局传统推广行业困境，推广链横空出世！'
-          // },
-          // {
-          //   sign:'贰',
-          //   title:'4天狂欢百万糖果大空投',
-          //   date:'2018年09月13日',
-          //   overview:'上线币种：RDN、DGD、ABT、SNT、DTA3.23日下午6点开启充提币服务。3.24日上午10点开启交易。币种介绍：RDNRaidenNetwork简介雷电网络是一种链下规模性交易的解决方案，基于以太坊智能合约实现。可支持所有符合以太坊ERC20标准代币的交易，它类似于闪电网络，具有即时到账，低转账费用。'
-          // },
-          // {
-          //   sign:'叁',
-          //   title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-          //   date:'2013年01月23日',
-          //   overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          // },
-          // {
-          //   sign:'肆',
-          //   title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-          //   date:'2013年01月23日',
-          //   overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          // },
-          // {
-          //   sign:'伍',
-          //   title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-          //   date:'2013年01月23日',
-          //   overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          // },
-          // {
-          //   sign:'陆',
-          //   title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-          //   date:'2013年01月23日',
-          //   overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          // },
-          // {
-          //   sign:'柒',
-          //   title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-          //   date:'2013年01月23日',
-          //   overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          // },
+         
         ],
         newList:[
         ],
         noticeTimeList:[
-          {
-            time:'2018.03.28',
-            order:'壹'
-          },
-          {
-            time:'2018.05.8',
-            order:'贰'
-          },
-          {
-            time:'2017.06.6',
-            order:'叁'
-          },
-          {
-            time:'2012.07.6',
-            order:'肆'
-          },
-          {
-            time:'2014.08.4',
-            order:'伍'
-          },
-          {
-            time:'2013.09.44',
-            order:'陆'
-          },
-          {
-            time:'2014.11.55',
-            order:'柒'
-          }
+          
         ],
         noticeNewsLists:[
-          {
-            sign:'肆',
-            title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-            date:'2013年01月23日',
-            overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          },
-          {
-            sign:'伍',
-            title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-            date:'2013年01月23日',
-            overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          },
-          {
-            sign:'陆',
-            title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-            date:'2013年01月23日',
-            overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          },
-          {
-            sign:'柒',
-            title:'关于 IOST.BTM.OMG.TRX.VEN 上线富比特BTC交易区公告',
-            date:'2013年01月23日',
-            overview:'暨绿色区块链发展论坛启动仪式首席协办单位：香港富比特广东省碳普惠创新发展中心小聪中小企业服务示范平台承办单位：广东量子协同会展管理有限公司首席支持单位：乐步施消费合作社碳圈传媒中金财行斑马信链CHINAAI峰会时间：2018-03-25 13:00至2018-03-25 18:00峰会地址'
-          },
         ],
         activeId:true
       }
@@ -220,13 +130,13 @@
       formData.append('id',2);
       formData.append('currentPage',1);
       ajax(url, 'post', formData, (res) => {
-        console.log(res.data.data.farticles);
+        // console.log(res.data.data.farticles);
         this.newsLists = res.data.data.farticles;
-        this.newList = this.newsLists.slice(0,7)
-        console.log(this.newList)
+        this.newList = this.newsLists.slice(0,7);
+        console.log(res.data.data.farticles)
       });
     },
-    components:{Header}
+    components:{Header,Customer}
   }
 </script>
 
@@ -351,5 +261,7 @@
   .newsList>ul>li:last-child>.verticalLine{
     display: none;
   }
-
+  .no-data{
+    margin-bottom: 100px;
+  }
 </style>

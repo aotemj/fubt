@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="user_div">
-            <div class="user_info" v-for="(item,index) in userCenter">
-                <p class="username">{{ item.userName }}<span class="set">{{ item.Setup }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.tui }}</span></p>
+            <div class="user_info">
+                <p class="username">{{ userCenter.floginname }}<span class="set">设置&nbsp;&nbsp;&nbsp;&nbsp;退出</span></p>
                 <div class="userid">
-                    <span>UID：{{ item.userID }}</span>
+                    <span>UID：{{ userCenter.fid }}</span>
                 </div>
             </div>
             <div class="currency">
@@ -15,7 +15,7 @@
                 </ul>
                 <div class="currencylist">
                     <ul>
-                        <li v-for="item in sitesList"><span>{{ item.currency }}</span><span>{{ item.available }}</span><span>{{ item.frozen }}</span></li>
+                        <!-- <li v-for="item in sitesList"><span>{{ item.total }}</span><span>{{ item.frozen }}</span><span>{{ item.ico }}</span></li> -->
                     </ul>
                 </div>
                 <div class="button_click" v-for="(item,index) in Chargeprovided">
@@ -28,17 +28,14 @@
     </div>
 </template>
 <script>
+  import common from "../../kits/domain"
+  import {ajax} from "../../kits/http"
 export default {
     data(){
 		return {
-            userCenter:[
-                {
-                userName:'15994026836',
-                userID:'81240',
-                Setup:'设置',
-                tui:'退出'
-                }
-            ],
+            userCenter:{
+
+            },
             currencyList:[
                 {
                 currency:'币种',
@@ -47,30 +44,30 @@ export default {
                 }
             ],
             sitesList: [
-            { currency: 'FUC' ,available:'157978.3122' ,frozen:'0'},
-            { currency: 'BTC' ,available:'157' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
-            { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'FUC' ,available:'157978.3122' ,frozen:'0'},
+                // { currency: 'BTC' ,available:'157' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
+                // { currency: 'TKC' ,available:'9999993122' ,frozen:'0'},
             ],
             Chargeprovided:[
                 {
@@ -81,7 +78,15 @@ export default {
         }
     },
     created(){
-    
+        var url = common.apidomain + 'login';
+        var formData = new FormData();
+        formData.append('loginName','15994026836');
+        formData.append('password','fbt15994026836');
+        ajax(url, 'post', formData, (res) => {
+            console.log(res.data);
+            this.userCenter = res.data.data.user;
+        });
+
     },
     methods:{
 

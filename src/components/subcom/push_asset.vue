@@ -1,5 +1,5 @@
 <template>
-  <div class="push_box">
+  <div class="pushAss push_box">
     <el-form ref="form" :model="form" label-width="80px">
        <el-form-item class="Unit border_bottom" label="账户余额">
         <span>0.2507245</span>

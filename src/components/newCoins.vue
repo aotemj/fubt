@@ -35,10 +35,12 @@
         </div>
       </div>
     </div>
+    <Customer></Customer>
   </div>
 </template>
 <script>
   import Header from './header'
+  import Customer from './subcom/customer_service'//在线客服
   export default {
     data(){
       return {
@@ -78,7 +80,8 @@
     computed:{},
     created(){},
     components:{
-      Header
+      Header,
+      Customer
     }
   }
 </script>

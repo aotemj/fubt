@@ -81,8 +81,8 @@
             <li>{{item.service}}</li>
             <li>{{item.state}}</li>
           </ul>
-          <div id="voteNew-list" v-for="(item,index) in billingList">
-            <article>
+          <div id="voteNew-list">
+            <article v-for="(item,index) in billingList" v-show="billingList.length!==0">
               <span>{{item.time}}</span>
               <span>{{item.type}}</span>
               <span>{{item.number}}</span>
@@ -90,6 +90,7 @@
               <span>{{item.state}}</span>
             </article>
           </div>
+          <div class="noRecord" v-show="billingList.length==0">暂无记录</div>
         </div>
       </div>
     </div>
@@ -129,6 +130,14 @@
   };
 </script>
 <style scoped>
+.block{
+  background-color: #0E1326;
+}
+.noRecord{
+  height: 410px;
+  line-height:410px;
+  background-color: #11182C;
+}
 .empty{
   width: 100%;
   height: 20px;

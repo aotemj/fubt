@@ -45,6 +45,7 @@
         </el-tabs>
       </div>
     </div>
+    <Customer></Customer>
   </div>
 </template>
 
@@ -58,7 +59,7 @@
   import fundAccount from "./subcom/fund_account"//资金账号
   import pushAsset from "./subcom/push_asset"//push资产
   import moneyIncome from "./subcom/money_income"//币存收益
-
+  import Customer from './subcom/customer_service'//在线客服
 
   export default {
     data(){
@@ -71,7 +72,7 @@
     created(){},
     computed:{},
     components:{
-      Header,cashValue,rechargeRecord,withdrawalRecord,personalAssets,billingDetails,fundAccount,pushAsset,moneyIncome
+      Header,cashValue,rechargeRecord,withdrawalRecord,personalAssets,billingDetails,fundAccount,pushAsset,moneyIncome,Customer
     }
   }
 </script>

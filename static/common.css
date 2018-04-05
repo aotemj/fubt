@@ -141,6 +141,43 @@ el-carousel-item img{
 
 /*  任付伟改新闻部分导航样式-结束 */
 
+/* 任付伟更改财务中心push资产样式-开始 */
+
+.pushAss{
+  background-color: #0E1326;
+}
+
+.pushAss button{
+  background: #192136;
+  border: 1px solid #a0a3ab;
+}
+.pushAss button:hover{
+  background: #66B1FF;
+  border: 1px solid #a0a3ab;
+}
+.pushAss .el-form-item__label{
+  padding-right: 20px;
+}
+/* 任付伟更改财务中心push资产样式-结束 */
+
+/* 任付伟更改财务中心币存收益样式-开始 */
+.push_box{
+  background-color: #0E1326;
+}
+.push_box .el-form-item__label{
+  padding-right: 20px;
+}
+.push_box button{
+  background: #192136;
+  border: 1px solid #a0a3ab;
+}
+.push_box button:hover{
+  background: #66B1FF;
+  border: 1px solid #a0a3ab;
+}
+/* 任付伟更改财务中心币存收益样式-结束 */
+
+
 
 /*孝喜改element样式*/
 
