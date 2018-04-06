@@ -7,13 +7,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state:{
 		lang:'ch-CN',//当前语言
-    isLogin:false,//是否登录
+    isLogin:!!localStorage.getItem('userToken'),//是否登录
     username:null,//用户名
     password:null,//密码
     userInfo:{
 
     },//用户信息
-    token:'',//
+    token:localStorage.getItem('userToken')||'',//
     routerTo:'',//要跳转到的页面
 
 	},
@@ -22,11 +22,14 @@ export default new Vuex.Store({
     userLogin(state,data){
       state.userInfo = data.user;
       state.isLogin = true;
-      state.token = data.token
+      state.token = data.token;
+      localStorage.setItem('userToken',data.token);
     },
     //用户登出
     userLogOut(state){
       state.isLogin = false;
+      state.token = '';
+      localStorage.setItem('userToken','');
     },
     //登录后路由跳转
     changeRouterPath(state,path){

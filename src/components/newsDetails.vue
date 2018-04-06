@@ -28,7 +28,7 @@
     			<!-- <p class="inscribe">香港富比特</p> -->
     			<!-- <p class="releaseDate">{{item.fcreatedate}}</p> -->
     		</div>
-    		
+
     	</div>
 	</div>
 </template>
@@ -63,7 +63,7 @@
 		var URL = common.apidomain+'notice/detail';
 		let formData = new FormData();
 		formData.append('id',this.newsId);
-		
+
 		ajax(URL,'post',formData,(res)=>{
 			// console.log(res.data);
 			this.newcontentList = res.data.data;
@@ -77,12 +77,16 @@
 	}
 </script>
 
-<style scoped> 
+<style scoped>
 	.notice{
-		background-color: #11182B;
-		width: 90%;
-		margin: 0 auto;
-		margin-top: 105px;
+		/*background-color: #11182B;*/
+		/*width: 90%;*/
+		/*margin: 0 auto;*/
+		/*margin-top: 105px;*/
+  background-color:#11182B;
+  width:1300px;
+  margin:0 auto;
+  margin-top:105px;
 	}
 	.notice .pathNav{
 		height: 60px;
@@ -110,5 +114,5 @@
 		margin-top: 10px;
 		padding-bottom: 16px;
 	}
-	
+
 </style>

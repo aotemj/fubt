@@ -11,7 +11,9 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.headers['Content-Type'] = 'application/form-data';
   }
-  if(store.state.token){
+  let userToken = localStorage.getItem('userToken')||store.state.token;
+  // console
+  if(userToken){
     config.headers['authorization'] = store.state.token;
   }
   // console.log(config);
@@ -64,10 +66,7 @@ export function ajax(url, ajaxType, params, success) {
   } else if (ajaxType == 'get') {
     axios.get(
       url, {
-        // headers: {
-        //   'Content-Type': 'application/json',
-        //   'charset': 'utf-8'
-        // }
+        params
       }
     ).then((res) => {
       success(res);

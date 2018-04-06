@@ -197,7 +197,8 @@
 
 <style scoped>
 .range{
-  padding: 0 100px 0 100px;
+  /*padding: 0 100px 0 100px;*/
+  width:1300px;
 }
 #trading-sub {
     margin-top:7%;

@@ -53,7 +53,7 @@ import Footer from "./footer.vue"
     },
     methods:{},
     computed:{
-      
+
     },
     components:{
       Header,//头部
@@ -67,11 +67,17 @@ import Footer from "./footer.vue"
 </script>
 <style scoped>
 .hint {
-    width: 100%;
-    padding: 2% 100px 2% 100px;
-    margin-top: 3%;
-    float: left;
-    background: #111a31;
+    /*width: 100%;*/
+    /*padding: 2% 100px 2% 100px;*/
+    /*margin-top: 3%;*/
+    /*float: left;*/
+    /*background: #111a31;*/
+  width: 1300px;
+  margin: 0 auto;
+  padding: 2% 100px 2% 100px;
+  margin-top: 3%;
+  /*float: left;*/
+  background: #111a31;
 }
 
 .hint>p:first-child {
@@ -106,5 +112,9 @@ import Footer from "./footer.vue"
   background:#c2c3c8;
   margin-top: -20px;
    margin-bottom: 10px;
+}
+.range{//增加
+width: 1300px;
+  margin: 0 auto;
 }
 </style>

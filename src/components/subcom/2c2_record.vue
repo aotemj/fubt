@@ -66,10 +66,15 @@
 </script>
 <style scoped>
 .exchange{
-  width: 100%;
-  float: left;
-  padding: 0 100px 0 100px;
-  margin: 20px 0 50px;
+  /*width: 100%;*/
+  /*float: left;*/
+  /*padding: 0 100px 0 100px;*/
+  /*margin: 20px 0 50px;*/
+  width: 1300px;
+  margin: 20px auto 50px;
+  /*  float: left;
+    padding: 0 100px 0 100px;
+    margin: 20px 0 50px;*/
 }
 
 .exchange>header{

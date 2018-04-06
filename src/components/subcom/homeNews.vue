@@ -57,8 +57,12 @@
 </script>
 <style scoped>
 	.news{
-		overflow: hidden;
-		transition: all 0.5s;
+		/*overflow: hidden;*/
+		/*transition: all 0.5s;*/
+    width: 100%;
+
+    overflow: hidden;
+    transition: all 0.5s;
 	}
 	.anim{
 		transition: all 0.5s;

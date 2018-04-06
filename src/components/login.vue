@@ -29,8 +29,8 @@
   export default {
     data() {
       return {
-        username: null,
-        password: null,
+        username: 18625512982,
+        password: 'a111111',
         errorMsg: '',//错误提示
         loginBtn: '登录',
         logging: false,//登录中

@@ -316,4 +316,8 @@
   .no-data{
     line-height: 200px;
   }
+  .content{//增加此样式
+  width: 1300px;
+    margin:0 auto;
+  }
 </style>

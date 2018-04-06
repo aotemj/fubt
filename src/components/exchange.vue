@@ -1,11 +1,11 @@
 <template>
-	<div class="con-box">
-		<Header class="header"></Header>
-		<!-- 币种资料 -->
-		<div class="currencyData">
-		  <div class="inner-box clearfix">
+  <div class="con-box">
+    <Header class="header"></Header>
+    <!-- 币种资料 -->
+    <div class="currencyData">
+      <div class="inner-box clearfix">
         <div class="left fl clearfix">
-          <button class="chg-cur-btn fl" v-on:click="toggleCurList">{{currentCurrency01.name}}/{{currentCurrency02.name}}</button>
+          <button class="chg-cur-btn fl" v-on:click="toggleCurList">{{defaultCurrency1}}/{{defaultCurrency2}}</button>
           <i class="iconfont fl" v-bind:class="{'icon-xiala':!curListIsShow,'icon-shangla-copy':curListIsShow}"></i>
           <router-link to="/currencyInfo" class="cur-desc fff fl"><i class= "iconfont icon-bianji"></i>币种资料</router-link>
         </div>
@@ -13,23 +13,23 @@
           <ul class="clearfix">
             <li class="fl today-max">
               今日最高
-              <span>0.235256</span>
+              <span>{{defaultdata1}}</span>
             </li>
             <li class="fl today-min">
               今日最低
-              <span>0.00000254</span>
+              <span>{{defaultdata2}}</span>
             </li>
             <li class="fl tf-done-count">
               24小时成交量
-              <span>{{activeCoinInfo.total}}</span>
+              <span>{{defaultdata3}}</span>
             </li>
             <li class="fl up-and-down">
               跌涨幅
-              <span>{{activeCoinInfo.rose}}</span>
+              <span>{{defaultdata4}}</span>
             </li>
             <li class="fl now-price">
               最新成交价
-              <span>{{activeCoinInfo.price}}</span>
+              <span>{{defaultdata5}}</span>
             </li>
           </ul>
         </div>
@@ -116,7 +116,7 @@
           <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i class="el-icon-search search-icon"></i>
         </div>
       </div>
-		</div>
+    </div>
 
     <!--交易-->
     <div class="deal-box">
@@ -206,28 +206,27 @@
                 <li>比例</li>
               </ul>
             </li>
-            <li class="sell-one" v-for="(item,index) in sellList">
-              <ul>
-                <li>{{item.name}}</li>
+            <li class="sell-one">
+              <ul v-for="(item,index) in businessbuys">
+                <li>卖{{item.id}}</li>
                 <li>{{item.price}}</li>
-                <li>{{item.entrustCount|keepTwoNum}}</li>
+                <li>{{item.amount}}</li>
                 <li>
                   <span class="sell-proportion" v-bind:style="{width:item.proportion}"></span>
                 </li>
               </ul>
             </li>
             <div class="middle-line"></div>
-            <li class="buy-one" v-for="(item,index) in buyList">
-              <ul>
-                <li>{{item.name}}</li>
+            <li class="buy-one">
+              <ul v-for="(item,index) in businesssell">
+                <li>买{{item.id}}</li>
                 <li>{{item.price}}</li>
-                <li>{{item.entrustCount|keepTwoNum}}</li>
+                <li>{{item.amount}}</li>
                 <li>
                   <span class="buy-proportion" v-bind:style="{width:item.proportion}"></span>
                 </li>
               </ul>
             </li>
-
 
           </ul>
         </div>
@@ -239,15 +238,15 @@
         <el-tab-pane name="first">
           <span slot="label">当前委托</span>
           <div class="table">
-              <ul class="th">
-               <li class="td">时间</li>
-               <li class="td">类型</li>
-               <li class="td">价格</li>
-               <li class="td">数量</li>
-               <li class="td">成交额</li>
-               <li class="td">状态</li>
-               <li class="td">操作</li>
-              </ul>
+            <ul class="th">
+              <li class="td">时间</li>
+              <li class="td">类型</li>
+              <li class="td">价格</li>
+              <li class="td">数量</li>
+              <li class="td">成交额</li>
+              <li class="td">状态</li>
+              <li class="td">操作</li>
+            </ul>
             <div class="tbody">
               <ul class="item" v-for="(item,index) in currentEntrustList" v-on:mouseover="hover">
                 <li class="data-item">{{item.date}}</li>
@@ -268,7 +267,7 @@
 
     </div>
     <Customer></Customer>
-	</div>
+  </div>
 </template>
 <script>
   import common from "../kits/domain"
@@ -276,12 +275,19 @@
   import Header from "./header.vue";
   //在线客服
   import Customer from './subcom/customer_service'
-	export default {
-		data(){
-			return {
-			  activeName:'first',
-				currentCurrency01:{
-				  name:'FUC',//币种
+  export default {
+    data(){
+      return {
+        defaultCurrency1:'BTC',
+        defaultCurrency2:'FBT',
+        defaultdata1:'0.2654',
+        defaultdata2:'0.02565',
+        defaultdata3:'2731',
+        defaultdata4:'12',
+        defaultdata5:'0.33',
+        activeName:'first',
+        currentCurrency01:{
+          name:'FUC',//币种
           count:0,//数量
           maxBuy:0,//最大可买
           referencePrice:0.00000254,//参考单价
@@ -298,75 +304,77 @@
           sellPrice:0,//买入数量
           totalPrice:this.buyPrice*this.buyCount||0,//总金额
         },
-				curListIsShow:false,//币种选择框显示状态
-				curDescIsShow:false,//币种资料框显示状态
+        curListIsShow:false,//币种选择框显示状态
+        curDescIsShow:false,//币种资料框显示状态
         userBalance:9977,//用户余额
         // userBuyCount:0,//用户买入数量
         // userBuyTotal:this.userBuyPrice*this.userBuyCount||0,//总价
-        buyList:[
-          {
-            name:'买1',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'100%',//比例
-          },
-          {
-            name:'买2',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'20%',//比例
-          }
-          ,
-          {
-            name:'买3',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'10%',//比例
-          },
-          {
-            name:'买4',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'50%',//比例
-          },{
-            name:'买5',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'88%',//比例
-          }
-        ],//买列表
-        sellList:[
-          {
-            name:'卖1',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'100%',//比例
-          },
-          {
-            name:'卖2',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'20%',//比例
-          }
-          ,
-          {
-            name:'卖3',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'10%',//比例
-          },
-          {
-            name:'卖4',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'50%',//比例
-          },{
-            name:'卖5',//名称
-            price:0.00008500,//价格
-            entrustCount:5000.000,//委托量
-            proportion:'88%',//比例
-          }
-        ],//卖列表
+        // buyList:[
+        //   {
+        //     name:'买1',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'100%',//比例
+        //   },
+        //   {
+        //     name:'买2',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'20%',//比例
+        //   }
+        //   ,
+        //   {
+        //     name:'买3',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'10%',//比例
+        //   },
+        //   {
+        //     name:'买4',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'50%',//比例
+        //   },{
+        //     name:'买5',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'88%',//比例
+        //   }
+        // ],
+        //买列表
+        // sellList:[
+        //   {
+        //     name:'卖1',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'100%',//比例
+        //   },
+        //   {
+        //     name:'卖2',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'20%',//比例
+        //   }
+        //   ,
+        //   {
+        //     name:'卖3',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'10%',//比例
+        //   },
+        //   {
+        //     name:'卖4',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'50%',//比例
+        //   },{
+        //     name:'卖5',//名称
+        //     price:0.00008500,//价格
+        //     entrustCount:5000.000,//委托量
+        //     proportion:'88%',//比例
+        //   }
+        // ],
+        //卖列表
         currentEntrustList:[
           {
             date:'18-02-27 10:53:48',
@@ -391,19 +399,23 @@
         currencyList:[],
         //部分行情数据展示
         activeCoinInfo:{},
-			}
-		},
-		methods:{
-			//显示隐藏币种选择框
-			toggleCurList(){
-				// this.isShow = !this.isShow;
-				this.curListIsShow=!this.curListIsShow;
-			},
-			toggleCurDesc(){
+        //买卖
+        business:[],
+        newarr:[],
+        // businesssell:[]
+      }
+    },
+    methods:{
+      //显示隐藏币种选择框
+      toggleCurList(){
+        // this.isShow = !this.isShow;
+        this.curListIsShow=!this.curListIsShow;
+      },
+      toggleCurDesc(){
 
-			},
+      },
       formatTooltip(val) {
-			  return val;
+        return val;
         // return this.userBalance/val*100 ;
       },
       hover(e){
@@ -417,33 +429,56 @@
 
       },
       selectedCurrency(e){
-			  console.dir(e.target.parentNode.dataset.curName);
-			  let curName = e.target.parentNode.dataset.curName;
-			  this.curListIsShow = false;
+        console.dir(e.target.parentNode.dataset.curName);
+        let curName = e.target.parentNode.dataset.curName;
+        this.curListIsShow = false;
       },
       // 所有币种列表
       say:function (id) {
-        // e.cancelBubble = true;
-        console.log(id);
-        console.log(this.currencyList);
+        // console.log(id);
+        // console.log(this.currencyList);
         this.currencyList.forEach((item,index)=>{
           if(item.id==id){
+            //单个列表数据
             this.activeCoinInfo = item;
+            //列表币种默认
+            this.defaultCurrency1 = item.sellname;
+            this.defaultCurrency2 = item.buysymbol;
+            this.defaultdata1 = item.total;
+            this.defaultdata2 = item.total;
+            this.defaultdata3 = item.total;
+            this.defaultdata4 = item.rose;
+            this.defaultdata5 = item.price;
           }
         })
-        console.log(this.activeCoinInfo);
+        this.curListIsShow = false;
+        // console.log(this.activeCoinInfo);
       },
-		},
-		created(){
+    },
+    created(){
       var url = common.apidomain + 'real/indexmarket';
-      var formData = new FormData();
-      ajax(url, 'get', formData, (res) => {
+      ajax(url, 'get', {}, (res) => {
         this.currencyList = res.data.data;
         // console.log(this.currencyList)
       });
-
-		},
-		computed:{
+      var currebyurl = common.apidomain + 'real/market';
+      var formDataurl = new FormData();
+      ajax(currebyurl,'get',{
+        symbol:2,
+        buysellcount:20,
+        successcount:20,
+      },(res) => {
+        this.business = res.data.data.trades;
+        // this.iness = businessbuys;
+        this.newarr = this.business.slice(0,11);//截取的10条数据
+        // this.businesssell = res.data.data.sells;
+        console.log(this.business);
+        console.log(this.newarr)
+        console.log(this.iness)
+        // console.log(this.businesssell);
+      });
+    },
+    computed:{
       // 币种列表过滤
       fbtFilteredData: function () {
         return this.currencyList.filter(function (item) {
@@ -460,35 +495,41 @@
           return item['type'] == 3;
         })
       },
-        // filteredArticles: function () {
-        //   var articles_array = this.articles,
-        //     searchString = this.searchString;
-        //   if(!searchString){
-        //     return articles_array;
-        //   }
-        //   searchString = searchString.trim().toLowerCase();
-        //   articles_array = articles_array.filter(function(item){
-        //     if(item.title.toLowerCase().indexOf(searchString) !== -1){
-        //       return item;
-        //     }
-        //   })
-        //   // Return an array with the filtered data.
-        //   return articles_array;;
-        // }
+      // 买过滤
+      businessbuys: function () {
+        return this.newarr.filter(function (item) {
+          return item['type'] == '买入';
+        })
+      },
+      //卖过滤
+      businesssell: function () {
+        return this.newarr.filter(function (item) {
+          return item['type'] == '卖出';
+        })
+      }
+      // isLogin(){
+      //   return this.$store.state.isLogin;
+      // }
     },
-		components:{
+    components:{
       Header,//头部
       Customer,//在线客服
-		}
-	}
+    }
+  }
 </script>
 <style scoped>
-	.currencyData{
-		height:70px;
-		line-height:70px;
-		margin-top:100px;
-		padding:0 100px;
-	}
+  .currencyData{
+    /*height:70px;*/
+    /*line-height:70px;*/
+    /*margin-top:100px;*/
+    /*padding:0 100px;*/
+    width: 1300px;
+    margin:0 auto;
+    height:70px;
+    line-height:70px;
+    margin-top:100px;
+    /*padding:0 100px;*/
+  }
   .currencyData .inner-box {
     background-color: #10172d;
     width:100%;
@@ -525,16 +566,16 @@
 
   .chg-cur-btn,.cur-desc{
     cursor:pointer;
-		height:70px;
-		margin:0 30px;
-	}
+    height:70px;
+    margin:0 30px;
+  }
   .chg-cur-btn{
     font-weight: 700;
 
   }
-	.cur-desc{
-		margin-left: 30px;
-	}
+  .cur-desc{
+    margin-left: 30px;
+  }
   .right ul li.fl{
     /*background-color: pink;*/
     height:70px;
@@ -548,9 +589,15 @@
   }
   /*交易框（买入，卖出）*/
   .deal-box,.entrust{
+    /*margin-top:20px;*/
+    /*height:400px;*/
+    /*padding:0 100px;*/
+    /*text-align: left;*/
+    width: 1300px;
+    margin: 0 auto;
     margin-top:20px;
     height:400px;
-    padding:0 100px;
+    /*padding:0 100px;*/
     /*text-align: left;*/
   }
   .deal-box .inner-box{
@@ -702,3 +749,4 @@
     top:17px;
   }
 </style>
+

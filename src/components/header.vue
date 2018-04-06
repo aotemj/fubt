@@ -42,7 +42,7 @@
         <div class="welcome login fl" v-else="isLogin">
           <ul class="clearfix">
             <li class="fl percenter" @mouseover="onMouseOver" @mouseleave="upMouseOut">
-              <a href="#">您好，小明</a>
+              <a href="#">您好，{{this.$store.state.userInfo.frealname}}</a>
               <!-- 悬浮弹窗个人信息在此展示 -->
               <div slot="content" class="personal_center" v-show="per">
                 <Personal></Personal>
@@ -171,8 +171,13 @@
 		padding:0 100px;
 	}
 	.inner-content{
-		width:100%;
-		height:100%;
+		/*width:100%;*/
+		/*height:100%;*/
+    /*display:flex;*/
+    width: 1300px;
+    margin: 0 auto;
+    /*width:100%;*/
+    height:100%;
     display:flex;
 	}
   .inner-content .left {

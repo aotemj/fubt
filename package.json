@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@xkeshi/vue-qrcode": "^0.3.0",
     "axios": "^0.18.0",
     "echarts": "^4.0.4",
     "element-ui": "^2.2.2",
@@ -17,7 +18,9 @@
     "iview": "^2.11.0",
     "mint-ui": "^2.2.13",
     "vue": "^2.5.2",
+    "vue-clipboard2": "^0.1.0",
     "vue-i18n": "^7.6.0",
+    "vue-qart": "^2.1.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

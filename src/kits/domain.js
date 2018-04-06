@@ -1,3 +1,3 @@
 export default {
-	apidomain: 'http://192.168.1.36:8073/'
+	apidomain: 'http://192.168.1.47:8073/'
 }

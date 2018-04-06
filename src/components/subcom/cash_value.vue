@@ -41,31 +41,41 @@
                 <button v-on:click="showWithdrawDepositBox(index)">提现</button>
               </div>
             </div>
-            <div class="todos-box" v-show="withdrawDepositIsShowList[index].allIsShow">
+            <div class="todos-box" v-if="withdrawDepositIsShowList[index].allIsShow">
               <!--充值-->
               <div class="recharge-box" v-show="withdrawDepositIsShowList[index].rechargeIsShow">
                 <div class="inner-box clearfix">
+                  <div class="needmemo tc fw7 fz22" v-show="needmemo">
+                    转账时请务必备注（否则后果自负）:<span class="red">{{$store.state.userInfo.fid}}</span>
+                  </div>
                   <div class="left fl">
-                    <p class="title">充值地址</p>
-                    <div class="address" v-show="rechargeAddress.fadderess">
-                      <span class="fl" >{{rechargeAddress.fadderess}}</span>
-                      <span class="fr copy-btn">复制</span>
+                    <p class="title dis-in-blk">充值地址</p>
+                    <el-button size="mini" type="primary" v-if="!rechargeAddress.fadderess"
+                               v-on:click="getAddress(index,item.coinId)">点击获取充值地址
+                    </el-button>
+                    <div v-show="rechargeAddress.fadderess">
+                      <div class="address">
+                        <span class="fl">{{rechargeAddress.fadderess}}</span>
+                        <span class="fr copy-btn cp" v-clipboard:copy="rechargeAddress.fadderess"
+                              v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
+                      </div>
                     </div>
-                    <el-button type="primary" v-show="!rechargeAddress.fadderess">点击获取充值地址</el-button>
-
                   </div>
                   <div class="right fl">
-                    <div class="qr-code"></div>
+                    <div class="qr-code" id="qrcode" v-show="rechargeAddress.fadderess">
+                      <VueQrcode :value="String(rechargeAddress.fadderess)" :options="{ size: 100 }"></VueQrcode>
+                    </div>
                   </div>
                 </div>
                 <!--充值须知-->
                 <div class="tips">
                   充值须知
                   <p> < 到账时间一般是10分钟-60分钟，如有疑问请联系客服QQ:2263378</p>
-                  <p> < 您充值FUC上述地址后，需要整个FUC网络节点的确认，为了快速到账，您可以向FUC网络支付少量的手续费。</p>
-                  <p> < 最小充值金额是：0.0001 您的TKC地址不会改变，可以重复充值，如有更改，我们会通过网站公告或邮件通知您。</p>
+                  <p> < 您充值{{item.coinName}}上述地址后，需要整个{{item.coinName}}网络节点的确认，为了快速到账，您可以向FUC网络支付少量的手续费。</p>
+                  <p> < 最小充值金额是：0.0001 您的{{item.coinName}}地址不会改变，可以重复充值，如有更改，我们会通过网站公告或邮件通知您。</p>
                 </div>
               </div>
+
               <!--提现-->
               <div class="withdraw-deposit-box" v-show="withdrawDepositIsShowList[index].withdrawDepositIsShow">
                 <div class="inner-box">
@@ -98,32 +108,43 @@
 <script>
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
+  // import VueQArt from 'vue-qart'
+  import VueQrcode from '@xkeshi/vue-qrcode'
+
   export default {
     data() {
       return {
+        config: {
+          value: 'https://www.baidu.com',
+          imagePath: '',
+          filter: 'color'
+        },
         seen: true,
         withdrawDepositIsShowList: [],
         currencyList: [//币种列表
-          {
-            // "applogo":"https://fubt.oss-ap-southeast-1.aliyuncs.com/fubt/upload/coin/a7e56fc38ea44e1f8ed4c395193ec2e0组.png",
-            // "coinIntroduce":null,
-            // "id":1,
-            // "name":"FUC",
-            // "networkFee":0.01,
-            // "recharge":true,
-            // "shortname":"FUC",
-            // "status":1,
-            // "symbol":"FUC",
-            // "type":2,
-            // "weblogo":"https://fubt.oss-ap-southeast-1.aliyuncs.com/fubt/upload/coin/a7e56fc38ea44e1f8ed4c395193ec2e0组.png",
-            // "withdraw":true
-          }
+          // {
+          // "applogo":"https://fubt.oss-ap-southeast-1.aliyuncs.com/fubt/upload/coin/a7e56fc38ea44e1f8ed4c395193ec2e0组.png",
+          // "coinIntroduce":null,
+          // "id":1,
+          // "name":"FUC",
+          // "networkFee":0.01,
+          // "recharge":true,
+          // "shortname":"FUC",
+          // "status":1,
+          // "symbol":"FUC",
+          // "type":2,
+          // "weblogo":"https://fubt.oss-ap-southeast-1.aliyuncs.com/fubt/upload/coin/a7e56fc38ea44e1f8ed4c395193ec2e0组.png",
+          // "withdraw":true
+          // }
         ],
         filteredData: [],//渲染数组
-        filteredData1:[],//原数组
-        filteredData2:[],//过滤可用余额不为0 的数组
-        rechargeAddress:{},//充值地址
-
+        filteredData1: [],//原数组
+        filteredData2: [],//过滤可用余额不为0 的数组
+        rechargeAddress: {
+          fadderess: ''
+        },//充值地址
+        msg: '复制信息',//复制信息
+        needmemo:null,//是否需要提示信息
       }
     },
     methods: {
@@ -136,7 +157,8 @@
         this.filteredData = this.filteredData2;
       },
       //显示充值框
-      showRechargeBox(index,coinId) {
+      showRechargeBox(index, coinId) {
+
         this.withdrawDepositIsShowList.forEach((item, index) => {
           item.allIsShow = false;
           item.rechargeIsShow = false;
@@ -145,15 +167,29 @@
         this.withdrawDepositIsShowList[index].allIsShow = true;
         this.withdrawDepositIsShowList[index].rechargeIsShow = true;
 
-        let coinDepositUrl = common.apidomain+'deposit/coin_deposit';
+        //清空地址栏
+        this.rechargeAddress = {
+          fadderess: ''
+        }
+
+        let coinDepositUrl = common.apidomain + 'deposit/coin_deposit';
         let fd = new FormData();
-        fd.append('symbol',coinId);
-        ajax(coinDepositUrl,'post',fd,(res)=>{
-          console.log(res);
-          if(res.data.code!==200){
+        fd.append('symbol', coinId);
+        ajax(coinDepositUrl, 'post', fd, (res) => {
+          console.dir(res.data.data);
+
+          if (res.data.code !== 200) {
             return;
           }
+          if (!res.data.data.rechargeAddress) {
+            return;
+          }
+          //是否需要提示
+          if(res.data.data.needmemo){
+            this.needmemo = res.data.data.needmemo;
+          }
           this.rechargeAddress = res.data.data.rechargeAddress;
+          console.log(this.rechargeAddress.fadderess);
         })
       },
       //显示提现框
@@ -166,19 +202,19 @@
         this.withdrawDepositIsShowList[index].allIsShow = true;
         this.withdrawDepositIsShowList[index].withdrawDepositIsShow = true;
       },
-    //  获取币种列表
-      loadCurrencyList(){
-        let promise = new Promise((resolve, reject)=>{
+      //  获取币种列表
+      loadCurrencyList() {
+        let promise = new Promise((resolve, reject) => {
           // let coinUrl = common.apidomain+ 'deposit/coin_deposit';
-          let coinUrl = common.apidomain+ 'financial/index';
+          let coinUrl = common.apidomain + 'financial/index';
           let fd = new FormData();
 
           // fd.append('symbol',1);
-          ajax(coinUrl,'post',fd,(res)=>{
-            if(res.data.code!==200){
+          ajax(coinUrl, 'post', fd, (res) => {
+            if (res.data.code !== 200) {
               reject(res);
               return;
-            }else{
+            } else {
               resolve(res);
             }
 
@@ -186,21 +222,45 @@
         })
         return promise;
 
+      },
+      //  获取虚拟币充值地址
+      getAddress(index,coinId){
+        let addressUrl = common.apidomain+'withdraw/coin_address';
+        let fd = new FormData();
+        fd.append('symbol',coinId);
+        ajax(addressUrl,'post',fd,(res)=>{
+          console.log(res);
+          if(res.data.code!==200){
+            return;
+          }
+          this.rechargeAddress = {
+            fadderess:res.data.data
+          }
+        })
+      },
+      //  点击复制
+      onCopy: function (e) {
+        alert('You just copied: ' + e.text)
+      },
+      onError: function (e) {
+        alert('Failed to copy texts')
       }
     },
 
     created() {
-      this.loadCurrencyList().then((res)=>{
+
+      this.loadCurrencyList().then((res) => {
+
         this.currencyList = res.data.data.userWalletList;
         this.filteredData = this.currencyList;
         this.filteredData1 = this.currencyList;
-        this.currencyList.forEach((item,index)=>{
+        this.currencyList.forEach((item, index) => {
           this.withdrawDepositIsShowList.push({allIsShow: false, rechargeIsShow: false, withdrawDepositIsShow: false});
-          if(item.total){
+          if (item.total) {
             this.filteredData2.push(item);
           }
         })
-        console.log(this.currencyList);
+        // console.log(this.currencyList);
       });
       // console.log(this.withdrawDepositIsShowList);
     },
@@ -218,7 +278,9 @@
       //   })
       // },
     },
-    components: {}
+    components: {
+      VueQrcode
+    }
   }
 </script>
 <style scoped>
@@ -226,7 +288,7 @@
   .title {
     height: 40px;
     line-height: 40px;
-    width: 100%;
+    /*width: 100%;*/
     background-color: #0e1425;
     /*margin-bottom:10px;*/
   }
@@ -391,6 +453,12 @@
     padding: 20px;
   }
 
+  .recharge-box .inner-box {
+    height: 100px;
+    /*min-height:50px;*/
+    /*background-color: pink;*/
+  }
+
   .recharge-box .left {
     /*padding:5px 10px;*/
     text-align: left;
@@ -402,6 +470,7 @@
     height: 20px;
     /*background-color: pink;*/
     margin-bottom: 20px;
+    margin-right: 20px;
   }
 
   .recharge-box .left .address {
@@ -430,11 +499,21 @@
   .recharge-box .right .qr-code {
     width: 100px;
     height: 100px;
-    background-color: pink;
+    /*background-color: pink;*/
+  }
+
+  .qr-code div {
+    width: 100px;
+    height: 100px;
+  }
+
+  .qr-code div div {
+    width: 100px;
+    height: 100px;
   }
 
   .recharge-box .tips, .withdraw-deposit-box .tips {
-    margin-top: 150px;
+    /*margin-top: 150px;*/
     text-align: left;
   }
 
@@ -503,5 +582,10 @@
     top: 50%;
     transform: translateY(-50%);
     right: 17%;
+  }
+  .needmemo{
+    height:70px;
+    line-height: 50px;
+    /*background-color: pink;*/
   }
 </style>

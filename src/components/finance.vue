@@ -89,10 +89,14 @@
 
 <style scoped>
   .financeContent {
-    width: 81%;
+    /*width: 81%;*/
+    /*margin: 0 auto;*/
+    /*margin-top: 85px;*/
+    /*!*background-color: #11182B;*!*/
+    /*margin-top: 100px;*/
+    width: 1300px;
     margin: 0 auto;
     margin-top: 85px;
-    /*background-color: #11182B;*/
     margin-top: 100px;
   }
 </style>

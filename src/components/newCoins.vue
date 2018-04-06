@@ -88,10 +88,14 @@
 
 <style scoped>
   .newCoins{
-    padding: 0 100px;
+    /*padding: 0 100px;*/
+    /*line-height:60px;*/
+    /*margin-top:100px;*/
+    /*padding:0 100px;*/
+    width: 1300px;
+    margin: 0 auto;
     line-height:60px;
     margin-top:100px;
-    padding:0 100px;
   }
   header {
     height: 60px;

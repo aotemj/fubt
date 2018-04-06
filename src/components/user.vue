@@ -1,21 +1,23 @@
 <template>
   <div class="user-box">
     <Header class="header"></Header>
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="安全中心" name="first">
-        <account></account>
-        <history></history>
-      </el-tab-pane>
-      <el-tab-pane label="用户中心" name="second">
-        <award></award>
-        <rechange></rechange>
-        <site></site>
-        <candies></candies>
-      </el-tab-pane>
-      <el-tab-pane label="推广中心" name="third">
-        <generalize></generalize>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="centerContent">
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="安全中心" name="first">
+          <account></account>
+          <history></history>
+        </el-tab-pane>
+        <el-tab-pane label="用户中心" name="second">
+          <award></award>
+          <rechange></rechange>
+          <site></site>
+          <candies></candies>
+        </el-tab-pane>
+        <el-tab-pane label="推广中心" name="third">
+          <generalize></generalize>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 <script>
@@ -60,6 +62,17 @@ import Generalize from "./subcom/center_generalize"
   }
 </script>
 <style scoped>
+.centerContent{
+  width: 1300px;
+  margin: 0 auto;
+}
+.header{
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  left: 0;
+  right: 0;
+}
 .user-box{
   padding:0 100px 0 100px;
   margin-top:5%;

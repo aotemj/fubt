@@ -63,10 +63,16 @@
 }
 
 .put-up{
-  float: left;
-  width: 100%;
-  padding: 0 100px 0 100px;
+  /*float: left;*/
+  /*width: 100%;*/
+  /*padding: 0 100px 0 100px;*/
+  /*margin-top: 45px;*/
+  width: 1300px;
+  margin: 0 auto;
   margin-top: 45px;
+  /*float: left;
+  width: 100%;
+  padding: 0 100px 0 100px;*/
 }
 
 .put-up>header {

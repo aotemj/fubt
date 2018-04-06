@@ -104,18 +104,18 @@
   export default {
     data(){
       return {
-        activeName: 'first', 
+        activeName: 'first',
         activeId:true,
         newsLists:[],// 返回的10条新闻
         newList:[],//截取的前7条新闻
         noticeLists:[],//返回的5条公告
         // 截取的前7条公告
-        // noticeList:[],  
+        // noticeList:[],
       }
     },
     methods:{
       handleClick(tab, e) {
-        // console.log(tab, event);  
+        // console.log(tab, event);
         // console.log(e.target);
         this.activeId =!this.activeId;
       }
@@ -224,6 +224,10 @@
   }
   /*新闻列表部分*/
   .newsList{
+    /*width: 100%;*/
+    /*padding: 0 25%;*/
+    /*margin-top: 50px;*/
+    /*font-size: 16px;*/
     width: 100%;
     padding: 0 25%;
     margin-top: 50px;

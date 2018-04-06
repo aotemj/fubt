@@ -189,4 +189,8 @@
         width: 1024px;
     }
 }
+footer{//增加
+width: 1300px;
+  margin: 0 auto;
+}
 </style>
