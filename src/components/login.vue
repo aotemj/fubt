@@ -1,5 +1,6 @@
 <template>
-  <div class="con-box">
+  <div class="con-box pr">
+    <tips class=""></tips>
     <Header class="header"></Header>
     <div class="inner-box">
       <div class="login-box">
@@ -25,12 +26,16 @@
   import Header from "./header"
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
-
+  import tips from './subcom/friendlyTips'//提示信息
   export default {
     data() {
       return {
-        username: 18625512982,
-        password: 'a111111',
+        // username: 18625512982,//赵鑫磊账号
+        // password: 'a111111',//赵鑫磊密码
+        // username: 15738818082,//任付伟账号
+        // password: 'admin123',//任付伟密码
+        username: 15994026836,//杨孝喜账号
+        password: 'a123456',//杨孝喜密码
         errorMsg: '',//错误提示
         loginBtn: '登录',
         logging: false,//登录中
@@ -128,7 +133,9 @@
             }
           }
           */
+
           this.$store.commit('userLogin', res.data.data)
+          this.$store.commit('changeDialogInfo','登录成功！')
           if (this.$store.state.routerTo) {
             this.$router.push({path: this.$store.state.routerTo})
 
@@ -144,6 +151,7 @@
     },
     components: {
       Header,
+      tips
     }
   }
 </script>

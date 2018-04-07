@@ -72,7 +72,7 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
   color:#407edf;
 }
 .red{
-  color:﻿#fc0d1c;
+  color:#fc0d1c;
 }
 .pr{
   position: relative;
@@ -108,6 +108,15 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 .bn{
   border:none !important;
 }
+.mt-10{
+  margin-top:-10px !important;
+}
+.mt-20{
+  margin-top:-20px !important;
+}
+.mb-20{
+  margin-bottom:-20px;
+}
 .ml10{
   margin-left:10px;
 }
@@ -132,6 +141,12 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 .ml80{
   margin-left:80px;
 }
+.ml90{
+  margin-left:90px;
+}
+.ml100{
+  margin-left:100px;
+}
 .fw4{
   font-weight: 400;
 }
@@ -140,4 +155,40 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 }
 .cp{
   cursor: pointer;
+}
+.bd1{
+  border:1px solid #fff;
+}
+.db1p{
+  border:1px dotted #fff;
+}
+.mb10{
+  margin-bottom:10px;
+}
+.mb20{
+  margin-bottom:20px;
+}
+.h40{
+  height:40px;
+}
+.pdlr10{
+  padding:0 10px;
+}
+.pd20{
+  padding:20px;
+}
+.bdr5{
+  border-radius:5px;
+}
+.w220{
+  width: 220px;
+}
+.w100p{
+  width:100%;
+}
+.w80p{
+  width:80%;
+}
+.h380{
+  height:380px;
 }

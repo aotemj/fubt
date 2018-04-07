@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="pr">
+    <tips class="pa"></tips>
     <!-- 充值提现表头 -->
     <div class="title">
       <div class="left-con">充值&提现</div>
@@ -33,7 +34,7 @@
           <div class="tr" v-for="(item,index) in filteredData">
             <!-- <div class="tr" v-for="(item,index) in filteredData2"> -->
             <div class="item">
-              <div class="td">{{item.coinName}}</div>
+              <div class="td">{{item.shortName}}</div>
               <div class="td">{{item.total}}</div>
               <div class="td">{{item.frozen}}</div>
               <div class="td todos">
@@ -44,7 +45,8 @@
             <div class="todos-box" v-if="withdrawDepositIsShowList[index].allIsShow">
               <!--充值-->
               <div class="recharge-box" v-show="withdrawDepositIsShowList[index].rechargeIsShow">
-                <div class="inner-box clearfix">
+                <!--非天涯币充值地址-->
+                <div class="inner-box clearfix" v-if="item.shortName!=='TYZ'">
                   <div class="needmemo tc fw7 fz22" v-show="needmemo">
                     转账时请务必备注（否则后果自负）:<span class="red">{{$store.state.userInfo.fid}}</span>
                   </div>
@@ -62,27 +64,62 @@
                     </div>
                   </div>
                   <div class="right fl">
-                    <div class="qr-code" id="qrcode" v-show="rechargeAddress.fadderess">
+                    <div class="qr-code" id="qrcode" v-if="rechargeAddress.fadderess">
                       <VueQrcode :value="String(rechargeAddress.fadderess)" :options="{ size: 100 }"></VueQrcode>
                     </div>
                   </div>
                 </div>
-                <!--充值须知-->
-                <div class="tips">
+                <!--天涯币充值地址-->
+                <div class="inner-box" v-show="item.shortName=='TYZ'">
+                  <div class="h40 ml80">转账金额：<input class="bd1 dis-in-blk bdr5 pdlr10" type="text"
+                                                    v-model="tyz.transferAccounts"></div>
+                  <div class="h40 ml80">来源账号：<input class="bd1 dis-in-blk bdr5 pdlr10" type="text"
+                                                    v-model="tyz.account">
+                  </div>
+                  <div class="ml80 h40 w220">
+                    <div class="false-tips fz12 mb10 mt-10"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+                    <el-button size="mini" type="primary" v-on:click="submitTyzTransfer">提交充值订单</el-button>
+                  </div>
+                </div>
+                <!--非天涯币充值须知-->
+                <div class="tips" v-if="item.shortName!=='TYZ'">
                   充值须知
                   <p> < 到账时间一般是10分钟-60分钟，如有疑问请联系客服QQ:2263378</p>
-                  <p> < 您充值{{item.coinName}}上述地址后，需要整个{{item.coinName}}网络节点的确认，为了快速到账，您可以向FUC网络支付少量的手续费。</p>
-                  <p> < 最小充值金额是：0.0001 您的{{item.coinName}}地址不会改变，可以重复充值，如有更改，我们会通过网站公告或邮件通知您。</p>
+                  <p> < 您充值{{item.shortName}}上述地址后，需要整个{{item.shortName}}网络节点的确认，为了快速到账，您可以向FUC网络支付少量的手续费。</p>
+                  <p> < 最小充值金额是：0.0001 您的{{item.shortName}}地址不会改变，可以重复充值，如有更改，我们会通过网站公告或邮件通知您。</p>
+                </div>
+                <!--天涯币充值须知-->
+                <div class="tips" v-if="item.shortName=='TYZ'">
+                  <p>< 请将天涯钻转入平台账号hf</p>
+                  <p>< 目前仅支持100元以上汇款, 100元以下汇款不予处理。</p>
                 </div>
               </div>
 
               <!--提现-->
               <div class="withdraw-deposit-box" v-show="withdrawDepositIsShowList[index].withdrawDepositIsShow">
-                <div class="inner-box">
+                <div class="inner-box" v-bind:class="{'h380':item.shortName=='TYZ'}">
                   <ul>
-                    <li><span class="fl">可用{{item.coinName}}</span><span class="fl">{{item.total}}</span></li>
+                    <li><span class="fl">可用{{item.shortName}}</span><span class="fl">{{item.total}}</span></li>
                     <li><span class="fl">提现地址</span><input class="fr" type="text"></li>
-                    <li><span class="fl">提现数量</span><input class="fr" type="text"></li>
+                    <li v-if="item.shortName!=='TYZ'"><span class="fl">提现数量</span><input class="fr" type="text"></li>
+
+                    <!--天涯币提现-->
+                    <li v-if="item.shortName=='TYZ'"><span class="fl">提现金额</span><input class="fr" type="text"></li>
+                    <li v-if="item.shortName=='TYZ'">
+                      <span class="fl"></span>
+                      <div class="fl ml100 db1p pdlr10 w80p">
+                        <div>手续费 00000 TYZ</div>
+                        <div>实际到账 <span class="red">0000</span> </div>
+                      </div>
+                      <input class="fr" type="text">
+                      <!--<div>-->
+                        <!--手续费 00000 TYZ-->
+                      <!--</div>-->
+                      <!--<div>-->
+                        <!--实际到账 000000-->
+                      <!--</div>-->
+                    </li>
+
                     <li><span class="fl">交易密码</span><input class="fr" type="text"></li>
                     <li class="verify-li"><span class="fl">短信验证码</span><input class="fr" type="text">
                       <input class="verify-btn" type="button" value="发送验证码">
@@ -90,12 +127,12 @@
                     <li><input class="fr submit" type="button" value="提交提现订单"></li>
                   </ul>
                 </div>
-                <!--充值须知-->
+                <!--交易须知-->
                 <div class="tips">
                   交易须知
-                  <p> < FUC 最小提币数量为0个</p>
+                  <p> < {{item.shortName}} 最小提币数量为0个</p>
                   <p> < 提交申请后，24小时内审核通过。待网络确认后，即可到账。</p>
-                  <p> < 提币费率说明:提币手续费=提币数目*费率0.0000BTM +固定手续费2.0000BTM 。</p>
+                  <p> < 提币费率说明:提币手续费=提币数目*费率0.0000{{item.shortName}} +固定手续费2.0000{{item.shortName}} 。</p>
                 </div>
               </div>
             </div>
@@ -110,10 +147,12 @@
   import {ajax} from "../../kits/http"
   // import VueQArt from 'vue-qart'
   import VueQrcode from '@xkeshi/vue-qrcode'
+  import tips from "./friendlyTips"
 
   export default {
     data() {
       return {
+        //二维码样式
         config: {
           value: 'https://www.baidu.com',
           imagePath: '',
@@ -144,7 +183,12 @@
           fadderess: ''
         },//充值地址
         msg: '复制信息',//复制信息
-        needmemo:null,//是否需要提示信息
+        needmemo: null,//是否需要提示信息
+        tyz: {
+          transferAccounts: '',//转账金额
+          account: '',//账号来源
+        },
+        errorMsg: '',//错误信息
       }
     },
     methods: {
@@ -185,7 +229,7 @@
             return;
           }
           //是否需要提示
-          if(res.data.data.needmemo){
+          if (res.data.data.needmemo) {
             this.needmemo = res.data.data.needmemo;
           }
           this.rechargeAddress = res.data.data.rechargeAddress;
@@ -211,6 +255,7 @@
 
           // fd.append('symbol',1);
           ajax(coinUrl, 'post', fd, (res) => {
+            console.log(res);
             if (res.data.code !== 200) {
               reject(res);
               return;
@@ -224,26 +269,49 @@
 
       },
       //  获取虚拟币充值地址
-      getAddress(index,coinId){
-        let addressUrl = common.apidomain+'withdraw/coin_address';
+      getAddress(index, coinId) {
+        let addressUrl = common.apidomain + 'withdraw/coin_address';
         let fd = new FormData();
-        fd.append('symbol',coinId);
-        ajax(addressUrl,'post',fd,(res)=>{
+        fd.append('symbol', coinId);
+        ajax(addressUrl, 'post', fd, (res) => {
           console.log(res);
-          if(res.data.code!==200){
+          if (res.data.code !== 200) {
+            this.$store.commit('changeDialogInfo',res.data.msg)
             return;
           }
           this.rechargeAddress = {
-            fadderess:res.data.data
+            fadderess: res.data.data
           }
         })
       },
+      //提交天涯币充值订单
+      submitTyzTransfer() {
+        /*
+        * tyz:{
+          transferAccounts:'',//转账金额
+          account:'',//账号来源
+        }*/
+        if (!this.tyz.account) {
+          this.errorMsg = '请输入账号来源';
+          return;
+        } else if (!this.tyz.transferAccounts) {
+          this.errorMsg = '请输入转账金额';
+          return;
+        } else if (this.tyz.transferAccounts < 100) {
+          this.errorMsg = '转账金额不可小于100';
+          return;
+        } else {
+          this.errorMsg = ''
+        }
+      },
       //  点击复制
       onCopy: function (e) {
-        alert('You just copied: ' + e.text)
+        let msg = '已拷贝'+e.text;
+        this.$store.commit('changeDialogInfo',msg)
       },
       onError: function (e) {
-        alert('Failed to copy texts')
+        let msg = '拷贝失败，请稍后重试';
+        this.$store.commit('changeDialogInfo',msg)
       }
     },
 
@@ -252,6 +320,7 @@
       this.loadCurrencyList().then((res) => {
 
         this.currencyList = res.data.data.userWalletList;
+        this.$store.commit('getPersonalAsset',res.data.data.userWalletList);
         this.filteredData = this.currencyList;
         this.filteredData1 = this.currencyList;
         this.currencyList.forEach((item, index) => {
@@ -279,7 +348,8 @@
       // },
     },
     components: {
-      VueQrcode
+      VueQrcode,//二维码
+      tips,//提示信息
     }
   }
 </script>
@@ -453,10 +523,13 @@
     padding: 20px;
   }
 
-  .recharge-box .inner-box {
-    height: 100px;
+  .recharge-box .inner-box{
+    min-height: 130px;
     /*min-height:50px;*/
     /*background-color: pink;*/
+  }
+  .withdraw-deposit-box .inner-box{
+    min-height:280px;
   }
 
   .recharge-box .left {
@@ -529,7 +602,7 @@
   }
 
   .withdraw-deposit-box li {
-    width: 53%;
+    width: 46.5%;
     margin: 0 auto;
     height: 40px;
     line-height: 40px;
@@ -583,8 +656,9 @@
     transform: translateY(-50%);
     right: 17%;
   }
-  .needmemo{
-    height:70px;
+
+  .needmemo {
+    height: 70px;
     line-height: 50px;
     /*background-color: pink;*/
   }

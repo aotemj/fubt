@@ -10,10 +10,10 @@
             <li>总量</li>
           </ul>
           <ul v-for="(item,index) in dataList" v-show="dataList.length!==0">
-            <li>{{item.bizhong}}</li>
-            <li>{{item.keyongzichan}}</li>
-            <li>{{item.dongjiezichan}}</li>
-            <li>{{item.zongliang}}</li>
+            <li>{{item.shortName}}</li>
+            <li>{{item.total}}</li>
+            <li>{{item.frozen}}</li>
+            <li>{{item.total+item.frozen}}</li>
           </ul>
           <div class="noRecord" v-show="dataList.length==0">暂无记录</div>
         </div>
@@ -26,73 +26,23 @@
   export default {
     data(){
       return {
-        dataList:[
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-          {
-            bizhong:'FHU',
-            keyongzichan:'211.1234567',
-            dongjiezichan:'54.1234567',
-            zongliang:234.1234567,
-          },
-        ]
+        // dataList:[
+        //   {
+        //     bizhong:'FHU',
+        //     keyongzichan:'211.1234567',
+        //     dongjiezichan:'54.1234567',
+        //     zongliang:234.1234567,
+        //   }
+        // ]
       }
     },
     methods:{},
     created(){},
-    computed:{},
+    computed:{
+      dataList(){
+        return this.$store.state.personalAsset;
+      }
+    },
     components:{}
   }
 </script>

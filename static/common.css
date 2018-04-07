@@ -178,6 +178,10 @@ el-carousel-item img{
 }
 /* 任付伟更改财务中心币存收益样式-结束 */
 
+.friendlyTip .el-icon-close:before{
+  content: ''
+}
+
 
 
 /*孝喜改element样式*/
@@ -372,7 +376,7 @@ el-carousel-item img{
   text-align: center;
   height:40px;
   padding:0;
-  line-hieght:40px;
+ line-hieght:40px;
   font-weight: 700;
 }
 /*表格hover变色*/
@@ -405,4 +409,22 @@ el-carousel-item img{
   background-color:#455993;
   border-color:#455993;
   width:100%;
+}
+
+/*错误提示*/
+.false-tips {
+  margin-top: 20px;
+  color: #e9494d;
+}
+
+.false-tips i {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  /*background: url('../assets/errorIcon.png') no-repeat center center;*/
+  background: url('../src/assets/errorIcon.png') no-repeat center center;
+  -webkit-background-size: 16px 16px;
+  background-size: 16px 16px;
 }
