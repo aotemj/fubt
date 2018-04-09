@@ -81,7 +81,7 @@ const router = new Router({
       component: currencyInfo
     },
     {
-      path: '/news/newsDetails/:newsId',
+      path: '/news/newsDetails/:newsId',//新闻详情
       name: 'newsDetails',
       component: newsDetails
     },

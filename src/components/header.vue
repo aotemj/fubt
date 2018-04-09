@@ -29,7 +29,6 @@
 			</div>
 			<!--<div class="right fr clearfix">-->
 			<div class="right">
-
         <!--登录注册-->
 				<div class="login fl" v-if="!isLogin">
 					<ul class="clearfix">
@@ -145,16 +144,12 @@
       },
       // 退出系统
       quit:function(){//点击退出按钮触发事件
-        // console.log("1")
-        this.$router.push({path:'/'});//点击退出到首页
+        // this.$router.push({path:'/'});//点击退出到首页
         this.$store.commit('userLogOut');//从前端退出系统：改变用户的登陆状态->未登陆
-        // 发送请求接口：从后台 退出 系统
-        var url = common.apidomain + 'user/logout';
-        // var formData = new FormData();
-        ajax(url, 'post', {}, (res) => {
-          // console.log(res.data)
-        });
-        // console.log(this.userInfo)
+        // // 发送请求接口：从后台 退出 系统
+        // var url = common.apidomain + 'user/logout';
+        // ajax(url, 'post', {}, (res) => {
+        // });
       },
 		},
     computed:{
@@ -328,5 +323,6 @@
     position:absolute;
     top:85px;
     right:-108px;
+    /*overflow: auto;*/
   }
 </style>

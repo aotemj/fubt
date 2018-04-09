@@ -26,14 +26,6 @@
   export default {
     data(){
       return {
-        // dataList:[
-        //   {
-        //     bizhong:'FHU',
-        //     keyongzichan:'211.1234567',
-        //     dongjiezichan:'54.1234567',
-        //     zongliang:234.1234567,
-        //   }
-        // ]
       }
     },
     methods:{},

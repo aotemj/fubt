@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-
+import common from '../kits/domain'
+import {ajax} from '../kits/http'
+import router from '../router/index'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -15,12 +16,13 @@ export default new Vuex.Store({
     },//用户信息
     token:localStorage.getItem('userToken')||'',//
     routerTo:'',//要跳转到的页面
-    personalAsset:[],//个人资产
+    personalAsset:JSON.parse(localStorage.getItem('personalAsset'))||[],//个人资产
     // 弹出框信息
     message:{
       status:false,
       dataInfo:''
-    }
+    },
+    voteTipsStatus:false,//投票状态
 
   },
 	mutations:{
@@ -30,13 +32,17 @@ export default new Vuex.Store({
       state.isLogin = true;
       state.token = data.token;
       localStorage.setItem('userToken',data.token);
-
+      console.log(state.userInfo);
     },
     //用户登出
     userLogOut(state){
       state.isLogin = false;
       state.token = '';
       localStorage.setItem('userToken','');
+      router.push({path:'/'});//点击退出到首页
+      let url = common.apidomain + 'user/logout';
+      ajax(url, 'post', {}, (res) => {
+      });
     },
     //登录后路由跳转
     changeRouterPath(state,path){
@@ -55,6 +61,7 @@ export default new Vuex.Store({
     close(state){
       state.message.status=false;
       state.message.dataInfo='';
+      state.voteTipsStatus = false;//关闭外层弹窗
     }
   }
 })

@@ -246,28 +246,6 @@
         this.withdrawDepositIsShowList[index].allIsShow = true;
         this.withdrawDepositIsShowList[index].withdrawDepositIsShow = true;
       },
-      //  获取币种列表
-      loadCurrencyList() {
-        let promise = new Promise((resolve, reject) => {
-          // let coinUrl = common.apidomain+ 'deposit/coin_deposit';
-          let coinUrl = common.apidomain + 'financial/index';
-          let fd = new FormData();
-
-          // fd.append('symbol',1);
-          ajax(coinUrl, 'post', fd, (res) => {
-            console.log(res);
-            if (res.data.code !== 200) {
-              reject(res);
-              return;
-            } else {
-              resolve(res);
-            }
-
-          })
-        })
-        return promise;
-
-      },
       //  获取虚拟币充值地址
       getAddress(index, coinId) {
         let addressUrl = common.apidomain + 'withdraw/coin_address';
@@ -316,11 +294,7 @@
     },
 
     created() {
-
-      this.loadCurrencyList().then((res) => {
-
-        this.currencyList = res.data.data.userWalletList;
-        this.$store.commit('getPersonalAsset',res.data.data.userWalletList);
+        this.currencyList = this.$store.state.personalAsset;
         this.filteredData = this.currencyList;
         this.filteredData1 = this.currencyList;
         this.currencyList.forEach((item, index) => {
@@ -329,9 +303,6 @@
             this.filteredData2.push(item);
           }
         })
-        // console.log(this.currencyList);
-      });
-      // console.log(this.withdrawDepositIsShowList);
     },
     computed: {
       // // 显示所有

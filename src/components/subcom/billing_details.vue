@@ -2,17 +2,18 @@
   <div class="billing_box">
     <header>
       <div class="block">
-        <div class="picker">
-          <span class="to">起止日期</span>
-          <el-date-picker v-model="value1" type="date" placeholder="选择日期">
 
-          </el-date-picker>
-          <span class="to">至</span>
-          <el-date-picker v-model="value2" type="date" placeholder="选择日期">
-
-          </el-date-picker>
-        </div>
         <el-row class="block-col-2">
+          <div class="picker">
+            <el-date-picker
+              v-model="value1"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              id="1">
+            </el-date-picker>
+          </div>
           <el-col :span="12">
             <span>市场</span>
             <el-dropdown trigger="click">
@@ -97,7 +98,7 @@
   </div>
 </template>
 <script>
-   export default {
+  export default {
     data() {
       return {
         pickerOptions1: {
@@ -107,22 +108,22 @@
         },
         value1: '',
         value2: '',
-        billingTab:[
+        billingTab: [
           {
-            time:'交易时间',
-            type:'类型',
-            number:'数量',
-            service:'手续费',
-            state:'状态'
+            time: '交易时间',
+            type: '类型',
+            number: '数量',
+            service: '手续费',
+            state: '状态'
           }
         ],
-        billingList:[
+        billingList: [
           {
-            time:'2018.3.29 20:30:20',
-            type:'FTB',
-            number:'155631',
-            service:'0.01',
-            state:'已确认'
+            time: '2018.3.29 20:30:20',
+            type: 'FTB',
+            number: '155631',
+            service: '0.01',
+            state: '已确认'
           }
         ]
       };
@@ -130,67 +131,79 @@
   };
 </script>
 <style scoped>
-.block{
-  background-color: #0E1326;
-}
-.noRecord{
-  height: 410px;
-  line-height:410px;
-  background-color: #11182C;
-}
-.empty{
-  width: 100%;
-  height: 20px;
-  background: #1e253d;
-}
-.voteNew>ul {
+  .block {
+    background-color: #0E1326;
+  }
+
+  .noRecord {
+    height: 410px;
+    line-height: 410px;
+    background-color: #11182C;
+  }
+
+  .empty {
+    width: 100%;
+    height: 20px;
+    background: #1e253d;
+  }
+
+  .voteNew > ul {
     background: #0e1326;
     color: #c2c3c8;
-}
+  }
 
-.voteNew {
+  .voteNew {
     margin: 10px 0 50px;
-}
+  }
 
-.voteNew>ul {
+  .voteNew > ul {
     height: 40px;
     line-height: 40px;
     font-size: 16px;
     border-bottom: 1px solid #0c101e;
-}
+  }
 
-.voteNew>ul>li {
+  .voteNew > ul > li {
     width: 20%;
     float: left;
     font-size: 14px;
-}
+  }
 
-#voteNew-list {
+  #voteNew-list {
     background: #11182c;
-}
+  }
 
-#voteNew-list>article {
+  #voteNew-list > article {
     height: 40px;
     line-height: 40px;
     cursor: pointer;
-}
+  }
 
-#voteNew-list>article>span {
+  #voteNew-list > article > span {
     display: inline-block;
     width: 20%;
     color: #c2c3c8;
     font-size: 12px;
     float: left;
-}
-.picker{
-  float: left;
-  margin-top: 15px;
-}
-.picker>span:first-child{
-  margin: 0 10px 0 15px;
-}
-.picker>.to{
- margin: 0 5px;
-}
+  }
 
+  .picker {
+    float: left;
+    margin-top: 15px;
+  }
+
+  .picker > span:first-child {
+    margin: 0 10px 0 15px;
+  }
+
+  .picker > .to {
+    margin: 0 5px;
+  }
+
+  .block-col-2 {
+    padding: 0 15px;
+  }
+  .el-date-editor .el-range__icon{
+    /*line-height: 24px;*/
+  }
 </style>

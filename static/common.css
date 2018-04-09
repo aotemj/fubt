@@ -410,7 +410,13 @@ el-carousel-item img{
   border-color:#455993;
   width:100%;
 }
+.el-date-editor .el-range__icon{
+  line-height: 24px;
+}
 
+.picker .el-date-editor .el-range-separator{
+  color:#fff;
+}
 /*错误提示*/
 .false-tips {
   margin-top: 20px;

@@ -21,9 +21,6 @@
 	export default{
 		data(){
 			return{
-				// data:'我是默认数据1',
-				// centerDialogVisible:this.$store.commit('changeDialogInfo'),
-				// show-close:false
 			}
 		},
 		methods:{

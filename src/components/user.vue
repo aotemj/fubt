@@ -21,35 +21,39 @@
   </div>
 </template>
 <script>
-// 头部：
-import Header from "./header"
-//奖励记录
-import Account from "./subcom/safety_account"
-//登录、设置历史
-import History from "./subcom/safety_history"
-//用户中心
-import Award from "./subcom/center_award"
-//充值码记录
-import Rechange from "./subcom/center_recharge"
-//收货地址
-import Site from "./subcom/center_site"
-//糖果奖励
-import Candies from "./subcom/center_candies"
-//推广
-import Generalize from "./subcom/center_generalize"
-  export default {
-    data(){
-      return {
-        activeName: 'first'
-      }
-    },
-    methods:{
-       handleClick(tab, event) {
+  // 头部：
+  import Header from "./header"
+  //奖励记录
+  import Account from "./subcom/safety_account"
+  //登录、设置历史
+  import History from "./subcom/safety_history"
+  //用户中心
+  import Award from "./subcom/center_award"
+  //充值码记录
+  import Rechange from "./subcom/center_recharge"
+  //收货地址
+  import Site from "./subcom/center_site"
+  //糖果奖励
+  import Candies from "./subcom/center_candies"
+  //推广
+  import Generalize from "./subcom/center_generalize"
 
+  export default {
+    data() {
+      return {
+        activeName: 'first',
       }
     },
-    computed:{},
-    components:{
+    methods: {
+      handleClick(tab, event) {
+      }
+    },
+    computed: {
+      // userInfo() {
+      // return this.$store.state.userInfo
+      // }
+    },
+    components: {
       Header,//头部
       Account,//safety-奖励记录
       History,//safety-历史
@@ -62,20 +66,22 @@ import Generalize from "./subcom/center_generalize"
   }
 </script>
 <style scoped>
-.centerContent{
-  width: 1300px;
-  margin: 0 auto;
-}
-.header{
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  left: 0;
-  right: 0;
-}
-.user-box{
-  padding:0 100px 0 100px;
-  margin-top:5%;
-  background: #1c253a;
-}
+  .centerContent {
+    width: 1300px;
+    margin: 0 auto;
+  }
+
+  .header {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .user-box {
+    /*padding:0 100px 0 100px;*/
+    margin-top: 100px;
+    background: #1c253a;
+  }
 </style>

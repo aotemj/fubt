@@ -5,7 +5,7 @@
     <div class="currencyData">
       <div class="inner-box clearfix">
         <div class="left fl clearfix">
-          <button class="chg-cur-btn fl" v-on:click="toggleCurList">{{defaultCurrency1}}/{{defaultCurrency2}}</button>
+          <button class="chg-cur-btn fl" v-on:click="toggleCurList">{{activeCoinInfo.sellsymbol}}/{{activeCoinInfo.buysymbol}}</button>
           <i class="iconfont fl" v-bind:class="{'icon-xiala':!curListIsShow,'icon-shangla-copy':curListIsShow}"></i>
           <router-link to="/currencyInfo" class="cur-desc fff fl"><i class= "iconfont icon-bianji"></i>币种资料</router-link>
         </div>
@@ -13,23 +13,23 @@
           <ul class="clearfix">
             <li class="fl today-max">
               今日最高
-              <span>{{defaultdata1}}</span>
+              <span>{{activeCoinInfo.total}}</span>
             </li>
             <li class="fl today-min">
               今日最低
-              <span>{{defaultdata2}}</span>
+              <span>{{activeCoinInfo.total}}</span>
             </li>
             <li class="fl tf-done-count">
               24小时成交量
-              <span>{{defaultdata3}}</span>
+              <span>{{activeCoinInfo.total}}</span>
             </li>
             <li class="fl up-and-down">
               跌涨幅
-              <span>{{defaultdata4}}</span>
+              <span>{{activeCoinInfo.rose}}</span>
             </li>
             <li class="fl now-price">
               最新成交价
-              <span>{{defaultdata5}}</span>
+              <span>{{activeCoinInfo.price}}</span>
             </li>
           </ul>
         </div>
@@ -46,7 +46,7 @@
                   <li class="td">日涨跌</li>
                 </ul>
                 <div class="tbody" v-on:click="selectedCurrency">
-                  <div :id="item.id" class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id)">
+                  <div :id="item.id" class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
                     <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
                     <li class="data-item">{{item.price}}</li>
                     <li class="data-item">{{item.total}}</li>
@@ -65,7 +65,7 @@
                   <li class="td">日涨跌</li>
                 </ul>
                 <div class="tbody" v-on:click="selectedCurrency">
-                  <div :id="item.id" class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id)">
+                  <div :id="item.id" class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
                     <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
                     <li class="data-item">{{item.price}}</li>
                     <li class="data-item">{{item.total}}</li>
@@ -84,7 +84,7 @@
                   <li class="td">日涨跌</li>
                 </ul>
                 <div class="tbody" v-on:click="selectedCurrency">
-                  <div :id="item.id" class="item" v-for="(item,index) in fucFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id)">
+                  <div :id="item.id" class="item" v-for="(item,index) in fucFilteredData" v-on:mouseover="hover" v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
                     <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
                     <li class="data-item">{{item.price}}</li>
                     <li class="data-item">{{item.total}}</li>
@@ -125,13 +125,13 @@
         <div class="buy">
           <ul>
             <li>
-              {{currentCurrency01.name}}余额：{{currentCurrency01.count | keepTwoNum}}
+              {{activeCoinInfo.buysymbol}}余额：{{this.activeCoinInfo.buyItem.total}}
             </li>
             <li>
-              最大可买：{{currentCurrency01.maxBuy}}
+              最大可买：{{this.activeCoinInfo.buyItem.total/this.activeCoinInfo.price}}
             </li>
             <li>
-              参考单价：{{currentCurrency01.referencePrice}}
+              参考单价：{{this.activeCoinInfo.price}}
             </li>
             <li>
               <ul class="buy-title">
@@ -162,13 +162,13 @@
         <div class="sell">
           <ul>
             <li>
-              {{currentCurrency01.name}}余额：{{currentCurrency01.count | keepTwoNum}}
+              {{activeCoinInfo.sellsymbol}}余额：{{this.activeCoinInfo.sellItem.total}}
             </li>
             <li>
-              最大可卖：{{currentCurrency01.maxBuy}}
+              最大可卖：{{this.activeCoinInfo.sellItem.total/this.activeCoinInfo.sellItem.price}}
             </li>
             <li>
-              参考单价：{{currentCurrency01.referencePrice}}
+              参考单价：{{this.activeCoinInfo.sellItem.price}}
             </li>
             <li>
               <ul class="buy-title">
@@ -277,13 +277,6 @@
   export default {
     data(){
       return {
-        defaultCurrency1:'BTC',
-        defaultCurrency2:'FBT',
-        defaultdata1:'0.2654',
-        defaultdata2:'0.02565',
-        defaultdata3:'2731',
-        defaultdata4:'12',
-        defaultdata5:'0.33',
         activeName:'first',
         currentCurrency01:{
           name:'FUC',//币种
@@ -397,14 +390,17 @@
         //所有币种列表
         currencyList:[],
         //部分行情数据展示
-        activeCoinInfo:{},
+        activeCoinInfo:{
+          exchangeGroup:{
+            sellsymbol:'',
+            buysymbol:''
+          }
+        },
         //买卖
         business:[],
         newarr:[],
         //比例显示
         total:0,
-        // 个人资产
-        userassets:[],
       }
     },
     methods:{
@@ -434,21 +430,33 @@
         this.curListIsShow = false;
       },
       // 所有币种列表
-      say:function (id) {
+      say:function (id,sellName,buyName) {
+        console.log(sellName,buyName);
         this.currencyList.forEach((item,index)=>{
+          // console.log(item);
           if(item.id==id){
             //单个列表数据
             this.activeCoinInfo = item;
-            //列表币种默认
-            this.defaultCurrency1 = item.sellname;
-            this.defaultCurrency2 = item.buysymbol;
-            this.defaultdata1 = item.total;
-            this.defaultdata2 = item.total;
-            this.defaultdata3 = item.total;
-            this.defaultdata4 = item.rose;
-            this.defaultdata5 = item.price;
+            // this.activeCoinInfo.sell = 
+            // console.log(this.activeCoinInfo);
+
+            // this.$store.state.personalAsset;
+            // console.log(this.$store.state.personalAsset)
+            // console.log(this.activeCoinInfo);
           }
         })
+        console.log(this.personalAsset);
+        // 个人资产
+        this.personalAsset.forEach((item,index)=>{
+          console.log(item);
+          if(item.shortName == sellName){
+            this.activeCoinInfo.sellItem = item;
+          }
+          if(item.shortName == buyName){
+            this.activeCoinInfo.buyItem = item;
+          }
+        })
+        console.log(this.activeCoinInfo);
         this.curListIsShow = false;
       },
       // 数据比例显示
@@ -461,11 +469,14 @@
 
     },
     created(){
+     
       // 币种数据接口
       var url = common.apidomain + 'real/indexmarket';
       ajax(url, 'get', {}, (res) => {
         this.currencyList = res.data.data;
         // console.log(this.currencyList)
+        this.activeCoinInfo = this.currencyList[0];
+        console.log(this.activeCoinInfo);
       });
       // 行情信息展示接口
       var currebyurl = common.apidomain + 'real/market';
@@ -478,10 +489,11 @@
         this.newarr = this.business.slice(0,12);//截取的数据
         this.buys();
       });
-      // 个人资产接口
-
     },
-    computed:{
+    computed:{ 
+      personalAsset(){
+        return this.$store.state.personalAsset;
+      },
       // 币种列表过滤
       fbtFilteredData: function () {
         return this.currencyList.filter(function (item) {
@@ -509,7 +521,8 @@
         return this.newarr.filter(function (item) {
           return item['type'] == '卖出';
         })
-      }
+      },
+     
       // isLogin(){
       //   return this.$store.state.isLogin;
       // }
