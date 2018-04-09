@@ -21,7 +21,7 @@ import changePwdByPhone from "@/components/changePwdByCellPhone"
 import changePwdByEmail from "@/components/changePwdByEmail"
 import addNewPwdByPhone from "@/components/subcom/addNewPwdByPhone"
 import addNewPwdByEmail from "@/components/subcom/addNewPwdByEmail"
-
+import c2c_instructions from "@/components/subcom/c2c_instructions"
 Vue.use(Router)
 
 const router = new Router({
@@ -124,6 +124,11 @@ const router = new Router({
       path: '/addNewPwdByEmail',
       name: 'addNewPwdByEmail',
       component: addNewPwdByEmail
+    },
+    {
+      path: '/c2c_instructions',//操作说明
+      name: 'c2c_instructions',
+      component: c2c_instructions
     }
   ]
 })

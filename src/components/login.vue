@@ -156,7 +156,7 @@
             } else {
               // this.currencyList = res.data.data.userWalletList;
               this.$store.commit('getPersonalAsset', res.data.data.userWalletList);
-              localStorage.setItem('personalAsset',JSON.stringify(res.data.data.userWalletList));
+              localStorage.setItem('personalAsset', JSON.stringify(res.data.data.userWalletList));
               if (this.$store.state.routerTo) {
                 this.$router.push({path: this.$store.state.routerTo})
               } else {

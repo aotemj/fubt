@@ -182,7 +182,10 @@ el-carousel-item img{
   content: ''
 }
 
-
+/* 任付伟更改弹出窗 ×--去掉 -新币投票大弹窗*/
+.newCoins .el-icon-close:before{
+  content: ''
+}
 
 /*孝喜改element样式*/
 
@@ -311,7 +314,7 @@ el-carousel-item img{
 }
 
 .el-form-item__label {
-  width: 16%;
+  /*width: 16%;*/
 }
 .el-tooltip__popper.is-dark {
   background: transparent;
@@ -416,6 +419,24 @@ el-carousel-item img{
 
 .picker .el-date-editor .el-range-separator{
   color:#fff;
+}
+
+/**/
+.deal-box .el-slider__runway{
+  height:2px;
+}
+.deal-box .el-slider__button{
+  width:10px;
+  height:10px;
+  border:1px solid #fff;
+  background-color:#10182d;
+}
+.deal-box .el-slider__button-wrapper{
+  height:32px;
+}
+.deal-box .el-slider__bar{
+  height:2px;
+  background-color: #455993;
 }
 /*错误提示*/
 .false-tips {

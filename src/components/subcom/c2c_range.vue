@@ -7,9 +7,9 @@
             <div class="C2c-header">
               <div class="C2C-header-right">
                 <ul v-for="(item,index) in datalink">
-                  <li><a href="#"><button>{{item.bring}}</button></a></li>
-                  <li><a href="#"><button>{{item.full}}</button></a></li>
-                  <li><a href="../C2C/information.html"><span>{{item.state}}</span></a></li>
+                  <li><router-link to="/finance"><button>{{item.bring}}</button></router-link></li>
+                  <li><router-link to="/finance"><button>{{item.full}}</button></router-link></li>
+                  <li><span><router-link to="/c2c_instructions" style="color:#fff;">{{item.state}}</router-link></span></li>
                 </ul>
               </div>
             </div>

@@ -8,7 +8,7 @@
       <!-- 新币投票表头 -->
       <header>
         <div class="left">新币投票</div>
-        <div class="left">记录</div>
+        <!-- <div class="left">记录</div> -->
       </header>
       <!-- 数据展示部分 -->
       <div class="data">
@@ -21,37 +21,33 @@
             <li>参与人数</li>
             <li>操作</li>
           </ul>
-          <ul v-for="(item,index) in dataList" >
+          <div class="no-recode" v-show="dataList.length==0">暂无记录</div>
+          <ul data-id ='item.id' v-for="(item,index) in dataList" v-show="dataList.length!==0">
             <li>{{index+1}}</li>
             <li>{{item.coinabbreviate}}</li>
             <li>{{item.coinname}}</li>
-            <li>{{item.favor}}/{{item.oppose}}</li>
-            <li>{{item.partakenumber}}</li>
+            <li>{{item.favor}}/{{item.oppose}}</li><!-- 赞成/反对 -->
+            <li>{{item.partakenumber}}</li><!-- 投票总人数 -->
             <li>
-              <button type="button" @click="vote(item.fid)" :id="item.fid">赞成</button>
-              <button type="button" @click="vote('object')">反对</button>
-
-              
+              <button type="button" @click="vote(item.fid,1)" :id="item.fid">赞成</button>
+              <button type="button" @click="vote(item.fid,2)" :id="item.fid">反对</button> 
               <el-dialog title="添加投票" :visible.sync="dialogFormVisible" class="dialog-contentinfo" width="35%">
                 <el-form :model="form" class="cent">
                   <el-form-item label="投票数" :label-width="formLabelWidth">
-                    <el-input v-model="form.name1" auto-complete="off" class="input-info"></el-input>
+                    <el-input v-model="form.name1" class="input-info" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></el-input>
                   </el-form-item>
                   <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input v-model="form.name2" auto-complete="off"  class="input-info" placeholder="备注"></el-input>
+                    <el-input v-model="form.name2"  class="input-info" placeholder="备注"></el-input>
                   </el-form-item>
                   <el-form-item label="" :label-width="formLabelWidth">
-                    <!-- <el-input v-model="form.name" auto-complete="off"  class="input-info"></el-input> -->
-                    <el-button class="buttomvote" @click="immediatelyvote">立即投票</el-button>
+                    <el-button class="buttomvote" @click="immediatelyvote(activeId)">立即投票</el-button>
                   </el-form-item>
                 </el-form>
                 <div class="tipchar"><span>投票方式：每投一票消耗1FUC(富链)币，</span>本站注册用户可以参与投票。</div>
                 <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogFormVisible = false" class="operate">取 消</el-button>
-                  <el-button @click="dialogFormVisible = false" class="operate">确 定</el-button>
+                  <el-button @click="dia" class="operate">关闭</el-button>
                 </div>
               </el-dialog>
-
             </li>
           </ul>
         </div>
@@ -73,73 +69,77 @@
     data(){
       return {
         dataList:[],
+        activeId:'',//投票id
         // dialogFormVisible: false,
         form: {
           name1: '',
           name2: '',
-          // region: '',
-          // date1: '',
-          // date2: '',
-          // delivery: false,
-          // type: [],
-          // resource: '',
-          // desc: ''
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        sun:0,
       }
     },
     methods:{
-      // 1.0立即投票点击事件
-      immediatelyvote(){
-        // 若没有输入提示输入
-        if(this.form.name1==''){
+      // 3.0立即投票点击事件
+      immediatelyvote(id,sun){
+        // console.log(e.target);
+        if(this.form.name1==''){// 若没有输入提示输入
           this.$store.commit('changeDialogInfo','先填写投票数量！')
         }
-        // 若输入了则正常发送ajax
-        if(this.form.name1!==""){
-          var url = common.apidomain + 'vote/newCoinVote';
-          // var formData = new FormData();
-          // formData.append('fid',10);
-          // formData.append('number',25);
-          // formData.append('fstate',1);
-          // formData.append('remarks',"测试");
-          ajax(url, 'post', {}, (res) => {
-            console.log(res.data)
-            this.$store.commit('changeDialogInfo',res.data.msg);
-
-            // 置空文本框内容
-            // this.form.name1="";
-            // this.form.name2="";
+        if(this.form.name1!==""){// 若输入了数字则正常发送ajax
+          var url = common.apidomain + 'vote/addNewCoinVote';
+          var formData = new FormData();
+          formData.append('fid',id);
+          formData.append('number',this.form.name1);//投票数量
+          formData.append('fstate',this.sun); // 1：赞成
+          // formData.append('fstate',2);    // 2: 反对
+          formData.append('remarks',this.form.name2);//备注信息
+          ajax(url, 'post', formData, (res) => {
+            this.$store.commit('changeDialogInfo',res.data.msg);//如果成功：调用友情提示弹窗
+            this.render();
+            // console.log(this.form.name1);
+            // console.log(this.form.name2);
+            this.form.name1="";//完成后置空输入框
+            this.form.name2="";//完成后置空输入框
           });
         }
       },
-      // 投票
-      vote(item){
-        // data:意见（反对、同意）
-        this.$store.state.voteTipsStatus =true;
+      // 2.0赞成反对投票按钮点击事件：
+      vote(item,sun){
+        this.$store.state.voteTipsStatus =true;//改变弹窗状态
         this.dataList.forEach((fid)=>{
-          console.log(item)
-          if(item.fid==fid){
+          if(item.fid == fid){
             this.dataList = item;
           }
-          this.dataList.partakenumber;
-          console.log(this.partakenumber)
+          // console.log(item)
         })
-      }
+        // console.log(item);
+        this.activeId  = item;
+        this.sun=sun;
+      },
+      // 1.0 渲染新币投票列表
+      render(){
+        var url = common.apidomain + 'vote/newCoinVote';
+        ajax(url, 'post', {}, (res) => {
+          // console.log(res.data);
+          // console.log(res.data.data);
+          this.dataList=res.data.data;
+        });
+      },
+      // 4.0大弹窗的确定和取消按钮事件 --关闭大弹窗
+      dia(){
+        this.$store.state.voteTipsStatus =false;
+      },
     },
     computed:{
+      // 5.0获取弹窗属性状态
       dialogFormVisible(){
         return this.$store.state.voteTipsStatus;
       }
     },
     created(){
-      // 1.0 新币投票列表
-      var url = common.apidomain + 'vote/newCoinVote';
-      ajax(url, 'post', {}, (res) => {
-        console.log(res.data);
-        console.log(res.data.data);
-        this.dataList=res.data.data;
-      });
+      // 渲染列表
+      this.render()
     },
     components:{
       Header,//头部
@@ -257,6 +257,12 @@
   }
   .data-list>ul+ul{
     font-size: 12px;
+  }
+
+  /*暂无记录样式*/
+  .no-recode{
+    height: 400px;
+    line-height: 400px;
   }
   
 </style>

@@ -192,3 +192,6 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
 .h380{
   height:380px;
 }
+.lh100{
+  line-height:100px;
+}
