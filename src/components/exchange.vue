@@ -151,19 +151,20 @@
             </li>
             <li>
               <ul class="buy-content">
-                <li><input type="text" v-model="buyReferencePrice"></li>
-                <li><input type="text" v-model="activeCount"></li>
-                <li><input type="text" disabled v-model="activeSellTotalModel"></li>
+                <li><input type="text" v-model="buyReferencePrice" v-on:keyup="checkBalance(true,false)"></li>
+                <li><input type="text" v-model="buyCount" v-on:keyup="checkBalance(true,false)"></li>
+                <li><input type="text" disabled v-model="totalBuyAccount"></li>
               </ul>
             </li>
             <li>
-              <el-slider v-model="activeSellTotalModel" :step="0.01" :max="activeSellTotal||100" input-size="mini"></el-slider>
+              <el-slider :step="0.01" :max="activeSellTotal||100" input-size="mini"></el-slider>
+              <div class="false-tips fz12 mt-5"><i v-show="buyErrorMsg"></i>{{buyErrorMsg}}</div>
             </li>
             <li>
               <a class="fff" href="#">立即充值 >></a>
             </li>
             <li>
-              <input class="buy-btn" type="button" value="买入">
+              <input class="buy-btn" type="button" value="买入" v-on:click="showTradeWin(0)">
             </li>
           </ul>
         </div>
@@ -188,22 +189,41 @@
             </li>
             <li>
               <ul class="buy-content">
-                <li><input type="text" v-model="sellReferencePrice"></li>
-                <li><input type="text" v-model="currentCurrency01.buyCount"></li>
-                <li><input type="text" disabled v-model="currentCurrency01.totalPrice"></li>
+                <li><input type="text" v-model="sellReferencePrice"
+                           v-on:keyup="checkBalance(false,true,activeCoinInfo.buysymbol)"></li>
+                <li><input type="text" v-model="sellCount"
+                           v-on:keyup="checkBalance(false,true,activeCoinInfo.buysymbol)"></li>
+                <li><input type="text" disabled v-model="totalSellAccount"></li>
               </ul>
             </li>
             <li>
-              <el-slider v-model="currentCurrency01.totalPrice" :step="0.01" :max="activeBuyTotal||100" input-size="mini"></el-slider>
+              <el-slider v-model="currentCurrency01.totalPrice" :step="0.01" :max="activeBuyTotal||100"
+                         input-size="mini"></el-slider>
+              <div class="false-tips fz12 mt-5"><i v-show="sellErrorMsg"></i>{{sellErrorMsg}}</div>
             </li>
             <li>
               <a class="fff" href="#">立即充值 >></a>
             </li>
             <li>
-              <input class="sell-btn" type="button" value="卖出">
+              <input class="sell-btn" type="button" value="卖出" v-on:click="showTradeWin(1)">
             </li>
           </ul>
         </div>
+        <!--交易密码框-->
+        <i class="dialog">
+          <el-dialog title="交易密码" center :visible.sync="dialogFormVisible" class="dialog-contentinfo" width="35%">
+            <el-form class="cent">
+              <el-form-item label="交易密码">
+                <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
+                <div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}</div>
+
+              </el-form-item>
+              <el-form-item label="">
+                <el-button size="mini" class="buttomvote" v-on:click="submitTradePwd">确定</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+        </i>
         <!--价格-->
         <div class="price">
           <ul>
@@ -351,18 +371,27 @@
         total: 0,
         activeBuyTotal: 0,//当前选中买币种用户资金总额
         activeSellTotal: 0,//当前卖币种用户资金总额
-        buy5:[],//买1-买5
-        buy5Max:0,//买1-买5委托量最大值
-        sell5:[],//卖1-卖5
-        sell5Max:0,//卖1-卖5委托量最大值
-        buyReferencePrice:0,//参考卖价,
-        sellReferencePrice:0,//参考买价
-        buyCount:0,//买入数量
-        sellCount:0,//卖出数量
-        activeSellTotalModel:0,//滑块初始化
+        buy5: [],//买1-买5
+        buy5Max: 0,//买1-买5委托量最大值
+        sell5: [],//卖1-卖5
+        sell5Max: 0,//卖1-卖5委托量最大值
+        buyReferencePrice: 0,//参考卖价,
+        sellReferencePrice: 0,//参考买价
+        buyCount: 0,//买入数量
+        sellCount: 0,//卖出数量
+        activeSellTotalModel: this.buyCount * this.buyReferencePrice,//滑块初始化
+        buyErrorMsg: '',//购买错误信息
+        sellErrorMsg: '',//卖出错误信息
+
+
+        //交易密码弹窗
+        dialogFormVisible: false,//弹窗状态
+        tradePwd: '',//交易密码
+        tradePwdErrorMsg: '',//交易密码错误信息
+        tradeType: 0,//交易类型,0 :买入，1：卖出
       }
     },
-    filters:{
+    filters: {
       // buyFilter(value){
       //   return buyReferencePrice
       // }
@@ -393,14 +422,14 @@
       },
       // 所有币种列表
       say: function (id, sellName, buyName) {
-        this.sell5Max= 0;
-        this.buy5Max= 0;
+        this.sell5Max = 0;
+        this.buy5Max = 0;
         this.getMarket().then((res) => {
           this.currencyList = res.data.data;
 
           this.currencyList.forEach((item, index) => {
             if (item.id == id) {
-              console.log(item.id)
+              // console.log(item.id)
               //单个列表数据
               this.activeCoinInfo = item;
             }
@@ -417,28 +446,25 @@
           })
         })
         //请求买一卖一数据
-        this.getRealMarket(id).then((res)=>{
-          console.log(res);
-          this.buy5= res.data.data.buys;
+        this.getRealMarket(id).then((res) => {
+          // console.log(res);
+          this.buy5 = res.data.data.buys;
           this.sell5 = res.data.data.sells;
 
-          for(let i = 0;i<this.buy5.length;i++){
-            if(this.buy5[i].amount>this.buy5Max){
+          for (let i = 0; i < this.buy5.length; i++) {
+            if (this.buy5[i].amount > this.buy5Max) {
               this.buy5Max = this.buy5[i].amount;
             }
           }
-          for(let j = 0;j<this.sell5.length;j++){
-            if(this.sell5[j].amount>this.sell5Max){
+          for (let j = 0; j < this.sell5.length; j++) {
+            if (this.sell5[j].amount > this.sell5Max) {
               this.sell5Max = this.sell5[j].amount;
             }
           }
-          console.log(this.buy5Max);
-          console.log(this.sell5Max);
-          this.buyReferencePrice = this.sell5[this.sell5.length-1].price;
+          this.buyReferencePrice = this.sell5[this.sell5.length - 1].price;
           this.sellReferencePrice = this.buy5[0].price;
         })
 
-        // console.log(this.activeCoinInfo);
         this.curListIsShow = false;
       },
       //获取市场数据(币种)
@@ -456,15 +482,15 @@
           this.total += item.amount;
         })
       },
-    // 获取市场行情(卖1，买1)
-      getRealMarket(tradeId){
-        return new Promise((resolve,reject)=>{
+      // 获取市场行情(卖1，买1)
+      getRealMarket(tradeId) {
+        return new Promise((resolve, reject) => {
           let currebyurl = common.apidomain + 'real/market';
-          ajax(currebyurl,'get',{
-            symbol:tradeId,
-            buysellcount:5,
-            successcount:10,
-          },(res) => {
+          ajax(currebyurl, 'get', {
+            symbol: tradeId,
+            buysellcount: 5,
+            successcount: 10,
+          }, (res) => {
             resolve(res);
             // console.log(res);
             // this.business = res.data.data.trades;
@@ -472,6 +498,93 @@
             // this.buys();
           });
         })
+      },
+      //  检测用户余额是否不足购买
+      checkBalance(buy, sell, coinName) {
+        if (buy) {
+          if (this.totalBuyAccount > this.activeSellTotal) {
+            this.buyErrorMsg = '您的余额不足，请先充值';
+            // return;
+          } else {
+            this.buyErrorMsg = '';
+          }
+        } else {
+          if (this.totalSellAccount > this.activeBuyTotal) {
+            this.sellErrorMsg = '您的' + coinName + '余额不足'
+          } else {
+            this.sellErrorMsg = ''
+          }
+        }
+      },
+      //显示支付密码弹窗
+      showTradeWin(tradeType) {
+        //未登陆，跳转到登陆页面
+        if (!this.$store.state.isLogin) {
+          this.$router.push({path: '/login'})
+        }
+        //未设置交易密码
+        if (!this.$store.state.userInfo.ftradepassword) {
+          //
+        }
+
+        this.tradeType = tradeType;
+        //买入
+        if (!tradeType) {
+          if(!this.buyCount){
+            this.buyErrorMsg='请输入购买数量！';
+            return;
+          }
+        } else {
+          //  卖出
+          if(!this.sellCount){
+            this.sellErrorMsg ='请输入卖出数量！';
+            return;
+          }
+        }
+        // console.log(this.activeCoinInfo);
+
+
+        // fd.append('tradePwd',this.$s);
+        // let data = {
+        // tradeAmount: tradeAmount,//数量
+        // tradePrice: tradeCnyPrice,//价格
+        // tradePwd: tradePwd,//交易密码
+        // symbol: this.activeCoinInfo.id,//交易对id
+        // limited: limited
+        // }
+
+        this.tradePwdErrorMsg = '';
+        this.dialogFormVisible = true;
+      },
+      //提交支付密码
+      submitTradePwd() {
+        if (!this.tradePwd) {
+          this.tradePwdErrorMsg = '请输入交易密码！';
+          return;
+        }
+        let fd = new FormData();
+        fd.append('tradePwd', this.tradePwd);
+        fd.append('symbol', this.activeCoinInfo.id);
+        fd.append('limited', '');
+        //买入
+        if (!this.tradeType) {
+          fd.append('tradeAmount', this.buyCount);
+          fd.append('tradePrice', this.buyReferencePrice);
+          let buyUrl = common.apidomain + 'trade/cny_buy';
+          ajax(buyUrl, 'post', fd, (res) => {
+            console.log(res);
+          })
+        } else {
+          //卖出
+          fd.append('tradeAmount', this.sellCount);
+          fd.append('tradePrice', this.sellReferencePrice);
+          let sellUrl = common.apidomain + 'trade/cny_sell';
+          ajax(sellUrl, 'post', fd, (res) => {
+            console.log(res);
+          });
+        }
+
+        this.dialogFormVisible = false;
       }
     },
     created() {
@@ -516,11 +629,19 @@
     mounted() {
     },
     computed: {
-      activeCount(){
-        return this.activeSellTotalModel/this.buyReferencePrice
+      //总购买金额
+      totalBuyAccount() {
+        return this.buyCount * this.buyReferencePrice
+      },
+      //总卖出金额
+      totalSellAccount() {
+        return this.sellCount * this.sellReferencePrice
+      },
+      activeCount() {
+        return this.activeSellTotalModel / this.buyReferencePrice
       },
       // buyCount(){
-        // return this.activeBuyTotal/this.buyReferencePrice
+      // return this.activeBuyTotal/this.buyReferencePrice
       // },
       personalAsset() {
         return this.$store.state.personalAsset;
@@ -712,6 +833,7 @@
     width: 80%;
     border-radius: 5px;
     text-align: center;
+    padding: 0 10px;
   }
 
   /*买入按钮*/
@@ -812,6 +934,10 @@
     max-height: 400px;
     overflow: auto;
     background-color: green;
+  }
+
+  .dialog {
+    font-style: normal;
   }
 
   .search-btn {

@@ -112,7 +112,7 @@
         agree: false,//用户协议
         // regType:0,//注册方式（手机：0，邮箱：1）
         registerInfo: {//注册信息
-          phoneNum: null,
+          phoneNum: '13253655737',
           emailAddress: '',//邮箱地址
         },
         phoneReg: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/,
@@ -152,23 +152,30 @@
         } else {
           this.errorMsg = '';
         }
-        let regUrl = common.apidomain +'register';
+        let regUrl = common.apidomain + 'register';
         let fd = new FormData();
-        if(this.regType==0){
-          fd.append('regName',this.registerInfo.phoneNum);//手机号
-          fd.append('pcode',this.msgCode);//短信验证码
-        }else {
-          fd.append('regName',this.registerInfo.emailAddress);//邮箱地址
-          fd.append('pcode',this.emailCode);//邮箱验证码
+        if (this.regType == 0) {
+          fd.append('regName', this.registerInfo.phoneNum);//手机号
+          fd.append('pcode', this.msgCode);//短信验证码
+        } else {
+          fd.append('regName', this.registerInfo.emailAddress);//邮箱地址
+          fd.append('pcode', this.emailCode);//邮箱验证码
         }
-        fd.append('password',this.password);//密码
-        fd.append('regType',this.regType);//注册类型
-        fd.append('vcode',this.imgCode);//图片验证码
-        fd.append('ecode',0);//图片验证码
-        fd.append('areaCode','+86');//地区代码
-        fd.append('intro_user','');//
-        ajax(regUrl,'post',fd,(res)=>{
+        fd.append('password', this.password);//密码
+        fd.append('regType', this.regType);//注册类型
+        fd.append('vcode', this.imgCode);//图片验证码
+        fd.append('ecode', 0);//图片验证码
+        fd.append('areaCode', '+86');//地区代码
+        fd.append('imageRedisKey', this.imageRedisKey);
+        fd.append('intro_user', '');//
+        ajax(regUrl, 'post', fd, (res) => {
           console.log(res);
+          //调用成功
+          // if () {
+
+          // } else {
+            //  调用失败
+          // }
         })
         /*
         * 手机号注册参数
@@ -220,10 +227,10 @@
               fd.append('uid', 0);
               ajax(msgUrl, 'post', fd, (res) => {
                 console.log(res);
-                if(res.data.code!==200){
+                if (res.data.code !== 200) {
                   this.errorMsg = res.data.msg;
                   return;
-                }else{
+                } else {
                   this.msgTime = 60;
                   this.msgDisabled = true;
                   this.msgTimer();
@@ -374,7 +381,7 @@
         if (!this.msgCode) {
           this.errorMsg = '请输入短信验证码';
           return 0;
-        }else {
+        } else {
           return 1;
         }
       },

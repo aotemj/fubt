@@ -12,12 +12,12 @@
               <li>创建时间</li>
             </ul>
             <div class="user-rewards">
-              <article>
-                <span>1</span>
-                <span>FBT</span>
-                <span>1352.021</span>
-                <span>asdfasdasd</span>
-                <span>2018 3 12 11:30</span>
+              <article v-for="(item,index) in reward">
+                <span>{{ index + 1 }}</span>
+                <span>{{ item.fcoinname }}</span>
+                <span>{{ item.fcoinname }}</span>
+                <span>{{ item.finfo }}</span>
+                <span>{{ item.fcreatetime }}</span>
               </article>
             </div>
           </el-collapse-item>
@@ -27,17 +27,29 @@
 </div>
 </template>
 <script>
+  import common from "../../kits/domain";
+  import {ajax} from "../../kits/http";
   export default {
    data() {
       return {
-        activeNames: ['1']
+        activeNames: ['1'],
+        reward:[],//奖励记录
       };
     },
     methods: {
       handleChange(val) {
 
       }
-    }
+    },
+    computed:{},
+    created(){
+      var JournalUrl = common.apidomain + 'user/rewardlog'
+      ajax(JournalUrl, 'post', {}, (res) => {
+        this.reward = res.data.data;
+        // console.log(res);
+      });
+    },
+    components:{}
   }
 </script>
 <style scoped>

@@ -2,7 +2,7 @@
   <div>
     <div class="security">
       <div id="user-panel">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName">
           <el-tab-pane label="用户管理" name="first">
             <div class="user_panel">
               <ul>
@@ -10,13 +10,9 @@
                   <li>登录IP</li>
               </ul>
               <ul>
-                <li>
-                  <span>18-02-27 10:53:48</span>
-                  <span>1.192.60.236</span>
-                </li>
-                <li>
-                  <span>18-02-27 10:53:48</span>
-                  <span>1.192.60.236</span>
+                <li v-for="(item,index) in Logonlog">
+                  <span>{{ item.fupdatetime }}</span>
+                  <span>{{ item.fip }}</span>
                 </li>
               </ul>
             </div>
@@ -43,19 +39,29 @@
   </div>
 </template>
 <script>
+  import common from "../../kits/domain"
+  import {ajax} from "../../kits/http"
   export default {
     data(){
        return {
-        activeName: 'first'
+        activeName: 'first',
+        Logonlog:[],//登陆日志
       };
     },
     methods:{
-      handleClick(tab, event) {
-
-      }
+      
     },
     computed:{},
-    created(){},
+    created(){
+      var JournalUrl = common.apidomain + 'user/user_loginlog';
+      var Jourfd = new FormData();
+      Jourfd.append('currentPage',1);
+
+      ajax(JournalUrl, 'post', Jourfd, (res) => {
+        this.Logonlog = res.data.data.flogs.data;
+        // console.log(this.Logonlog);
+      });
+    },
     components:{}
   }
 </script>

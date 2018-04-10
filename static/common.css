@@ -438,6 +438,29 @@ el-carousel-item img{
   height:2px;
   background-color: #455993;
 }
+
+.dialog .el-form-item__label{
+  padding:0 20px 0 0 ;
+}
+.dialog .el-form,.dialog .el-input{
+  width:70%;
+}
+.dialog .el-button--mini, .el-button--mini.is-round{
+  margin-left:76px;
+  width:70%;
+}
+.dialog .el-button{
+  background-color:#d75452;
+  color:#fff;
+  border:none;
+}
+.dialog .el-button:hover{
+  background-color:#c73232;
+
+}
+.dialog .el-form-item{
+  margin-bottom:10px;
+}
 /*错误提示*/
 .false-tips {
   margin-top: 20px;

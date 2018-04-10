@@ -39,7 +39,7 @@ import range from "./subcom/c2c_range.vue"
 // 市场Liet模块
 import list from "./subcom/c2c_bazaarList.vue"
 // 用户List模块
-import record from "./subcom/2c2_record.vue"
+import record from "./subcom/c2c_record.vue"
 //在线客服
 import Customer from './subcom/customer_service'
 // 尾部

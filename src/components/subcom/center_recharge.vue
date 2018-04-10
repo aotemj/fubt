@@ -6,8 +6,10 @@
           <el-collapse-item title="欢迎使用充值码" name="1">
             <el-form ref="form" :model="form" label-width="80px">
               <el-form-item label="充值码">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.Rechargearr" placeholder="请输入16位充值码" v-on:change.native="buton"></el-input>
+                <!-- <input type="text" v-on:keyup="buton"> -->
               </el-form-item>
+              <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">确定</el-button>
               </el-form-item>
@@ -25,43 +27,65 @@
         <li>创建时间</li>
       </ul>
       <div class="user-rewards">
-        <article>
-          <span>1</span>
-          <span>FBT</span>
-          <span>1352.021</span>
-          <span>asdfasdasd</span>
-          <span>2018 3 12 11:30</span>
+        <article v-for="(item,index) in Recharge">
+          <span>{{ index + 1 }}</span>
+          <span>{{ item.fcoinname }}</span>
+          <span>{{ item.dividendmunber }}</span>
+          <span>{{ item.sharedividendname }}</span>
+          <span>{{ item.fcreatetime }}</span>
         </article>
       </div>
     </el-tab-pane>
   </el-tabs>
 </template>
 <script>
+  import common from "../../kits/domain";
+  import {ajax} from "../../kits/http";
   export default {
      data() {
       return {
         activeName: 'first',
         activeNames: ['1'],
-          form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+        form: {
+          Rechargearr : '',
+        },
+        Recharge:[],
+        errorMsg: '',//错误提示
+        pwdReg:/^[a-zA-Z0-9]{16}/,//number验证
       };
     },
     methods: {
-      handleClick(tab, event) {
-
-      },
       onSubmit() {
-        console.log('submit!');
+        if (this.form.Rechargearr == '') {
+          this.errorMsg = "请输入充值码";
+          return;
+        }
+        if(!this.pwdReg.test(this.Rechargearr)){
+          this.errorMsg = "充值码为16位";
+         
+        }else{
+          this.errorMsg = '';
+        }
+
+
+        var JournalUrl = common.apidomain + 'deposit/alipay_manual'
+        ajax(JournalUrl, 'post', {}, (res) => {
+          console.log(res);
+        });
+      },
+      buton(){
+        // console.log(1)
+        if(!(/^[a-zA-Z0-9]{16}/.test(this.Rechargearr))){
+          this.errorMsg = "充值码为16位";
+        }
+        console.log(this.form.Rechargearr.length);
+        console.log(this.pwdReg.test(this.Rechargearr));
       }
-    }
+    },
+    created(){
+      
+    },
+    components:{}  
   }
 </script>
 <style scoped>
