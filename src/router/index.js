@@ -116,7 +116,7 @@ const router = new Router({
       component: changePwdByEmail
     },
     {
-      path: '/addNewPwdByPhone',
+      path: '/addNewPwdByPhone/:phoneNum',
       name: 'addNewPwdByPhone',
       component: addNewPwdByPhone
     },

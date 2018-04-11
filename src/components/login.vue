@@ -33,7 +33,7 @@
     data() {
       return {
         username: 18625512982,//赵鑫磊账号
-        password: 'c111111',//赵鑫磊密码
+        password: 'a111111',//赵鑫磊密码
         // username: 15738818082,//任付伟账号
         // password: 'admin123',//任付伟密码
         // username: 15994026836,//杨孝喜账号

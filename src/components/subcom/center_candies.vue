@@ -11,7 +11,7 @@
               <li>说明</li>
               <li>创建时间</li>
             </ul>
-            <div class="user-rewards">
+            <div class="user-rewards" v-show="candy.length!=0">
               <article v-for="(item,index) in candy">
                 <span>{{ index+1 }}</span>
                 <span>{{ item.fcoinname }}</span>
@@ -20,6 +20,7 @@
                 <span>{{ item.fcreatetime }}</span>
               </article>
             </div>
+            <div class="no-data" v-show ="candy.length==0">暂无记录</div>
           </el-collapse-item>
         </el-collapse>
     </div>
@@ -53,7 +54,9 @@
   }
 </script>
 <style scoped>
-
+.no-data{
+  line-height: 100px;
+}
 ul {
     height: 60px;
     line-height: 60px;

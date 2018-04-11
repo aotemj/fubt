@@ -24,13 +24,14 @@
                 <li>最近安全设置</li>
                 <li>登录IP</li>
               </ul>
-              <ul>
-                <li>
-                  <span>18-02-27 10:53:48</span>
+              <ul v-show="security.length!=0">
+                <li v-for="(item,index) in security">
+                  <span>{{ item.fcreatetime }}</span>
                   <span>安全</span>
-                  <span>192.168.1.96</span>
+                  <span>{{ item.fip }}</span>
                 </li>
               </ul>
+              <div class="no-data" v-show ="security.length==0">暂无记录</div>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -39,6 +40,35 @@
   </div>
 </template>
 <script>
+
+	// private String uuid;
+	// // 主键ID
+  //   private Integer fid;
+  //   // 用户ID
+  //   private Integer fuid;
+  //   // 类型
+  //   private Integer ftype;
+  //   private String ftype_s;
+  //   // 数据类型
+  //   private Integer fdatatype;
+  //   private String fdatatype_s;
+  //   // 数据类型
+  //   private Integer fcapitaltype;
+  //   // 数据内容
+  //   private BigDecimal fdata;
+  //   // 数据内容
+  //   private BigDecimal ffees;
+  //   // 网络手续费
+  //   private BigDecimal fbtcfees;
+  //   // 描述
+  //   private String fcontent;
+  //   // IP
+  //   private String fip;
+  //   // 更新时间
+  //   private Date fupdatetime;
+  //   // 创建时间
+    // private Date fcreatetime;
+
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
   export default {
@@ -46,26 +76,40 @@
        return {
         activeName: 'first',
         Logonlog:[],//登陆日志
+        security:[],//登录配置
       };
     },
     methods:{
       
     },
-    computed:{},
+    computed:{
+      
+    },
     created(){
+      //登陆日志
       var JournalUrl = common.apidomain + 'user/user_loginlog';
       var Jourfd = new FormData();
       Jourfd.append('currentPage',1);
-
       ajax(JournalUrl, 'post', Jourfd, (res) => {
         this.Logonlog = res.data.data.flogs.data;
         // console.log(this.Logonlog);
+      });
+      //登录安全配置
+      var securityUrl = common.apidomain + 'user/user_settinglog';
+      var securityUrlfd = new FormData();
+      securityUrlfd.append('currentPage',1);
+      ajax(securityUrl, 'post', securityUrlfd, (res) => {
+        // this.Logonlog = res.data.data.flogs.data;
+        console.log(res.data.data.flogs.data);
       });
     },
     components:{}
   }
 </script>
 <style scoped>
+.no-data{
+  line-height: 100px;
+}
 #user-panel>ul,
 .user_panel,
 .security>ul {
@@ -83,13 +127,13 @@
 }
 
 #user-panel>ul {
-    height: 50px;
+    height: 40px;
     margin-bottom: 9px;
 }
 
 #user-panel>ul>li {
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     float: left;
     font-size: 12px;
     font-family: '微软雅黑';
@@ -117,9 +161,10 @@
 }
 
 .user_panel>ul>li {
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     display: flex;
+    font-size: 14px;
 }
 
 .user_panel>ul>li>span {

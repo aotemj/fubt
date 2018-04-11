@@ -25,21 +25,23 @@
                   <div class="trading-left trading1" v-for="(item,index) in databuy">
                       <p class="C2C-buy">{{item.title}}</p>
                       <div class="C2C-tab">
-                        <p class="tab_input">{{item.site}}&nbsp;{{item.cny}}</p>
+                        <p class="tab_input">{{item.site}}&nbsp;{{item.fbt}}</p>
                         <p class="tab_input" ref="buyNum"> {{buyprice}}</p>
                       </div>
                       <div class="trading-left">
-                          <div class="C2C-tab C2C-input red">
+                          <div class="C2C-tab C2C-input" v-bind:class="{ red: isActive1 }">
                             <p>{{item.scale}}&nbsp;{{item.fbt}}</p>
-                            <input id="inp1" type="text" placeholder="0" v-model="buyPurchases" @keyup="buyamount" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 买入量 -->
+                            <input id="inp1" type="text" placeholder="0" v-model="buyPurchases" @focus="inputfocus1()" @blur="inputblur1()" @keyup="buyamount" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 买入量 -->
                           </div>
-                          <!-- <p style="backgroundColor:#1E253D;width:100px;height:30px;">{{buyPurchases}}</p> -->
-                          <div class="C2C-tab C2C-input">
+                          <div class="C2C-tab C2C-input" v-bind:class="{ red: isActive2 }" style="position:relative">
                             <p>{{item.sum}}&nbsp;{{item.cny}}</p>
-                            <input id="inp2" type="text" placeholder="0" v-model="moneySum" @keyup="buyMoney" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 金额 -->
+                            <input id="inp2" type="text" placeholder="0" v-model="moneySum" @focus="inputfocus2()" @blur="inputblur2()" @keyup="buyMoney" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 金额 -->
+                            <div class="warninfo">{{warn}}</div>
                           </div>
+
+                          
                           <div class="C2C-tab">
-                            <button>{{item.buying}}</button>
+                            <button v-on:click="buybutton()">{{item.buying}}</button>
                           </div>
                       </div>
                   </div>
@@ -50,21 +52,22 @@
                       <span class="available">可用：<span class="availSum">{{available}}</span>FBT</span>
                     </p>
                     <div class="C2C-tab">
-                      <p class="tab_input">{{item.site}}&nbsp;{{item.cny}}</p>
+                      <p class="tab_input">{{item.site}}&nbsp;{{item.fbt}}</p>
                       <!-- <p class="tab_input">{{item.buynum}}</p> -->
                       <p class="tab_input">{{sellpice}}</p>
                     </div>
                     <div class="trading-right1">
-                      <div class="C2C-tab C2C-input">
+                      <div class="C2C-tab C2C-input" v-bind:class="{ green: isActive3 }">
                         <p>{{item.scale}}&nbsp;{{item.fbt}}</p>
-                        <input id="inp3" type="text" placeholder="0" v-model="sellPurchases" @keyup="sellamount" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 卖出量 -->
+                        <input id="inp3" type="text" placeholder="0" v-model="sellPurchases" @focus="inputfocus3()" @blur="inputblur3()" @keyup="sellamount" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 卖出量 -->
                       </div>
-                      <div class="C2C-tab C2C-input">
+                      <div class="C2C-tab C2C-input" v-bind:class="{ green: isActive4 }" style="position:relative">
                         <p>{{item.sum}}&nbsp;{{item.cny}}</p>
-                        <input id="inp4" type="text" placeholder="0" v-model="sellmoneySum" @keyup="sellMoney" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 金额 -->
+                        <input id="inp4" type="text" placeholder="0" v-model="sellmoneySum" @focus="inputfocus4()" @blur="inputblur4()" @keyup="sellMoney" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"><!-- 金额 -->
+                        <div class="sellWarn">{{sellwarn}}</div>
                       </div>
                       <div class="C2C-tab">
-                        <button>{{item.buying}}</button>
+                        <button v-on:click="sellbutton()">{{item.selling}}</button>
                       </div>
                     </div>
                   </div>
@@ -85,6 +88,56 @@
               </div>
             </div>
           </el-tab-pane>
+
+          <!--交易密码框-->
+          <i class="dialog">
+            <el-dialog title="交易密码" center :visible.sync="dialogFormVisible1" class="dialog-contentinfo" width="35%">
+              <el-form class="cent">
+                <el-form-item label="交易密码">
+                  <el-input type="password" class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
+                  <!-- <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input> -->
+                  <!-- <div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}</div> -->
+                </el-form-item>
+                <el-form-item label="">
+                  <el-button size="mini" class="buttomvote" v-on:click="submitTradePwd">确定</el-button>
+                </el-form-item>
+              </el-form>
+            </el-dialog>
+          </i>
+
+          <!--如果没有设置交易密码，则弹出此框引导设置交易密码-->
+          <i class="dialog settrapwd">
+            <el-dialog title="友情提示" center :visible.sync="dialogFormVisible2" class="dialog-contentinfo" width="30%">
+              <el-form class="cent">
+                <el-form-item>
+                  <!-- <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
+                  <div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}</div> -->
+                  <div>请先设置交易密码，<router-link to="/user" style="color:#C73232;">立即设置</router-link></div>
+                </el-form-item>
+                <el-form-item label="" style="textAlign:center;paddingTop:10px;">
+                  <!-- <el-button class="buttomvote" v-on:click="submitTradePwd">确定</el-button> -->
+                  <el-button class="buttomvote" @click="dialogFormVisible2 = false">确定</el-button>
+                </el-form-item>
+              </el-form>
+            </el-dialog>
+          </i>
+
+          <!--如果没有绑定银行卡或者支付宝提示去绑定-->
+          <i class="dialog bankcard">
+            <el-dialog title="友情提示" center :visible.sync="dialogFormVisible3" class="dialog-contentinfo" width="30%">
+              <el-form class="cent">
+                <el-form-item>
+                  <!-- <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
+                  <div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}</div> -->
+                  <div>请先绑定银行卡或支付宝，<router-link to="/finance" style="color:#C73232;">立即设置</router-link></div>
+                </el-form-item>
+                <el-form-item label="" style="textAlign:center;paddingTop:10px;">
+                  <!-- <el-button class="buttomvote" v-on:click="submitTradePwd">确定</el-button> -->
+                  <el-button class="buttomvote" @click="dialogFormVisible3 = false">确定</el-button>
+                </el-form-item>
+              </el-form>
+            </el-dialog>
+          </i>
 
           <el-tab-pane label="BTC交易" name="second">BTC交易</el-tab-pane>
 
@@ -110,11 +163,11 @@
                       <div class="trading-left">
                           <div class="C2C-tab C2C-input">
                               <p>买入量&nbsp;FBT</p>
-                              <input id="inp1" type="text" placeholder="0">
+                              <input id="inp5" type="text" placeholder="0">
                           </div>
                           <div class="C2C-tab C2C-input">
                               <p>金额&nbsp;CNY</p>
-                              <input id="inp2" type="text" placeholder="0">
+                              <input id="inp6" type="text" placeholder="0">
                           </div>
                           <div class="C2C-tab">
                               <button>买入</button>
@@ -130,11 +183,11 @@
                     <div class="trading-right1">
                       <div class="C2C-tab C2C-input">
                         <p>卖出量&nbsp;FBT</p>
-                        <input id="inp3" type="text" placeholder="0">
+                        <input id="inp7" type="text" placeholder="0">
                       </div>
                       <div class="C2C-tab C2C-input">
                         <p>金额&nbsp;CNY</p>
-                        <input id="inp4" type="text" placeholder="0">
+                        <input id="inp8" type="text" placeholder="0">
                       </div>
                       <div class="C2C-tab">
                         <button>卖出</button>
@@ -170,15 +223,38 @@
   export default {
     data(){
       	return {
-          buyprice:"1",//买入价
-          sellpice:"0.99",//卖入价
+          // 银行卡是否绑定
+          bankinfo:'',
+
+          // 警示信息
+          warn:'',//买入的提示信息
+          sellwarn:'',//卖出的提示信息
+
+          //交易密码弹窗
+          dialogFormVisible1: false,//弹窗状态
+          tradePwd: '',//交易密码
+
+          // 设置交易密码
+          dialogFormVisible2: false,//弹窗状态
+
+          //银行卡弹窗
+          dialogFormVisible3:false,//弹窗状态
+
+          //文本框是否获得焦点
+          isActive1:false,
+          isActive2:false,
+          isActive3:false,
+          isActive4:false,
+
+          buyprice:"",//买入价
+          sellpice:"",//卖出价
           available:"",//可用
 
           buyPurchases:"",//买入量
           moneySum:"",//买入金额
 
-          sellPurchases:"",//卖入量
-          sellmoneySum:"",//卖入金额
+          sellPurchases:"",//卖出量
+          sellmoneySum:"",//卖出金额
           
   				activeName: 'first',
   				value:'',
@@ -204,76 +280,171 @@
           datasale:[
             {
               title:'卖出FBT',
-              site:'卖入价',
+              site:'卖出价',
               cny:'CNY',
               buynum:'0.99',
-              scale:'卖入量',
+              scale:'卖出量',
               fbt:'FBT',
               sum:'金额',
-              buying:'卖入'
+              selling:'卖出'
             }
           ],
-
 			}
     },
     created(){
-      // console.log(this.$refs.buyNum);
-      // console.log(Number(this.$refs.buyNum[0].innerText));
-
       // 1.0 刚打开c2c页面请求数据
-      var url = common.apidomain + 'c2c/index';
-      var formData = new FormData();
-      formData.append('c2ctradeId',52);
-      formData.append('c2ctype',2);
-      ajax(url, 'post', formData, (res) => {
-        // console.log(res.data)
-        console.log(res.data.data);
-        this.buyprice=res.data.data.c2CCoinList[0].buymoney;//1
-        this.sellpice=res.data.data.c2CCoinList[0].sellmoney;//0.99
-        this.available=res.data.data.userWalletTotal;//可用
-      });
+      this.render();
     },
     methods:{
+      // 1.0 刚打开c2c页面请求数据
+      render(){
+        var url = common.apidomain + 'c2c/index';
+        var formData = new FormData();
+        formData.append('c2ctradeId',52);
+        formData.append('c2ctype',2);
+        ajax(url, 'post', formData, (res) => {
+          // console.log(res.data)
+          // console.log(res.data.data);
+          this.buyprice=res.data.data.c2CCoinList[0].buymoney;//1
+          this.sellpice=res.data.data.c2CCoinList[0].sellmoney;//0.99
+          this.available=res.data.data.userWalletTotal;//可用
+          this.bankinfo=res.data.data.c2cfUserBankinfo;// 银行卡是否绑定
+          // console.log(this.bankinfo);
+        });
+      },
+
+      // 5.0点击买入按钮触发事件
+      buybutton(){
+        // console.log(this.$store.state.userInfo.ftradepassword)//交易密码    
+        if(this.$store.state.isLogin==false){// 登陆验证
+          this.$router.push('/login');//跳转到首页登陆
+        }else if(this.buyPurchases<100){//买入量验证
+          this.warn="最小交易数量为100个！";
+          return;
+        }else if(this.buyPurchases>1000000){
+          this.warn="最大交易数量为100万个！";
+          return;
+        }else if(this.$store.state.userInfo.ftradepassword==''){//若没有设置交易密码--弹窗--立即设置--用户中心设置交易密码
+          this.dialogFormVisible2=true;
+        }else if(this.$store.state.userInfo.fhasrealvalidate==false){//验证是否实名认证false:未实名，true实名；
+          this.warn="请先完成实名认证！";
+        }else{//弹出输入交易密码框
+          this.dialogFormVisible1=true;
+        }
+      },
+
+      // 6.0 点击输入交易密码框中的确定按钮
+      submitTradePwd(){
+        // console.log(this.tradePwd);
+        // console.log(this.$store.state.userInfo.ftradepassword);
+        if(this.tradePwd==''){
+          this.warn="请输入交易密码！";
+          return;
+        }
+        // 当交易密码对的时候发送数据请求
+        var url = common.apidomain + 'trade/cny_c2c_buy';
+        var formData1 = new FormData();
+        formData1.append('symbol',2);
+        formData1.append('tradeAmount',this.buyPurchases);
+        formData1.append('tradePrice',this.buyprice);
+        // formData1.append('tradePwd',this.$store.state.userInfo.ftradepassword);
+        formData1.append('tradePwd',this.tradePwd);
+        ajax(url, 'post', formData1, (res) => {
+          // console.log(this.tradePwd);
+          // console.log(this.$store.state.userInfo.ftradepassword);
+          // console.log(res.data)
+          if(res.data.code!==200){
+            this.warn=res.data.msg;
+            this.dialogFormVisible1=false;
+          }
+          if(res.data.code==200){
+            this.warn="数据请求成功！";
+          }
+        });
+        // if(this.tradePwd!==this.$store.state.userInfo.ftradepassword){
+        //   this.warn="交易密码错误！";
+        //   this.dialogFormVisible1=false;//关闭弹窗
+        //   this.tradePwd="";
+        // }else{
+        //   this.warn="交易密码正确！";
+        //   this.databuy[0].buying="正在买入...";//改变按钮的字
+        //   this.dialogFormVisible1=false;//关闭弹窗  
+        // }
+      },
+
+      // 7.0 点击卖出按钮触发事件
+      sellbutton(){
+        console.log("我是卖出按钮");
+        if(this.$store.state.isLogin==false){// 登陆验证
+          this.$router.push('/login');//跳转到首页登陆
+        }
+        if(this.bankinfo==false){
+          this.dialogFormVisible3=true;
+        }
+        if(this.sellPurchases<100){
+          this.sellwarn="小交易数量为100个！";
+          return;
+        }
+        if(this.sellPurchases>1000000){
+          this.sellwarn="最大交易数量为100万个！";
+          return;
+        }
+
+      },
+
+
+
       // 1.0输入买入量的时候键盘弹上来触发的方法
       buyamount(){
-        console.log("1");
         this.moneySum = this.buyprice * this.buyPurchases;
       },
       // 2.0输入买入FBT金额的时候键盘弹上来触发的方法
       buyMoney(){
-        console.log("2");
         this.buyPurchases = this.moneySum / this.buyprice;
       },
       // 3.0输入卖入量的时候键盘弹上来触发的方法
       sellamount(){
-        console.log("3");
         this.sellmoneySum = this.sellpice * this.sellPurchases;
       },
       // 4.0输入卖入量FBT金额的时候键盘弹上来触发的方法
       sellMoney(){
-        console.log("4");
         this.sellPurchases = this.sellmoneySum / this.sellpice;
+      },
+      // 控制文本框焦点的获得与失去
+      inputfocus1(){
+        this.isActive1=true;
+      },
+      inputblur1(){
+        this.isActive1=false;
+      },
+      inputfocus2(){
+        this.isActive2=true;
+      },
+      inputblur2(){
+        this.isActive2=false;
+      },
+      inputfocus3(){
+        this.isActive3=true;
+      },
+      inputblur3(){
+        this.isActive3=false;
+      },
+      inputfocus4(){
+        this.isActive4=true;
+      },
+      inputblur4(){
+        this.isActive4=false;
       },
 
     },
-    computed:{
-      // reverseMessage:function(){
-      //   return Number(this.buyPurchases) * this.buySite
-      // }
-    },
+    computed:{},
     components:{},
-    mounted(){
-      // var buySite = Number(this.$refs.buyNum[0].innerText);
-      // console.log(buySite);
-    }
+    mounted(){},
   }
 </script>
 
 <style scoped>
-
-
   .range{
-    /*padding: 0 100px 0 100px;*/
     width:1300px;
   }
   #trading-sub {
@@ -416,6 +587,7 @@
       /*line-height: 50px;*/
       line-height: 48px;
       margin-top: 0;
+      color: #fff;
   }
 
   .C2C-tab>p:last-child {
@@ -466,35 +638,38 @@
 
   .red{
     border: 1px solid #C9302C;
-    /*border: 1px solid #fff;*/
   }
-
-
+  .green{
+    border: 1px solid #449844;
+  }
   
   .C2C-input>input {
-      width: 80%;
-      height: 100%;
-      float: right;
-      border: 0;
-      outline: medium;
-      text-align: right;
-      padding-right: 15px;
+    width: 80%;
+    height: 100%;
+    float: right;
+    border: 0;
+    outline: medium;
+    text-align: right;
+    padding-right: 15px;
   }
 
   #inp1,
   #inp2,
   #inp3,
-  #inp4 {
-      width: 80%;
-      height: 100%;
-      border: 0;
-      outline: medium;
-      text-align: right;
-      padding-right: 15px;
-      background: #1d2843;
-      font-size: 17px;
+  #inp4,
+  #inp5,
+  #inp6,
+  #inp7,
+  #inp8,{
+    width: 80%;
+    height: 100%;
+    border: 0;
+    outline: medium;
+    text-align: right;
+    padding-right: 15px;
+    background: #1d2843;
+    font-size: 17px;
   }
-
 
   /*可用：*/
   .available{
@@ -504,6 +679,25 @@
   }
   .available .availSum{
     padding: 0 3px;
+  }
+  /*警告信息*/
+  .warninfo{
+    /*text-align: left;
+    padding-left: 20px;*/
+    color: #FB6A08;
+    position: absolute;
+    bottom: -30px;
+    left: 20px;
+  }
+  .sellWarn{
+    color: #FB6A08;
+    position: absolute;
+    bottom: -30px;
+    left: 20px;
+  }
+  /*弹框*/
+  .dialog {
+    font-style: normal;
   }
 </style>
 

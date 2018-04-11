@@ -443,23 +443,38 @@ el-carousel-item img{
   padding:0 20px 0 0 ;
 }
 .dialog .el-form,.dialog .el-input{
-  width:70%;
+  width:90%;
 }
 .dialog .el-button--mini, .el-button--mini.is-round{
-  margin-left:76px;
-  width:70%;
+  /*margin-left:76px;*/
+  width:90%;
 }
 .dialog .el-button{
   background-color:#d75452;
   color:#fff;
   border:none;
+  font-size: 12px;
 }
 .dialog .el-button:hover{
-  background-color:#c73232;
-
+  /*background-color:#c73232;*/
+  background-color: #455993;
+  border-radius:2px;
+  font-size: 12px;
 }
 .dialog .el-form-item{
   margin-bottom:10px;
+}
+.dialog .el-input-group__append{
+  /*border-radius:0;*/
+  padding:0;
+  color:#fff;
+  background-color:#11192c ;
+}
+.dialog .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select{
+  margin:0px;
+}
+.withdraw-deposit-box .el-select{
+  width: 400px;
 }
 /*错误提示*/
 .false-tips {

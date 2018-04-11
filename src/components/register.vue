@@ -1,5 +1,7 @@
 <template>
+
   <div class="con-box">
+    <tips></tips>
     <Header class="header"></Header>
     <div class="inner-box">
       <h4><span v-bind:class="{active:regType==0}" v-on:click="changeRegisterMode">手机注册</span><span
@@ -73,7 +75,9 @@
         <input type="checkbox" v-model="agree" class="dis-in-blk"><span>我已阅读并同意<router-link to="/"
                                                                                             class="blue">《用户协议》</router-link></span><br>
         <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
-        <input class="register-btn dis-in-blk" v-on:click="register" type="button" value="注册">
+        <el-button size="midium" :disabled="logging" class="register-btn dis-in-blk bdr0" type="primary"
+                   :loading="logging" v-on:click="register">注册
+        </el-button>
         <span>已有账号？<router-link to="/login" class="blue">直接登录>></router-link></span>
       </div>
     </div>
@@ -84,6 +88,7 @@
   import sIdentify from "./subcom/identify"
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
+  import tips from "./subcom/friendlyTips"//弹窗组件
   // import {phoneReg} from '../kits/reg'
   export default {
     data() {
@@ -113,11 +118,12 @@
         // regType:0,//注册方式（手机：0，邮箱：1）
         registerInfo: {//注册信息
           phoneNum: '13253655737',
-          emailAddress: '',//邮箱地址
+          emailAddress: '991807272@qq.com',//邮箱地址
         },
         phoneReg: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/,
         pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
         emailReg: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+        logging: false,//注册中
       }
     },
     methods: {
@@ -152,6 +158,8 @@
         } else {
           this.errorMsg = '';
         }
+        this.logging = true;//注册中激活
+
         let regUrl = common.apidomain + 'register';
         let fd = new FormData();
         if (this.regType == 0) {
@@ -159,23 +167,26 @@
           fd.append('pcode', this.msgCode);//短信验证码
         } else {
           fd.append('regName', this.registerInfo.emailAddress);//邮箱地址
-          fd.append('pcode', this.emailCode);//邮箱验证码
+          fd.append('ecode', this.emailCode);//邮箱验证码
         }
         fd.append('password', this.password);//密码
         fd.append('regType', this.regType);//注册类型
         fd.append('vcode', this.imgCode);//图片验证码
-        fd.append('ecode', 0);//图片验证码
+        // fd.append('pcode', 0);//
         fd.append('areaCode', '+86');//地区代码
         fd.append('imageRedisKey', this.imageRedisKey);
         fd.append('intro_user', '');//
         ajax(regUrl, 'post', fd, (res) => {
+          this.logging = false;//注册完成
           console.log(res);
-          //调用成功
-          // if () {
+          //  调用失败
+          if (res.data.code !== 200) {
 
-          // } else {
-            //  调用失败
-          // }
+            this.$store.commit('changeDialogInfo', res.data.msg)
+          } else {
+            //调用成功
+            this.$store.commit('changeDialogInfo', res.data.msg);
+          }
         })
         /*
         * 手机号注册参数
@@ -208,7 +219,7 @@
           if (!this.phoneNumReg() || !this.imgCodeReg()) {
             return;
           }
-          this.phoneNumExistTest().then((res) => {
+          this.phoneNumExistTest(0).then((res) => {
             // console.log(res.data);
             if (res.data.code !== 200) {
               this.errorMsg = res.data.msg;
@@ -238,7 +249,6 @@
               })
             }
           });
-
           /*
           * 短信验证码参数格式
           * type: 111
@@ -248,17 +258,41 @@
             vcode: gdh8 图片验证码
             uid: 0
             */
-          //
-
-
         } else {
           if (!this.emailNumReg() || !this.imgCodeReg()) {
             return;
           }
-          //  邮箱注册
-          this.emailTime = 120;
-          this.emailDisabled = true;
-          this.emailTimer();
+          this.phoneNumExistTest(1).then((res) => {
+            if (res.data.code !== 200) {
+              this.errorMsg = res.data.msg;
+              return;
+            } else {
+              /*发送邮箱验证码参数
+              * type: 203
+                msgtype: 1
+                address: 991807272@qq.com
+               */
+
+              let msgUrl = common.apidomain + 'user/send_reg_email';
+              let fd = new FormData();
+
+              fd.append('type',203);
+              fd.append('msgtype', 1);
+              fd.append('address',this.registerInfo.emailAddress);
+              ajax(msgUrl, 'post', fd, (res) => {
+                if (res.data.code !== 200) {
+                  this.errorMsg = res.data.msg;
+                  return;
+                } else {
+                  //  邮箱注册
+                  this.emailTime = 120;
+                  this.emailDisabled = true;
+                  this.emailTimer();
+                }
+              });
+            }
+          })
+
         }
       },
       msgTimer() {
@@ -328,14 +362,20 @@
           return 1;
         }
       },
-      //手机号是否存在验证
-      phoneNumExistTest() {
+      //账号是否存在验证
+      phoneNumExistTest(type) {
 
         let promise = new Promise((resolve) => {
           let testUrl = common.apidomain + 'user/check_user_exist';
           let fd = new FormData();
-          fd.append('name', this.registerInfo.phoneNum);
-          fd.append('type', '0');
+          //手机号已存在验证
+          if (!type) {
+            fd.append('name', this.registerInfo.phoneNum);
+          } else {
+            //  邮箱号已存在验证
+            fd.append('name', this.registerInfo.emailAddress);
+          }
+          fd.append('type', type);
           ajax(testUrl, 'post', fd, (res) => {
             // console.log(res);
             // if(res.data.code!==200){
@@ -369,7 +409,7 @@
           this.errorMsg = '请输入图片图片验证码';
           return 0;
         } else if (!this.imgCode == this.trueImgCode) {
-          this.errorMsg = '您输入的验证码不正确';
+          this.errorMsg = '您输入图片验证码不正确';
           return 0;
         } else {
           this.errorMsg = '';
@@ -389,9 +429,6 @@
       emailCodeReg() {
         if (!this.emailCode) {
           this.errorMsg = '请输入邮箱验证码';
-          return 0;
-        } else if (!this.emailCodeStatus) {
-          this.errorMsg = '您输入的验证码不正确';
           return 0;
         } else {
           return 1;
@@ -423,7 +460,8 @@
     },
     components: {
       Header,
-      sIdentify
+      sIdentify,
+      tips,//友情提示组件
     }
   }
 </script>

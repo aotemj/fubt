@@ -212,7 +212,7 @@
         <!--交易密码框-->
         <i class="dialog">
           <el-dialog title="交易密码" center :visible.sync="dialogFormVisible" class="dialog-contentinfo" width="35%">
-            <el-form class="cent">
+            <el-form class="cent" label-width="120px" label-position="right">
               <el-form-item label="交易密码">
                 <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
                 <div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}</div>
@@ -524,10 +524,11 @@
         }
         //未设置交易密码
         if (!this.$store.state.userInfo.ftradepassword) {
-          //
+
         }
 
         this.tradeType = tradeType;
+
         //买入
         if (!tradeType) {
           if(!this.buyCount){
@@ -562,6 +563,7 @@
           this.tradePwdErrorMsg = '请输入交易密码！';
           return;
         }
+
         let fd = new FormData();
         fd.append('tradePwd', this.tradePwd);
         fd.append('symbol', this.activeCoinInfo.id);

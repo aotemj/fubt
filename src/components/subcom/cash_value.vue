@@ -100,7 +100,54 @@
                 <div class="inner-box" v-bind:class="{'h380':item.shortName=='TYZ'}">
                   <ul>
                     <li><span class="fl">可用{{item.shortName}}</span><span class="fl">{{item.total}}</span></li>
-                    <li><span class="fl">提现地址</span><input class="fr" type="text"></li>
+                    <!--天涯币-->
+                    <li v-if="item.shortName=='TYZ'">
+                      <span class="fl">提现账号</span><input type="text" class="fr">
+                    </li>
+                    <!--非天涯币-->
+                    <li class="pr" v-if="item.shortName!=='TYZ'">
+                      <span class="fl">提现地址</span>
+                      <el-select class="fr" v-model="withdrawAddress" placeholder="请选择">
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                      <span v-if="item.shortName!=='TYZ'" class="pa blue add-address cp" v-on:click="addAddress">去新增 <i> >> </i></span>
+                      <!--新增提现地址-->
+                      <i class="dialog">
+                        <el-dialog title="提现地址" center :visible.sync="dialogFormVisible" class="dialog-contentinfo"
+                                   width="35%">
+                          <el-form class="cent" label-width="120px" label-position="right">
+
+                            <el-form-item label="提现地址">
+                              <el-input class="input-info"></el-input>
+                            </el-form-item>
+                            <el-form-item label="备注">
+                              <el-input class="input-info"></el-input>
+                            </el-form-item>
+                            <el-form-item label="交易密码">
+                              <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
+                            </el-form-item>
+                              <!--<div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}-->
+                              <!--</div>-->
+
+
+                            <el-form-item label="短信验证码">
+                              <el-input class="input-info input-with-select" v-model="tradePwd" placeholder="请输入交易密码"><el-button slot="append" size="mini" class="bdr0 w100p">发送验证码</el-button>
+
+                              </el-input>
+                            </el-form-item>
+                            <el-form-item label="      ">
+                              <el-button size="mini" class="" v-on:click="">确定提交</el-button>
+                            </el-form-item>
+                          </el-form>
+                        </el-dialog>
+                      </i>
+                    </li>
+
                     <li v-if="item.shortName!=='TYZ'"><span class="fl">提现数量</span><input class="fr" type="text"></li>
 
                     <!--天涯币提现-->
@@ -109,14 +156,14 @@
                       <span class="fl"></span>
                       <div class="fl ml100 db1p pdlr10 w80p">
                         <div>手续费 00000 TYZ</div>
-                        <div>实际到账 <span class="red">0000</span> </div>
+                        <div>实际到账 <span class="red">0000</span></div>
                       </div>
                       <input class="fr" type="text">
                       <!--<div>-->
-                        <!--手续费 00000 TYZ-->
+                      <!--手续费 00000 TYZ-->
                       <!--</div>-->
                       <!--<div>-->
-                        <!--实际到账 000000-->
+                      <!--实际到账 000000-->
                       <!--</div>-->
                     </li>
 
@@ -189,6 +236,28 @@
           account: '',//账号来源
         },
         errorMsg: '',//错误信息
+
+        //  提现
+        withdrawAddress: '',//1.提现地址
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        // value: ''
+        dialogFormVisible: false,//新增提现地址框
+        tradePwd: '',//交易密码
       }
     },
     methods: {
@@ -276,7 +345,7 @@
         ajax(addressUrl, 'post', fd, (res) => {
           console.log(res);
           if (res.data.code !== 200) {
-            this.$store.commit('changeDialogInfo',res.data.msg)
+            this.$store.commit('changeDialogInfo', res.data.msg)
             return;
           }
           this.rechargeAddress = {
@@ -306,26 +375,31 @@
       },
       //  点击复制
       onCopy: function (e) {
-        let msg = '已拷贝'+e.text;
-        this.$store.commit('changeDialogInfo',msg)
+        let msg = '已拷贝' + e.text;
+        this.$store.commit('changeDialogInfo', msg)
       },
       onError: function (e) {
         let msg = '拷贝失败，请稍后重试';
-        this.$store.commit('changeDialogInfo',msg)
+        this.$store.commit('changeDialogInfo', msg)
+      },
+      //  提现
+      //  显示提现窗口
+      addAddress() {
+        this.dialogFormVisible = true;
       }
     },
 
     created() {
-        this.currencyList = this.$store.state.personalAsset;
+      this.currencyList = this.$store.state.personalAsset;
 
-        this.filteredData = this.currencyList;
-        this.filteredData1 = this.currencyList;
-        this.currencyList.forEach((item, index) => {
-          this.withdrawDepositIsShowList.push({allIsShow: false, rechargeIsShow: false, withdrawDepositIsShow: false});
-          if (item.total) {
-            this.filteredData2.push(item);
-          }
-        })
+      this.filteredData = this.currencyList;
+      this.filteredData1 = this.currencyList;
+      this.currencyList.forEach((item, index) => {
+        this.withdrawDepositIsShowList.push({allIsShow: false, rechargeIsShow: false, withdrawDepositIsShow: false});
+        if (item.total) {
+          this.filteredData2.push(item);
+        }
+      })
     },
     computed: {
       // // 显示所有
@@ -517,13 +591,14 @@
     padding: 20px;
   }
 
-  .recharge-box .inner-box{
+  .recharge-box .inner-box {
     min-height: 130px;
     /*min-height:50px;*/
     /*background-color: pink;*/
   }
-  .withdraw-deposit-box .inner-box{
-    min-height:280px;
+
+  .withdraw-deposit-box .inner-box {
+    min-height: 280px;
   }
 
   .recharge-box .left {
@@ -655,5 +730,16 @@
     height: 70px;
     line-height: 50px;
     /*background-color: pink;*/
+  }
+
+  /*新增提现地址*/
+  .add-address {
+    right: -105px;
+    top: 0;
+    /*background-color: pink;*/
+  }
+
+  .dialog {
+    font-style: normal;
   }
 </style>
