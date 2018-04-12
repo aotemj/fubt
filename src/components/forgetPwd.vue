@@ -5,10 +5,12 @@
       <div class="login-box">
         <h4>找回密码</h4>
         <div class="username">
-          <input type="text" disabled placeholder="手机号找回"><router-link to="/changePwdByPhone" class="username-tips blue">点击找回>></router-link>
+          <!-- <input type="text" disabled placeholder="手机号找回"><router-link to="/changePwdByPhone" class="username-tips blue" @click="findBack()">点击找回>></router-link> -->
+           <input type="text" disabled placeholder="手机号找回"><button class="username-tips blue" @click="findBack()">点击找回>></button>
         </div>
         <div class="pwd">
-          <input type="password" disabled placeholder="邮箱找回"><router-link to="/changePwdByEmail" class="pwd-tips blue">点击找回>></router-link>
+          <!-- <input type="password" disabled placeholder="邮箱找回"><router-link to="/changePwdByEmail" class="pwd-tips blue">点击找回>></router-link> -->
+          <input type="password" disabled placeholder="邮箱找回"><button class="pwd-tips blue">点击找回>></button>
         </div>
       </div>
     </div>
@@ -26,6 +28,18 @@
       }
     },
     methods:{
+      // 1.0 点击手机号找回密码
+      findBack(){
+        var url = common.apidomain + 'validate/reset_phone';
+        var fd1 = new FormData();
+        fd1.append('phoneResetKey','');
+        ajax(url, 'post', fd1, (res) => {
+          console.log(res);
+          this.$router.push('/changePwdByPhone');//跳转到changePwdByPhone页面
+        });
+      },
+
+      // 2.0
       login(){
         console.log('123');
         let loginUrl = common.apidomain+'login';
@@ -73,6 +87,7 @@
     font-size: 12px;
     top:50%;
     transform: translateY(-50%);
+    cursor: pointer;
   }
   .pwd-tips{
     /*top:110px;*/

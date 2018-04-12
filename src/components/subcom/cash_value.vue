@@ -39,7 +39,7 @@
               <div class="td">{{item.frozen}}</div>
               <div class="td todos">
                 <button v-on:click="showRechargeBox(index,item.coinId)">充值</button>
-                <button v-on:click="showWithdrawDepositBox(index)">提现</button>
+                <button v-on:click="showWithdrawDepositBox(index,item.coinId)">提现</button>
               </div>
             </div>
             <div class="todos-box" v-if="withdrawDepositIsShowList[index].allIsShow">
@@ -109,10 +109,10 @@
                       <span class="fl">提现地址</span>
                       <el-select class="fr" v-model="withdrawAddress" placeholder="请选择">
                         <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                          v-for="(item,index) in withdrawAddressList"
+                          :key="item.fid"
+                          :label="item.fremark+'-'+item.fadderess"
+                          :value="item.fid">
                         </el-option>
                       </el-select>
                       <span v-if="item.shortName!=='TYZ'" class="pa blue add-address cp" v-on:click="addAddress">去新增 <i> >> </i></span>
@@ -123,32 +123,44 @@
                           <el-form class="cent" label-width="120px" label-position="right">
 
                             <el-form-item label="提现地址">
-                              <el-input class="input-info"></el-input>
+                              <el-input class="input-info" v-model="newWithdrawAddress"></el-input>
                             </el-form-item>
                             <el-form-item label="备注">
-                              <el-input class="input-info"></el-input>
+                              <el-input class="input-info" v-model="remark"></el-input>
                             </el-form-item>
                             <el-form-item label="交易密码">
-                              <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"></el-input>
+                              <el-input class="input-info" v-model="tradePwd" placeholder="请输入交易密码"
+                                        type="password"></el-input>
                             </el-form-item>
-                              <!--<div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}-->
-                              <!--</div>-->
+                            <!--<div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}-->
+                            <!--</div>-->
 
 
                             <el-form-item label="短信验证码">
-                              <el-input class="input-info input-with-select" v-model="tradePwd" placeholder="请输入交易密码"><el-button slot="append" size="mini" class="bdr0 w100p">发送验证码</el-button>
-
+                              <el-input class="input-info input-with-select" v-model="msgForNewAddress"
+                                        placeholder="请输入短信验证码">
+                                <el-button slot="append" size="mini" class="bdr0 w100p"
+                                           :disabled="msgDisabledForAddress"
+                                           v-on:click="sendCode('addAddress')">{{msgBtnTxt}}
+                                </el-button>
                               </el-input>
                             </el-form-item>
                             <el-form-item label="      ">
-                              <el-button size="mini" class="" v-on:click="">确定提交</el-button>
+                              <div class="false-tips fz12 mt-10"><i v-show="addAddressErrorMsg"></i>{{addAddressErrorMsg}}
+                              </div>
+                            </el-form-item>
+                            <el-form-item label="      ">
+                              <el-button size="mini" class="" v-on:click="addNewAddress">确定提交</el-button>
                             </el-form-item>
                           </el-form>
                         </el-dialog>
                       </i>
                     </li>
 
-                    <li v-if="item.shortName!=='TYZ'"><span class="fl">提现数量</span><input class="fr" type="text"></li>
+                    <li v-if="item.shortName!=='TYZ'">
+                      <span class="fl">提现数量</span>
+                      <input class="fr" type="text" v-model="withdrawCount">
+                    </li>
 
                     <!--天涯币提现-->
                     <li v-if="item.shortName=='TYZ'"><span class="fl">提现金额</span><input class="fr" type="text"></li>
@@ -159,19 +171,19 @@
                         <div>实际到账 <span class="red">0000</span></div>
                       </div>
                       <input class="fr" type="text">
-                      <!--<div>-->
-                      <!--手续费 00000 TYZ-->
-                      <!--</div>-->
-                      <!--<div>-->
-                      <!--实际到账 000000-->
-                      <!--</div>-->
                     </li>
 
-                    <li><span class="fl">交易密码</span><input class="fr" type="text"></li>
-                    <li class="verify-li"><span class="fl">短信验证码</span><input class="fr" type="text">
-                      <input class="verify-btn" type="button" value="发送验证码">
+                    <li><span class="fl">交易密码</span><input class="fr" type="text" v-model="tradePwd"></li>
+                    <li class="verify-li">
+                      <span class="fl">短信验证码</span>
+                      <input class="fr" type="text" v-model="submitWithdrawMsg">
+                      <input class="verify-btn" v-on:click="sendCode('submitWithdraw')" type="button" :disabled="msgDisabledForSubmitWithdraw" v-model="submitBtnTxt">
                     </li>
-                    <li><input class="fr submit" type="button" value="提交提现订单"></li>
+                    <li>
+                      <div class="false-tips fz12 mt-10"><i v-show="submitWithdrawErrorMsg"></i>{{submitWithdrawErrorMsg}}</div>
+
+                        <input class="fr submit" type="button" value="提交提现订单" v-on:click="submitWithdraw(item.shortName)">
+                    </li>
                   </ul>
                 </div>
                 <!--交易须知-->
@@ -237,27 +249,43 @@
         },
         errorMsg: '',//错误信息
 
-        //  提现
+        //  新增提现地址
         withdrawAddress: '',//1.提现地址
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        withdrawAddressList: [
+        /*
+        * fadderess:"FqKekmNtx43b5amcW9oTKbSQWfAoTabZy9"
+          fcoinid:1
+          fcreatetime:1523502617000
+          fid:269
+          fremark:""
+          fuid:300221
+          init:true
+          version:0
+          */
+        ],
+
+        newWithdrawAddress: '',//新增提现地址
+        addAddressErrorMsg: '',//新增提现错误信息
+        msgForNewAddress: '',//新增提现地址短信验证码
+        remark: '',//新增提现地址备注
+        addAddressTimer: 0,//新增提现地址发送验证码时间
         // value: ''
         dialogFormVisible: false,//新增提现地址框
         tradePwd: '',//交易密码
+        msgBtnTxt: '获取验证码',//短信验证码文字
+        msgDisabledForAddress: false,//短信验证码按钮状态
+
+
+        //提交提现订单
+        //非天涯币
+        withdrawCount: '',//提现数量
+        submitWithdrawMsg: '',//提现短信验证码
+        submitWithdrawErrorMsg:'',//提交订单错误信息
+        msgDisabledForSubmitWithdraw:false,//短信验证码按钮状态
+        submitTimer:0,//提交订单发送验证码时间
+        submitBtnTxt:'获取验证码',//短信验证码文字
+        activeCoinId:'',//提现币种id
+        //天涯币
       }
     },
     methods: {
@@ -271,7 +299,6 @@
       },
       //显示充值框
       showRechargeBox(index, coinId) {
-
         this.withdrawDepositIsShowList.forEach((item, index) => {
           item.allIsShow = false;
           item.rechargeIsShow = false;
@@ -306,7 +333,7 @@
         })
       },
       //显示提现框
-      showWithdrawDepositBox(index) {
+      showWithdrawDepositBox(index, coinId) {
         this.withdrawDepositIsShowList.forEach((item, index) => {
           item.allIsShow = false;
           item.rechargeIsShow = false;
@@ -314,6 +341,23 @@
         })
         this.withdrawDepositIsShowList[index].allIsShow = true;
         this.withdrawDepositIsShowList[index].withdrawDepositIsShow = true;
+
+        let coinWithdrawUrl = common.apidomain + 'withdraw/coin_withdraw';
+        let fd = new FormData();
+        fd.append('symbol', coinId);
+        ajax(coinWithdrawUrl, 'post', fd, (res) => {
+          if (res.data.code !== 200) {
+            return;
+          }
+          console.log(res);
+          this.withdrawAddressList = res.data.data.withdrawAddress;
+          this.activeCoinId = coinId;//数据传递使用
+          // console.log(this.activeCoinId);
+          // console.log('1234');
+          // console.log(this.withdrawAddressList);
+        });
+
+
       },
       // //  获取币种列表
       // loadCurrencyList() {
@@ -373,6 +417,35 @@
           this.errorMsg = ''
         }
       },
+      //提交提现订单
+      submitWithdraw(coinType) {
+        //非天涯币
+        if (coinType != 'TYZ') {
+          console.log('非');
+
+          /*
+          * withdrawAddr: 273
+            withdrawAmount: 1
+            tradePwd: b
+            totpCode: 0
+            phoneCode: 323541
+            symbol: 1
+            btcfeesIndex: 0*/
+
+          let withdrawUrl = common.apidomain+'withdraw/coin_manual';
+          let fd = new FormData();
+          fd.append('withdrawAddr',this.withdrawAddress);
+          fd.append('withdrawAmount',this.withdrawCount);
+          fd.append('tradePwd',this.tradeCode);
+          fd.append('totpCode',0);
+          fd.append('phoneCode',this.submitWithdrawMsg);
+          fd.append('symbol',this.activeCoinId);
+          fd.append('btcfeesIndex',);
+        } else {
+          //  天涯币
+          console.log('天涯币');
+        }
+      },
       //  点击复制
       onCopy: function (e) {
         let msg = '已拷贝' + e.text;
@@ -386,7 +459,187 @@
       //  显示提现窗口
       addAddress() {
         this.dialogFormVisible = true;
-      }
+      },
+      //新增提现地址
+      addNewAddress() {
+        if (!this.newWithdrawAddress) {
+          this.addAddressErrorMsg = '请输入新的提现地址';
+          return;
+        } else if (!this.tradePwd) {
+          this.addAddressErrorMsg = '请输入交易密码';
+          return;
+        } else if (!this.msgForNewAddress) {
+          this.addAddressErrorMsg = '请输入短信验证码';
+          return;
+        } else {
+          this.addAddressErrorMsg = '';
+        }
+
+        let addNewAddressUrl = common.apidomain + 'user/save_withdraw_address';
+        let fd = new FormData();
+        /*
+        *
+        * withdrawAddr: FqDDfCyFACFnPcohg1qAfuXZsbhiwcdKSv
+          totpCode: 0
+          phoneCode: 073379
+          symbol: 1
+          password:
+          remark: */
+        fd.append('withdrawAddr', this.newWithdrawAddress);
+        fd.append('totpCode', 0);
+        fd.append('phoneCode', this.msgForNewAddress);
+        fd.append('symbol', 1);
+        fd.append('password', this.tradePwd);
+        fd.append('remark', this.remark);
+        ajax(addNewAddressUrl, 'post', fd, (res) => {
+          console.log(res);
+          if (res.data.code !== 200) {
+            this.addAddressErrorMsg = res.data.msg;
+            return;
+          }
+          this.$store.commit('changeDialogInfo', res.data.msg);
+        });
+      },
+      //发送验证码
+      sendCode(msgType) {
+        //新增用户地址
+        // if(msgType=='addAddress'){
+        /*
+        * 发送验证码格式
+        * type: 108
+          msgtype: 1
+          areaCode: 0
+          phone: 0
+          vcode: 0
+          uid: 0*/
+
+        // }else if(msgType=='submitWithdraw'){}
+
+        if (msgType == 'addAddress') {
+          if (!this.newWithdrawAddress) {
+            this.addAddressErrorMsg = '请输入新的提现地址';
+            return;
+          }
+          this.sendCodeAll('addAddress').then((res) => {
+            console.log(res);
+            if (res.data.code !== 200) {
+              this.addAddressErrorMsg = res.data.msg;
+              return;
+            } else {
+              this.addAddressErrorMsg = '';
+              this.addAddressTimer = 60;
+              this.msgDisabledForAddress = true;
+              this.addMsgTimer();
+            }
+          });
+        }else if (msgType =='submitWithdraw'){
+          this.sendCodeAll('submitWithdraw').then((res)=>{
+            console.log(res);
+
+            if (res.data.code !== 200) {
+              this.submitWithdrawErrorMsg = res.data.msg;
+              return;
+            } else {
+              this.submitWithdrawErrorMsg = '';
+              this.submitTimer = 60;
+              this.msgDisabledForSubmitWithdraw = true;
+              this.submitMsgTimer();
+            }
+          })
+
+        }
+
+        // let msgUrl = common.apidomain + 'user/send_sms';
+        //
+        // let fd = new FormData();
+        //
+        // fd.append('type', 111);
+        // fd.append('msgtype', 1);
+        // fd.append('areaCode', '+86');
+        // fd.append('phone', this.registerInfo.phoneNum);
+        // fd.append('vcode', this.imgCode);
+        // fd.append('imageRedisKey', this.imageRedisKey);
+        // fd.append('uid', 0);
+        // ajax(msgUrl, 'post', fd, (res) => {
+        //   console.log(res);
+        //   if (res.data.code !== 200) {
+        //     this.errorMsg = res.data.msg;
+        //     return;
+        //   } else {
+        //     this.msgTime = 60;
+        //     this.msgDisabled = true;
+        //     this.msgTimer();
+        //   }
+        // })
+        // }
+        // });
+      },
+      //发送验证码
+      sendCodeAll(msgType) {
+        return new Promise((resolve, reject) => {
+          let msgUrl = common.apidomain + 'user/send_sms';
+          let fd = new FormData();
+          if (msgType == 'addAddress') {
+            /*
+            * type: 108
+              msgtype: 1
+              areaCode: 0
+              phone: 0
+              vcode: 0
+              uid:*/
+            fd.append('type', 108);
+            fd.append('msgtype', 1);
+            fd.append('areaCode', 0);
+            fd.append('phone', 0);
+            fd.append('vcode', 0);
+            fd.append('uid', 0);
+            ajax(msgUrl, 'post', fd, (res) => {
+              resolve(res);
+            })
+          }else if (msgType =='submitWithdraw'){
+            /*
+            *
+            * type: 105
+              msgtype: 1
+              areaCode: 0
+              phone: 0
+              vcode: 0
+              uid: 0*/
+            fd.append('type', 105);
+            fd.append('msgtype', 1);
+            fd.append('areaCode', 0);
+            fd.append('phone', 0);
+            fd.append('vcode', 0);
+            fd.append('uid', 0);
+            ajax(msgUrl, 'post', fd, (res) => {
+              resolve(res);
+            })
+          }
+
+        })
+      },
+      addMsgTimer() {
+        if (this.addAddressTimer > 0) {
+          this.addAddressTimer--;
+          this.msgBtnTxt = this.addAddressTimer + "s后重新获取"
+          setTimeout(this.addMsgTimer, 1000);
+        } else {
+          this.addAddressTimer = 0;
+          this.msgBtnTxt = "获取验证码";
+          this.msgDisabledForAddress = false;
+        }
+      },
+      submitMsgTimer() {
+        if (this.submitTimer > 0) {
+          this.submitTimer--;
+          this.submitBtnTxt = this.submitTimer + "s后重新获取"
+          setTimeout(this.submitMsgTimer, 1000);
+        } else {
+          this.submitTimer = 0;
+          this.submitBtnTxt = "获取验证码";
+          this.msgDisabledForSubmitWithdraw = false;
+        }
+      },
     },
 
     created() {

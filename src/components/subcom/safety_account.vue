@@ -69,9 +69,9 @@
               </el-form-item>
               <el-form-item label="验证码" class="modify">
                 <input class="modifyInput" type="text">
-                <p class="Verification">
-
-                </p>
+                <div class="inner-box cp" @click="refreshCode">
+                  <sIdentify class="image" :identifyCode="identifyCode"></sIdentify>
+                </div>
               </el-form-item>
               <el-form-item label="短信验证码" class="modify">
                  <input class="modifyInput" type="text" v-model="msgCode">
@@ -86,11 +86,23 @@
         </li>
         <li>
           <span>绑定邮箱：</span>
-          <span v-if="userInfo.fismailbind !==false">已绑定</span>
+          <span v-if="userInfo.femail !==null">已绑定</span>
           <span v-else>未绑定</span>
-          <span v-if="userInfo.fismailbind !==false">您绑定的邮箱为{{this.$store.state.userInfo.femail.substring(0,3)}}****{{this.$store.state.userInfo.femail.substring(11,19)}}</span>
+          <span v-if="userInfo.femail !==null">您绑定的邮箱为{{this.$store.state.userInfo.femail.substring(0,3)}}****{{this.$store.state.userInfo.femail.substring(11,19)}}</span>
           <span v-else>请绑定绑定邮箱</span>
-          <span class="floatRight">修改</span>
+          <span class="floatRight" @click="EmailFormVisible = true" v-if="userInfo.femail ==null">修改</span>
+          <span v-else></span>
+          <el-dialog title="绑定邮箱" :visible.sync="EmailFormVisible" width="30%" center>
+            <el-form :model="form" class="modifyPassword">
+              <el-form-item label="邮箱地址" class="modify">
+                <input class="modifyInput" type="email" v-model="EmailNum">
+              </el-form-item>
+            </el-form> 
+            <div class="false-tips fz12"><i v-show="emailMsg"></i>{{emailMsg}}</div>
+            <div slot="footer" class="dialog-footer footertop">
+                <el-button type="primary" v-on:click="Bindingmailbox">确 定</el-button>
+            </div>
+          </el-dialog>
         </li>
         <li>
           <span>交易密码：</span>
@@ -127,6 +139,34 @@
           <span v-else>未实名</span>
           <span v-if="userInfo.fhasrealvalidate !==false">您的账号已通过实名认证</span>
           <span v-else class="confirm">请实名认证</span>
+          <span class="floatRight" @click="RealFormVisible = true" v-if="userInfo.frealname !==''">修改</span>
+          <span v-else></span>
+          <el-dialog title="实名认证：" :visible.sync="RealFormVisible" width="30%" center>  
+            <el-form :model="form" class="modifyPassword">
+               <p><span>认证年龄需满18周岁，最高年龄为60周岁</span></p>
+              <el-form-item label="真实姓名" class="modify">
+                <input class="modifyInput" type="text" v-model="realname">
+                <p><span style="display:inline-block">*请填写真实姓名，认证后不能更改，提现是需要与银行等姓名信息保持一致。</span></p>
+              </el-form-item>
+              <el-form-item label="地区/国家" class="modify">
+               <select class="modifyInput">
+                  <option value="">中国大陆(China)</option>
+                </select>
+              </el-form-item>
+              <el-form-item label="证件类型" class="modify" v-model="identitytype">
+               <select class="modifyInput">
+                  <option value="">身份证</option>
+                </select>
+              </el-form-item>
+               <el-form-item label="证件号码" class="modify">
+                <input class="modifyInput" type="text" v-model="realnameID">
+              </el-form-item>
+            </el-form> 
+            <div class="false-tips fz12"><i v-show="RealMsg"></i>{{RealMsg}}</div>
+            <div slot="footer" class="dialog-footer footertop">
+              <el-button type="primary" v-on:click="Realnamebox">确 定</el-button>
+            </div>
+          </el-dialog>
         </li>
       </ul>
     </div>
@@ -184,6 +224,8 @@ videoTime:null*/
         form:{
 
         },
+        // 登录密码
+        modifyFormVisible: false,
         errorMsg: '',//错误提示
         codepassword:'',//旧密码
         password: '',//新密码
@@ -191,6 +233,9 @@ videoTime:null*/
         msgDisabled: false,//短信验证码按钮状态
         msgBtnTxt: "发送验证码",//短信验证码按钮文字
         msgCode: '',//短信验证码
+        //绑定手机
+        phoneFormVisible: false,
+
         // 修改交易密码
         IDNumber:'',//身份证
         newpassword:'',//交易新密码
@@ -198,15 +243,26 @@ videoTime:null*/
         magDisabled: false,//短信验证码按钮状态
         magBtnTxt: "发送验证码",//短信验证码按钮文字
         magCode:'',
-        // 登录密码
-        modifyFormVisible: false,
-        //绑定手机
-        phoneFormVisible: false,
+
+         // 绑定邮箱
+        EmailFormVisible:false,
+        EmailNum:'',
+        emailMsg:'',//绑定邮箱错误提示
         // 绑定邮箱
         // eamilFormVisible:false,
+
+        //实名认证
+        RealFormVisible:false,
+        realname:'',//真实姓名
+        realnameID:'',//证件号码
+        identitytype:'',//证件类型
+        identifyCode: "",//验证码'
+        imageRedisKey: "",//图片验证码key
+        RealMsg:'',//错误提示
         //修改交易密码
         transactionFormVisible:false,
         errorMsg: '',//错误提示
+        emailReg: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
         pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,//密码
         isIDCard: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,//身份证
     }
@@ -301,6 +357,27 @@ videoTime:null*/
           return 1;
         }
       },
+      //绑定邮箱
+      Bindingmailbox(){
+        if(!this.EmailNum){
+          this.emailMsg = '请输入邮箱';
+          return;
+        }else if (!this.emailReg.test(this.EmailNum)) {
+          this.emailMsg = "邮箱格式错误"
+          return;
+        }else {
+          this.emailMsg = '';
+          // validate/send_bindmail
+        }
+        let EmailUrl = common.apidomain + 'validate/send_bindmail';
+        let Ed = new FormData();
+        Ed.append('email',this.EmailNum);
+        ajax(EmailUrl, 'post', Ed, (res) => {
+          console.log(res);
+          this.errorMsg = res.data.msg;
+          return; 
+        })
+      },
       //修改登录密码发送验证码
       sendCode() {
         let msgUrl = common.apidomain + 'user/send_sms';
@@ -330,7 +407,7 @@ videoTime:null*/
           }
         })
       },
-    // 修改登录 密码发送验证码
+    // 手机绑定
      phoneCode(){
        let msgUrl = common.apidomain + 'user/send_sms';
         let fd = new FormData();
@@ -358,7 +435,103 @@ videoTime:null*/
             this.msgTimer();
           }
         })
+     },
+      msgTimer() {
+        if (this.msgTime > 0) {
+          this.msgTime--;
+          this.msgBtnTxt = this.msgTime + "s后重新获取"
+          setTimeout(this.msgTimer, 1000);
+        } else {
+          this.msgTime = 0;
+          this.msgBtnTxt = "获取验证码";
+          this.msgDisabled = false;
+        }
+      },
+      emailTimer() {
+        if (this.emailTime > 0) {
+          this.emailTime--;
+          this.emailBtnTxt = this.emailTime + "s后重新获取"
+          setTimeout(this.emailTimer, 1000);
+        } else {
+          this.emailTime = 0;
+          this.emailBtnTxt = "获取验证码";
+          this.emailDisabled = false;
+        }
+      },
+      /*发送验证码结束*/
+      /*图片验证码开始*/
+      randomNum(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      },
+      refreshCode() {
+        if (this.regType == 0) {
+          if (!this.phoneNumReg()) {
+            return;
+          }
+        } else {
+          if (!this.emailNumReg()) {
+            return;
+          }
+        }
+        this.makeCode();
+      },
+      makeCode() {
+        let url = common.apidomain + 'servlet/ValidateImageServlet';
+        ajax(url, 'post', {}, (res) => {
+          if (res.data.code !== 200) {
+            this.errorMsg = '获取图形验证码错误，请稍后再试'
+            return;
+          }
+          this.identifyCode = res.data.data.verifyCode;
+          this.imageRedisKey = res.data.data.imageRedisKey;
+          // console.log(this.imageRedisKey);
+          this.trueImgCode = this.identifyCode;
+          console.log(this.trueImgCode)
+        })
+      },
+      /*图片验证码结束*/
+      //手机号验证：
+      phoneNumReg() {
+        if (!this.registerInfo.phoneNum) {
+          this.errorMsg = '请输入手机号';
+          return 0;
+        } else if (!this.phoneReg.test(this.registerInfo.phoneNum)) {
+          this.errorMsg = '您输入的手机号格式不正确';
+          return 0;
+        } else {
+          this.errorMsg = '';
+          return 1;
+        }
+      },
+
+     //实名认证
+     Realnamebox(){
+        if(!this.realname){
+          this.RealMsg = '请输入用户名';
+          return;
+        }else if(!this.realnameID){
+          this.RealMsg = '请填写证件号';
+          return;
+        }else if(!this.isIDCard.test(this.realnameID)){
+          this.RealMsg = '证件号格式不正确';
+          return;
+        }else{
+          this.RealMsg = '';
+        }
+        var RealUrl = common.apidomain +'real_name_auth';
+        let Rfd = new FormData();
+        Rfd.append('realname', this.realname);
+        Rfd.append('identitytype', -1)
+        Rfd.append('identityno', this.identityno)
+        Rfd.append('address', '+86')
+        
+        ajax(RealUrl, 'post', Rfd, (res) => {
+          console.log(res)
+          this.errorMsg = res.data.msg;
+          return; 
+        })  
      }
+
     },
     computed: {
       userInfo(){

@@ -11,11 +11,13 @@
         </div>
         <div class="select-box">
           <!--新密码-->
-          <input type="text" name="" placeholder="新密码" v-model="newPwd">
+          <!-- <input type="text" name="" placeholder="新密码" v-model="newPwd"> -->
+          <input type="password" name="" placeholder="新密码" v-model="newPwd">
         </div>
         <div class="select-box">
           <!--确认新密码-->
-          <input type="text" name="" placeholder="确认密码" v-model="rNewPwd">
+          <!-- <input type="text" name="" placeholder="确认密码" v-model="rNewPwd"> -->
+          <input type="password" name="" placeholder="确认密码" v-model="rNewPwd">
         </div>
         <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
         <input class="register-btn dis-in-blk" v-on:click="next" type="button" value="下一步">
@@ -45,6 +47,7 @@
       }
     },
     methods: {
+      // 1.0下一步按钮
       next() {
         if (!this.newPwd) {
           this.errorMsg = '请输入新密码';
@@ -57,28 +60,49 @@
           return;
         } else {
           this.errorMsg = '';
-
+          this.resetPwd();
         }
-
-        this.success = true;
+        // this.success = true;//修改成功的提示状态
       },
+
+      // 3.0修改完成立即登录按钮
       login() {
         this.$router.push({'path': '/login'})
       },
+
+      // 2.0重置密码发送请求数据
       resetPwd(){
-        return new Promise((resolve, reject)=>{
           let resetUrl = common.apidomain+'validate/reset_passwd_by_phone';
           let fd = new FormData();
-          /*
-          * totpCode
-          * newPassword
-          * phoneResetSecond
-          * */
-          fd.append();
-        })
-      }
-
+          fd.append('totpCode',0);
+          fd.append('newPassword',this.newPwd);
+          fd.append('newPassword2',this.rNewPwd);
+          // fd.append('phoneResetSecond ',XXXXXXXXXXXXXX);
+          ajax(resetUrl, 'post', fd, (res) => {
+            console.log(res);
+            console.log(res.data);
+          });
+      },
+      // resetPwd(){
+        //   return new Promise((resolve, reject)=>{
+        //     let resetUrl = common.apidomain+'validate/reset_passwd_by_phone';
+        //     let fd = new FormData();
+        //     /*
+        //     * totpCode
+        //     * newPassword
+        //     * phoneResetSecond
+        //     * */
+        //     fd.append('totpCode',0);
+        //     fd.append('newPassword',this.newPwd);
+        //     fd.append('newPassword2',this.rNewPwd);
+        //     // fd.append('phoneResetSecond ',XXXXXXXXXXXXXX);
+        //     ajax(resetUrl, 'post', fd, (res) => {
+        //       console.log(res);
+        //     });
+        //   })
+      // },
     },
+
     created() {
       this.phoneNum = this.$route.params.phoneNum;
     },

@@ -5,7 +5,8 @@
 		<list class="list"></list>
     <div class="hint">
       <!-- <p><span><img src="../../images/index/d_03.png" alt=""></span><span>交易提示</span></p> -->
-      <p>1、买卖商户均为实地考察认证商户，并提供100万usdt保证金，您每次兑换会冻结商户资产，商户资产不够时，不能接单，可放心兑换;</p>
+      <p><i class="el-icon-info"></i>交易提示</p>
+      <p>1、买卖商户均为实地考察认证商户，并提供100万usdt保证金，您每次兑换会冻结商户资产，商户资产不够时，不能接单，可放心兑换；</p>
       <p>2、买卖商户均为实名认证商户，并提供保证金，可放心兑换； </p>
       <p>3、请使用本人绑定的银行卡和支付宝进行汇款，其他任何方式汇款都会退款；</p>
       <p>4、商家处理时间9:00 - 21:00非处理时间的订单会在第二天9:00开始处理，一般接单后24小时内会完成打款；</p>
@@ -66,55 +67,55 @@ import Footer from "./footer.vue"
   }
 </script>
 <style scoped>
-.hint {
-    /*width: 100%;*/
-    /*padding: 2% 100px 2% 100px;*/
-    /*margin-top: 3%;*/
-    /*float: left;*/
-    /*background: #111a31;*/
-  width: 1300px;
-  margin: 0 auto;
-  padding: 2% 100px 2% 100px;
-  margin-top: 3%;
-  /*float: left;*/
-  background: #111a31;
-}
+  .hint {
+    width: 1300px;
+    margin: 0 auto;
+    padding: 2% 0px 2% 70px;
+    margin-top: 3%;
+    background: #111a31;
+  }
 
-.hint>p:first-child {
-    margin-bottom: 10px;
-}
+  .hint>p:first-child {
+    font-size:16px;
+  }
+  .hint>p:first-child>i {
+    font-size:16px;
+    margin-right:10px;
+    color:#B22426;
+  }
 
-.hint>p:first-child>span:first-child>img {
+  .hint>p:first-child>span:first-child>img {
     width: 16px;
     margin: -3px 7px 0 0;
-}
+  }
 
-.hint>p {
+  .hint>p {
     text-align: left;
     color: #c2c3c8;
-}
-.c2c-text{
-  border-radius: 5px;
-}
+    line-height: 2em;
+  }
+  .c2c-text{
+    border-radius: 5px;
+  }
 
-.c2c-text p{
-  color: #c2c3c8;
-}
-.c2c-text p span{
-  color: #338ff5;
-}
-.c2c-text button{
-  width: 150px;
-}
-.solid{
-  width:100%;
-  height:1px;
-  background:#c2c3c8;
-  margin-top: -20px;
-   margin-bottom: 10px;
-}
-.range{//增加
-width: 1300px;
-  margin: 0 auto;
-}
+  .c2c-text p{
+    color: #c2c3c8;
+  }
+  .c2c-text p span{
+    color: #338ff5;
+  }
+  .c2c-text button{
+    width: 150px;
+  }
+  .solid{
+    width:100%;
+    height:1px;
+    background:#c2c3c8;
+    margin-top: -20px;
+     margin-bottom: 10px;
+  }
+  .range{
+    width: 1300px;
+    margin: 0 auto;
+  }
 </style>

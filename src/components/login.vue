@@ -17,7 +17,7 @@
         </div>
         <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
         <!--<input type="button" :disabled="logging" v-model="loginBtn" class="login-btn" v-on:click="loadCurrencyList">-->
-        <el-button size="midium" :disabled="logging" class="login-btn" type="primary" :loading="logging" v-on:click="loadCurrencyList">登陆</el-button>
+        <el-button size="midium" :disabled="logging" class="login-btn" type="primary" :loading="logging" v-on:click="loadCurrencyList">登录</el-button>
 
       </div>
 
@@ -32,10 +32,10 @@
   export default {
     data() {
       return {
-        username: 18625512982,//赵鑫磊账号
-        password: 'a111111',//赵鑫磊密码
-        // username: 15738818082,//任付伟账号
-        // password: 'admin123',//任付伟密码
+        // username: 18625512982,//赵鑫磊账号
+        // password: 'a111111',//赵鑫磊密码
+        username: 15738818082,//任付伟账号
+        password: 'admin123',//任付伟密码
         // username: 15994026836,//杨孝喜账号
         // password: 'a123456',//杨孝喜密码
         errorMsg: '',//错误提示
@@ -84,7 +84,7 @@
             }
             // console.log(res.data);
             /*
-            *  用户登陆返回信息：
+            *  用户登录返回信息：
             *
             {
               "code":200,

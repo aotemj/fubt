@@ -79,8 +79,8 @@
                       <!-- <img src="./images/650.png" alt=""> -->
                   </div>
                   <!-- <div class="trading-right">22</div> -->
-              </div>
               <div class="trading-C2C">
+              </div>
                   <div class="trading-left">
                       <!-- <img src="./images/650.png" alt=""> -->
                   </div>
@@ -99,13 +99,13 @@
                   <!-- <div class="false-tips fz12 mt-5"><i v-show="tradePwdErrorMsg"></i>{{tradePwdErrorMsg}}</div> -->
                 </el-form-item>
                 <el-form-item label="">
-                  <el-button size="mini" class="buttomvote" v-on:click="submitTradePwd">确定</el-button>
+                  <el-button size="mini" class="buttomvote" v-on:click="submitTradePwd(tradeType)">确定</el-button>
                 </el-form-item>
               </el-form>
             </el-dialog>
           </i>
 
-          <!--如果没有设置交易密码，则弹出此框引导设置交易密码-->
+          <!--设置交易密码框：如果没有设置交易密码，则弹出此框引导设置交易密码-->
           <i class="dialog settrapwd">
             <el-dialog title="友情提示" center :visible.sync="dialogFormVisible2" class="dialog-contentinfo" width="30%">
               <el-form class="cent">
@@ -122,7 +122,7 @@
             </el-dialog>
           </i>
 
-          <!--如果没有绑定银行卡或者支付宝提示去绑定-->
+          <!--银行卡或者支付宝提示框：如果没有绑定银行卡或者支付宝提示去绑定-->
           <i class="dialog bankcard">
             <el-dialog title="友情提示" center :visible.sync="dialogFormVisible3" class="dialog-contentinfo" width="30%">
               <el-form class="cent">
@@ -223,6 +223,8 @@
   export default {
     data(){
       	return {
+          tradeType: 0,//交易类型,0 :买入，1：卖出
+
           // 银行卡是否绑定
           bankinfo:'',
 
@@ -313,7 +315,7 @@
         });
       },
 
-      // 5.0点击买入按钮触发事件
+      // 5.0点击 买入 按钮触发事件
       buybutton(){
         // console.log(this.$store.state.userInfo.ftradepassword)//交易密码    
         if(this.$store.state.isLogin==false){// 登陆验证
@@ -329,70 +331,81 @@
         }else if(this.$store.state.userInfo.fhasrealvalidate==false){//验证是否实名认证false:未实名，true实名；
           this.warn="请先完成实名认证！";
         }else{//弹出输入交易密码框
+          this.tradeType=0;
           this.dialogFormVisible1=true;
         }
       },
 
       // 6.0 点击输入交易密码框中的确定按钮
-      submitTradePwd(){
-        // console.log(this.tradePwd);
-        // console.log(this.$store.state.userInfo.ftradepassword);
-        if(this.tradePwd==''){
-          this.warn="请输入交易密码！";
-          return;
-        }
-        // 当交易密码对的时候发送数据请求
-        var url = common.apidomain + 'trade/cny_c2c_buy';
+      submitTradePwd(id){
+        var urlbuy = common.apidomain + 'trade/cny_c2c_buy';
+        var urlsell = common.apidomain + 'trade/cny_c2c_sell';
         var formData1 = new FormData();
         formData1.append('symbol',2);
-        formData1.append('tradeAmount',this.buyPurchases);
-        formData1.append('tradePrice',this.buyprice);
-        // formData1.append('tradePwd',this.$store.state.userInfo.ftradepassword);
         formData1.append('tradePwd',this.tradePwd);
-        ajax(url, 'post', formData1, (res) => {
-          // console.log(this.tradePwd);
-          // console.log(this.$store.state.userInfo.ftradepassword);
-          // console.log(res.data)
-          if(res.data.code!==200){
-            this.warn=res.data.msg;
-            this.dialogFormVisible1=false;
+        if(id==0){//买入按钮
+          if(this.tradePwd==''){
+            this.warn="请输入交易密码！";
+            return;
           }
-          if(res.data.code==200){
-            this.warn="数据请求成功！";
+          // 当输入了交易密码的时候发送数据请求
+          formData1.append('tradeAmount',this.buyPurchases);
+          formData1.append('tradePrice',this.buyprice);
+          ajax(urlbuy, 'post', formData1, (res) => {
+            if(res.data.code!==200){
+              this.warn=res.data.msg;
+              this.dialogFormVisible1=false;
+              return;
+            }
+            if(res.data.code==200){
+              this.warn="数据请求成功！";
+              this.warn=res.data.msg;
+            }
+          });
+        }
+        if(id==1){//卖出按钮
+          if(this.tradePwd==''){
+            this.sellwarn="请输入交易密码！";
+            return;
           }
-        });
-        // if(this.tradePwd!==this.$store.state.userInfo.ftradepassword){
-        //   this.warn="交易密码错误！";
-        //   this.dialogFormVisible1=false;//关闭弹窗
-        //   this.tradePwd="";
-        // }else{
-        //   this.warn="交易密码正确！";
-        //   this.databuy[0].buying="正在买入...";//改变按钮的字
-        //   this.dialogFormVisible1=false;//关闭弹窗  
-        // }
+          // 当输入了交易密码的时候发送数据请求
+          formData1.append('tradeAmount',this.sellPurchases);
+          formData1.append('tradePrice',this.sellpice);
+          ajax(urlsell, 'post', formData1, (res) => {
+            if(res.data.code!==200){
+              this.sellwarn=res.data.msg;
+              this.dialogFormVisible1=false;
+              return;
+            }
+            if(res.data.code==200){
+              this.sellwarn=res.data.msg;
+            }
+          });
+        } 
       },
 
-      // 7.0 点击卖出按钮触发事件
+      // 7.0 点击 卖出 按钮触发事件
       sellbutton(){
-        console.log("我是卖出按钮");
+        // console.log("我是卖出按钮");
         if(this.$store.state.isLogin==false){// 登陆验证
           this.$router.push('/login');//跳转到首页登陆
-        }
-        if(this.bankinfo==false){
+        }else if(this.bankinfo==false){//银行卡支付宝是否绑定验证
           this.dialogFormVisible3=true;
-        }
-        if(this.sellPurchases<100){
+        }else if(this.sellPurchases<100){//卖出数量最小值验证
           this.sellwarn="小交易数量为100个！";
           return;
-        }
-        if(this.sellPurchases>1000000){
+        }else if(this.sellPurchases>1000000){//卖出数量最大值验证
           this.sellwarn="最大交易数量为100万个！";
           return;
+        }else if(this.$store.state.userInfo.ftradepassword==''){//若没有设置交易密码--弹窗--立即设置--用户中心设置交易密码
+          this.dialogFormVisible2=true;
+        }else if(this.$store.state.userInfo.fhasrealvalidate==false){//验证是否实名认证false:未实名，true实名；
+          this.sellwarn="请先完成实名认证！";
+        }else{//弹出输入交易密码框
+          this.tradeType=1;
+          this.dialogFormVisible1=true;
         }
-
       },
-
-
 
       // 1.0输入买入量的时候键盘弹上来触发的方法
       buyamount(){
@@ -435,7 +448,6 @@
       inputblur4(){
         this.isActive4=false;
       },
-
     },
     computed:{},
     components:{},

@@ -1,5 +1,6 @@
 <template>
   <div class="con-box">
+    <tips></tips>
     <Header class="header"></Header>
     <!-- 币种资料 -->
     <div class="currencyData">
@@ -161,7 +162,7 @@
               <div class="false-tips fz12 mt-5"><i v-show="buyErrorMsg"></i>{{buyErrorMsg}}</div>
             </li>
             <li>
-              <a class="fff" href="#">立即充值 >></a>
+              <router-link class="fff" to="/finance">立即充值 >></router-link>
             </li>
             <li>
               <input class="buy-btn" type="button" value="买入" v-on:click="showTradeWin(0)">
@@ -202,7 +203,8 @@
               <div class="false-tips fz12 mt-5"><i v-show="sellErrorMsg"></i>{{sellErrorMsg}}</div>
             </li>
             <li>
-              <a class="fff" href="#">立即充值 >></a>
+              <!--<a class="fff" href="#">立即充值 >></a>-->
+              <router-link class="fff" to="/finance">立即充值 >></router-link>
             </li>
             <li>
               <input class="sell-btn" type="button" value="卖出" v-on:click="showTradeWin(1)">
@@ -276,27 +278,92 @@
             <ul class="th">
               <li class="td">时间</li>
               <li class="td">类型</li>
-              <li class="td">价格</li>
-              <li class="td">数量</li>
+              <li class="td">来源</li>
+              <li class="td">委托价格</li>
+              <li class="td">委托数量</li>
               <li class="td">成交额</li>
+              <li class="td">手续费</li>
               <li class="td">状态</li>
               <li class="td">操作</li>
             </ul>
-            <div class="tbody">
-              <ul class="item" v-for="(item,index) in currentEntrustList" v-on:mouseover="hover">
-                <li class="data-item">{{item.date}}</li>
-                <li class="data-item">{{item.type}}</li>
-                <li class="data-item">{{item.price}}</li>
-                <li class="data-item">{{item.count}}</li>
-                <li class="data-item">{{item.doneCount}}</li>
+            <div class="tbody" v-show="entrutsCur.length!=0">
+              <ul class="item" v-for="(item,index) in entrutsCur.slice((currentPage-1)*pagesize,currentPage*pagesize)" v-on:mouseover="hover">
+                <li class="data-item">{{item.time}}</li>
+                <li class="data-item">{{item.types}}</li>
+                <li class="data-item">{{item.source}}</li>
+                <li class="data-item">{{item.buysymbol}}{{item.price}}</li>
+                <li class="data-item">{{item.sellsymbol}}{{item.count}}</li>
+                <li class="data-item">{{item.successamount}}</li>
+                <li class="data-item">{{item.fees}}</li>
                 <li class="data-item">{{item.status}}</li>
-                <li class="data-item">{{item.todos}}</li>
+                <li class="data-item"><span class="cp blue" v-on:click="cancelEntruts(item.id)">取消</span></li>
               </ul>
+              <div>
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pagesize"
+                  layout="prev, pager, next"
+                  background
+                  :total="entrutsCur.length">
+                </el-pagination>
+
+                <!--第 <span>{{curStartNum}}</span> 页-->
+                <!--<span>上一页</span>-->
+                <!--<span>下一页</span>-->
+              </div>
+            </div>
+
+            <div class="tbody lh100" v-show="entrutsCur.length==0">
+              暂无记录
             </div>
           </div>
         </el-tab-pane>
         <el-tab-pane name="second">
           <span slot="label">历史委托</span>
+          <div class="table">
+            <ul class="th">
+              <li class="td">时间</li>
+              <li class="td">类型</li>
+              <li class="td">来源</li>
+              <li class="td">委托价格</li>
+              <li class="td">委托数量</li>
+              <li class="td">成交额</li>
+              <li class="td">手续费</li>
+              <li class="td">状态</li>
+              <li class="td">操作</li>
+            </ul>
+            <div class="tbody" v-show="entrutsHis.length!=0">
+              <ul class="item" v-for="(item,index) in entrutsHis.slice((currentPageHis-1)*pagesizeHis,currentPageHis*pagesizeHis)" v-on:mouseover="hover">
+                <li class="data-item">{{item.time}}</li>
+                <li class="data-item">{{item.types}}</li>
+                <li class="data-item">{{item.source}}</li>
+                <li class="data-item">{{item.buysymbol}}{{item.price}}</li>
+                <li class="data-item">{{item.sellsymbol}}{{item.count}}</li>
+                <li class="data-item">{{item.successamount}}</li>
+                <li class="data-item">{{item.fees}}</li>
+                <li class="data-item">{{item.status}}</li>
+                <li class="data-item">{{item.todos}}</li>
+              </ul>
+              <div>
+                <el-pagination
+                  @size-change="handleSizeChangeHis"
+                  @current-change="handleCurrentChangeHis"
+                  :current-page="currentPageHis"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pagesizeHis"
+                  layout="prev, pager, next"
+                  background
+                  :total="entrutsCur.length">
+                </el-pagination>
+              </div>
+            </div>
+            <div class="tbody lh100" v-show="entrutsHis.length==0">
+              暂无记录
+            </div>
+          </div>
         </el-tab-pane>
       </el-tabs>
 
@@ -310,7 +377,7 @@
   import Header from "./header.vue";
   //在线客服
   import Customer from './subcom/customer_service'
-
+  import tips from './subcom/friendlyTips'//友情提示
   export default {
     data() {
       return {
@@ -389,6 +456,14 @@
         tradePwd: '',//交易密码
         tradePwdErrorMsg: '',//交易密码错误信息
         tradeType: 0,//交易类型,0 :买入，1：卖出
+
+        // 委单记录
+        entrutsHis: [],//历史委单
+        entrutsCur: [],//当前委单
+        currentPage:1,//当前委单当前页
+        pagesize:5,//当前委单每页显示数据数量
+        currentPageHis:1,//历史委单当前页
+        pagesizeHis:5,//历史委单当前页
       }
     },
     filters: {
@@ -434,6 +509,18 @@
               this.activeCoinInfo = item;
             }
           })
+          //获取委单记录
+          console.log(this.activeCoinInfo);
+          this.renderEntrutsList(this.activeCoinInfo.id)
+          // this.getEntruts().then((res) => {
+          //   console.log(res);
+          //   if (res.data.code !== 200) {
+          //     return;
+          //   }
+          //   this.entrutsCur = res.data.data.entrutsCur;
+          //   this.entrutsHis = res.data.data.entrutsHis;
+          // });
+
           // 个人资产
           this.personalAsset.forEach((item, index) => {
             if (item.shortName == sellName) {
@@ -447,7 +534,7 @@
         })
         //请求买一卖一数据
         this.getRealMarket(id).then((res) => {
-          // console.log(res);
+          // console.log(res);`
           this.buy5 = res.data.data.buys;
           this.sell5 = res.data.data.sells;
 
@@ -461,9 +548,17 @@
               this.sell5Max = this.sell5[j].amount;
             }
           }
-          this.buyReferencePrice = this.sell5[this.sell5.length - 1].price;
-          this.sellReferencePrice = this.buy5[0].price;
+          if (this.sell5[this.sell5.length - 1]) {
+            this.buyReferencePrice = this.sell5[this.sell5.length - 1].price;
+
+          }
+          if (this.buy5[0]) {
+            this.sellReferencePrice = this.buy5[0].price;
+
+          }
+          // console.log(this.sellReferencePrice);
         })
+
 
         this.curListIsShow = false;
       },
@@ -531,14 +626,14 @@
 
         //买入
         if (!tradeType) {
-          if(!this.buyCount){
-            this.buyErrorMsg='请输入购买数量！';
+          if (!this.buyCount) {
+            this.buyErrorMsg = '请输入购买数量！';
             return;
           }
         } else {
           //  卖出
-          if(!this.sellCount){
-            this.sellErrorMsg ='请输入卖出数量！';
+          if (!this.sellCount) {
+            this.sellErrorMsg = '请输入卖出数量！';
             return;
           }
         }
@@ -575,6 +670,12 @@
           let buyUrl = common.apidomain + 'trade/cny_buy';
           ajax(buyUrl, 'post', fd, (res) => {
             console.log(res);
+            if (res.data.code !== 200) {
+              this.buyErrorMsg = res.data.msg;
+              return;
+            } else {
+              this.$store.commit('changeDialogInfo', res.data.msg);
+            }
           })
         } else {
           //卖出
@@ -583,11 +684,76 @@
           let sellUrl = common.apidomain + 'trade/cny_sell';
           ajax(sellUrl, 'post', fd, (res) => {
             console.log(res);
+            if (res.data.code !== 200) {
+              this.sellErrorMsg = res.data.msg;
+              return;
+            } else {
+              this.$store.commit('changeDialogInfo', res.data.msg);
+            }
           });
         }
 
         this.dialogFormVisible = false;
-      }
+      },
+      //  获取委单记录
+      getEntruts(id) {
+        return new Promise((resolve, reject) => {
+          let entrutsUrl = common.apidomain + 'real/getEntruts';
+          let fd = new FormData();
+          // console.log(this.activeCoinInfo.id);
+          fd.append('symbol', id);
+          fd.append('count', 10000);
+          ajax(entrutsUrl, 'post', fd, (res) => {
+            resolve(res)
+          })
+        })
+      },
+      //渲染委单列表
+      renderEntrutsList(id,startNum){
+        this.getEntruts(id).then((res) => {
+          console.log(res);
+          if (res.data.code !== 200) {
+            return;
+          }
+          this.entrutsCur = res.data.data.entrutsCur;
+          this.entrutsHis = res.data.data.entrutsHis;
+        });
+      },
+      //取消委单
+      cancelEntruts(id) {
+        let cancelEnUrl = common.apidomain + 'trade/cny_cancel';
+        let fd = new FormData();
+        fd.append('id', id);
+        ajax(cancelEnUrl, 'post', fd, (res) => {
+          console.log(res);
+          if(res.data.code!==200){
+            this.$store.commit('changeDialogInfo',res.data.msg);
+            return;
+          }
+          this.renderEntrutsList(this.activeCoinInfo.id)
+        });
+      },
+      //当前委单分页
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      handleSizeChange(val) {
+        this.pagesize = val;
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+      },
+    //  历史委单分页
+
+      handleCurrentChangeHis(val) {
+        this.multipleSelection = val;
+      },
+      handleSizeChangeHis(val) {
+        this.pagesizeHis = val;
+      },
+      handleCurrentChangeHis(val) {
+        this.currentPageHis = val;
+      },
     },
     created() {
       this.getMarket().then((res) => {
@@ -684,6 +850,7 @@
     components: {
       Header,//头部
       Customer,//在线客服
+      tips,//友情提示弹窗
     }
   }
 </script>
