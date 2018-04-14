@@ -19,7 +19,7 @@
             <el-select class="selece_box" v-model="city">
               <el-option v-for="(option,index) in cityArr" :key="index" :value="option.name">
                 {{ option.name }}
-              </el-option>  
+              </el-option>
             </el-select>
             <el-select class="selece_box" v-model="district">
               <el-option v-for="(option,index) in districtArr" :key="index" :value="option.name">
@@ -81,7 +81,7 @@
             this.emailMsg = '请输入邮箱';
             return;
           }else if (!this.emailReg.test(this.zipcode)) {
-            this.emailMsg = "邮箱格式错误" 
+            this.emailMsg = "邮箱格式错误"
             return;
           }else {
             this.emailMsg = '';
@@ -125,6 +125,15 @@
               this.district = '';
           }
       },
+      //三级联动
+      linkage(){
+         return new Promise((resolve, reject) => {
+          let linkUrl = common.apidomain + '/user/info';
+          ajax(linkUrl, 'post', {}, (res) => {
+            resolve(res);
+          });
+        });
+      }
 
     },
     beforeMount: function() {
@@ -143,33 +152,33 @@
     //三级下拉结束
     computed:{},
     created(){
-      let Url = common.apidomain + '/user/info';
-      ajax(Url, 'post', {}, (res) => {
-        if(res.data.code==200){
-          this.username = res.data.data.Info.fname
-          this.phone = res.data.data.Info.fphone
-          this.prov = res.data.data.Info.fprov
-          this.city = res.data.data.Info.fcity
-          this.district = res.data.data.Info.fdist
-          this.dis = res.data.data.Info.faddress;
-          this.zipcode = res.data.data.Info.fzipcode;
+      this.linkage().then((res) => {
+          if (res.data.code !== 200) {
+            // this.errorMsg = res.data.msg;
+            return;
+          }else{
+            if(!this.username){
+              return;
+            }else if(!this.prov){
+              return;
+            }else{
+              this.username = res.data.data.Info.fname
+              this.phone = res.data.data.Info.fphone
+              this.prov = res.data.data.Info.fprov
+              this.city = res.data.data.Info.fcity
+              this.district = res.data.data.Info.fdist
+              this.dis = res.data.data.Info.faddress;
+              this.zipcode = res.data.data.Info.fzipcode;
+              this.subt = false
+            }
 
-          console.log(this.prov)
-          console.log(this.city)
-          console.log(this.district)
-          console.log(this.dis)
-
-          this.subt = false
-        }else{
-          this.errorMsg = res.data.msg;
-        }
-        
+          }
       });
     },
     components:{
       tips,//弹窗组件
     },
-    	
+
   }
 </script>
 <style scoped>
@@ -207,7 +216,7 @@ button {
     color: #c2c3c8;
 }
 .user-recharge>section>button:hover{
-  background: #409EFF;  
+  background: #409EFF;
   cursor: pointer;
 }
 </style>

@@ -12,7 +12,7 @@
             <li>{{item.state}}</li>
         </ul>
         <div id="voteNew-list" v-for="(item,index) in newrecordList" v-show="newrecordList.length!==0">
-          <article>
+          <article v-for="(item,index) in newrecordList">
             <span>{{item.time}}</span>
             <span>{{item.currency}}</span>
             <span>{{item.address}}</span>
@@ -27,7 +27,8 @@
   </div>
 </template>
 <script>
-
+  import common from "../../kits/domain";
+  import {ajax} from "../../kits/http";
   export default {
     data(){
       return {
@@ -53,9 +54,37 @@
         ]
       }
     },
-    methods:{},
-    created(){},
-    computed:{},
+    methods:{
+      loadAlipayList() {
+        return new Promise((resolve, reject) => {
+          let recordUrl = common.apidomain + 'operationRecord/coin_operationRecord';
+          let record = new FormData();
+          record.append('operationType',2);
+          record.append('fuid',this.$store.state.userInfo.fid);
+          ajax(recordUrl, 'post', record, (res) => {
+            resolve(res);
+          });
+        });
+      },
+    },
+    created(){
+      this.loadAlipayList().then((res) => {
+          if (res.data.code !== 200) {
+            return;
+          }else{
+            this.newrecordList = res.data.data.page.data
+            console.log(res)
+          }
+
+      });
+        
+    },
+    computed:{
+      // 用户id
+      dialogFormVisible(){
+        return this.$store.state.userInfo;
+      }
+    },
     components:{
 
     }

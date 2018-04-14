@@ -11,8 +11,8 @@
             <li>{{item.confirmation}}</li>
             <li>{{item.state}}</li>
         </ul>
-        <div id="voteNew-list" v-for="(item,index) in newrecordList" v-show="newrecordList.length!==0">
-          <article>
+        <div id="voteNew-list" v-show="newrecordList.length!==0">
+          <article v-for="(item,index) in newrecordList">
             <span>{{item.time}}</span>
             <span>{{item.currency}}</span>
             <span>{{item.address}}</span>
@@ -27,7 +27,8 @@
   </div>
 </template>
 <script>
-
+  import common from "../../kits/domain";
+  import {ajax} from "../../kits/http";
   export default {
     data(){
       return {
@@ -41,20 +42,40 @@
             state:'状态'
           }
         ],
+        //充值列表
         newrecordList:[
-          {
-            time:'2018.3.29 20:30:20',
-            currency:'FTB',
-            address:'河南省',
-            number:'155631',
-            confirmation:'6',
-            state:'已确认'
-          }
         ]
       }
     },
-    methods:{},
-    created(){},
+    methods:{
+      newrecord() {
+        return new Promise((resolve, reject) => {
+          let recordUrl = common.apidomain + 'operationRecord/coin_operationRecord';
+          let record = new FormData();
+          record.append('operationType',1);
+          record.append('fuid',this.$store.state.userInfo.fid);
+          ajax(recordUrl, 'post', record, (res) => {
+            resolve(res);
+          });
+        });
+      },
+    },
+    created(){
+      this.newrecord().then((res) => {
+        if (res.data.code !== 200) {
+          return;
+        }else{
+          this.newrecordList = res.data.data.page.data
+          console.log(res)   
+        }
+      });
+    },
+    computed:{
+      // 用户id
+      dialogFormVisible(){
+        return this.$store.state.userInfo;
+      }
+    },
     computed:{},
     components:{
     }
