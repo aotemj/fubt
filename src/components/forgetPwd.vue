@@ -10,7 +10,7 @@
         </div>
         <div class="pwd">
           <!-- <input type="password" disabled placeholder="邮箱找回"><router-link to="/changePwdByEmail" class="pwd-tips blue">点击找回>></router-link> -->
-          <input type="password" disabled placeholder="邮箱找回"><button class="pwd-tips blue">点击找回>></button>
+          <input type="password" disabled placeholder="邮箱找回"><button class="pwd-tips blue" @click="emailpwdBack()">点击找回>></button>
         </div>
       </div>
     </div>
@@ -34,23 +34,26 @@
         var fd1 = new FormData();
         fd1.append('phoneResetKey','');
         ajax(url, 'post', fd1, (res) => {
-          console.log(res);
+          // console.log(res);
           this.$router.push('/changePwdByPhone');//跳转到changePwdByPhone页面
         });
       },
 
       // 2.0
       login(){
-        console.log('123');
+        // console.log('123');
         let loginUrl = common.apidomain+'login';
-
         let formData = new FormData();
         formData.append('loginName',this.username);
         formData.append('password',this.password);
-
         ajax(loginUrl,'post',data,(res)=>{
-          console.log(res);
+          // console.log(res);
         })
+      },
+
+      // 3.0通过邮箱找回密码
+      emailpwdBack(){
+        this.$router.push('/changePwdByEmail');//跳转到邮箱找回密码changePwdByEmail页面
       }
     },
     created(){},

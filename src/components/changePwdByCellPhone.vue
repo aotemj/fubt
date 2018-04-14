@@ -66,6 +66,12 @@
   export default {
     data() {
       return {
+
+        phoneResetKey:'',
+        phoneResetSecond:'',
+
+
+
         // activeId:1,//激活面板
         refreshStatus: false,//是否允许刷新
         imgCode: '',//图形验证码
@@ -90,13 +96,26 @@
           return;
         }
         this.findPwdByPhone().then((res) => {
-          console.log(res);
           if(res.data.code!==200){
             this.errorMsg = res.data.msg;
             return;
           }
-          this.$router.push({ path: '/addNewPwdByPhone/'+this.phoneNum })
+        // res中应该会返回一个字段phoneResetKey
+        // console.log(res);
+        // console.log(res.data.data.phoneResetKey);
+        this.phoneResetKey = res.data.data.phoneResetKey;
 
+        // 第二次调用接口:/validate/reset_phone
+        var twourl = common.apidomain + 'validate/reset_phone';
+        var twofd = new FormData();
+        twofd.append('phoneResetKey',this.phoneResetKey);
+        ajax(twourl, 'post', twofd, (res) => {
+          // console.log(res.data);// res中应该会返回一个字段phoneResetSecond
+          // console.log("phoneResetSecond:"+res.data.data.phoneResetSecond);
+          // 将将忘记密码-手机找回-下一步按钮第二次调用接口返回的数据放到全局中保存起来
+          this.$store.commit('setphoneResetSecond',res.data.data.phoneResetSecond);
+        });
+        this.$router.push({ path: '/addNewPwdByPhone/'+this.phoneNum })
         })
       },
       //通过手机号找回密码
@@ -117,6 +136,7 @@
           fd.append('imgcode', this.identifyCode);
           fd.append('imageRedisKey', this.imageRedisKey);
           ajax(nextUrl, 'post', fd, (res) => {
+            console.log(res);
             // if (res.data.code !== 200) {
               // reject(res);
             // } else {
@@ -150,7 +170,7 @@
         fd.append('imageRedisKey', this.imageRedisKey);
         fd.append('uid', 0);
         ajax(msgUrl, 'post', fd, (res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code !== 200) {
             this.errorMsg = res.data.msg;
             return;

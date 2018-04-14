@@ -47,7 +47,7 @@ axios.interceptors.response.use(
   });
 
 // 封装通用请求方法:
-export function ajax(url, ajaxType, params, success) {
+export function ajax(url, ajaxType, params, success,fault) {
   // post 请求
   if (ajaxType == 'post') {
     axios.post(

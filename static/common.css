@@ -505,3 +505,6 @@ el-carousel-item img{
   -webkit-background-size: 16px 16px;
   background-size: 16px 16px;
 }
+.v-modal{
+  z-index: 2000 !important;
+}

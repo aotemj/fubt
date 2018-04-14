@@ -97,7 +97,6 @@
     },
     computed:{},
     created(){
-        this.ApiIP = true
         this.keyshow = true
         let Url = common.apidomain + 'user/apikey';
         ajax(Url, 'post', {}, (res) => {

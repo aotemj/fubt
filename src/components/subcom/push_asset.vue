@@ -1,7 +1,7 @@
 <template>
   <div class="pushAss push_box">
     <el-form ref="form" :model="form" label-width="80px">
-       <el-form-item class="Unit border_bottom" label="账户余额">
+      <el-form-item class="Unit border_bottom" label="账户余额">
         <span>0.2507245</span>
       </el-form-item>
       <el-form-item label="卖方UID" class="border_bottom">
@@ -9,8 +9,7 @@
       </el-form-item>
       <el-form-item label="资产类型" class="border_bottom">
         <el-select class="reg_select" v-model="form.region" placeholder="TKC">
-          <el-option label="TKC" value="TKC"></el-option>
-          <el-option label="FUC" value="FUC"></el-option>
+          <!--<el-option  value="TKC" v-for="(item,index) in regionList"></el-option>-->
         </el-select>
       </el-form-item>
       <el-form-item label="数量" class="border_bottom">
@@ -39,8 +38,11 @@
 </template>
 <script>
   import Push from "./pushRecord.vue"
+  import common from "../../kits/domain"
+  import {ajax} from "../../kits/http"
+
   export default {
-    data(){
+    data() {
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
@@ -55,17 +57,20 @@
         form: {
           id: '',
           region: '',
-          num:'',
-          price:'',
-          ver:''
+          num: '',
+          price: '',
+          ver: ''
         },
         ruleForm2: {
           pass: '',
           checkPass: '',
         },
+
+        regionList: [],//资产列表
+        userInfo: {},//个人信息
       }
     },
-    methods:{
+    methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -75,26 +80,50 @@
             return false;
           }
         });
+      },
+      //加载push信息
+      loadPushInfo() {
+        return new Promise((resolve, reject) => {
+          let pushUrl = common.apidomain + 'financial/push';
+          let fd = new FormData();
+          fd.append('currentPage', 1);
+          ajax(pushUrl, 'post', fd, (res) => {
+            resolve(res);
+          });
+        })
       }
     },
-    created(){},
-    computed:{},
-    components:{
-     Push,//push记录
+    created() {
+      this.loadPushInfo().then((res) => {
+        console.log(res);
+        if (res.data.code !== 200) {
+          return;
+        }
+        this.regionList = res.data.data.pushCoinMap;
+        this.userInfo = res.data.data.coinWallet;
+        // regionList
+      });
+    },
+    computed: {},
+    components: {
+      Push,//push记录
     }
   }
 </script>
 <style scoped>
-.border_bottom{
-  margin-bottom: 10px;
-}
-.push_box{
-  padding-top: 2%;
-}
-.Unit {
-  text-align: left;
-}
-button {
+  .border_bottom {
+    margin-bottom: 10px;
+  }
+
+  .push_box {
+    padding-top: 2%;
+  }
+
+  .Unit {
+    text-align: left;
+  }
+
+  button {
     width: 100%;
     height: 35px;
     line-height: 9px;
@@ -104,25 +133,29 @@ button {
     border: 0;
     margin: 0 auto;
     color: #c2c3c8;
-}
-.user-recharge>section>button:hover{
-  background: #409EFF;
-  color: #fff;
-  cursor: pointer;
-}
-.reg_select{
-  width: 100%;
-}
-.empty{
-  width: 100%;
-  height: 20px;
-  background: #1e253d;
-}
-.Verification{
-  float: right;
-  position:absolute;
-  top: 0px;
-  right: 4%;
-  cursor: pointer;
-}
+  }
+
+  .user-recharge > section > button:hover {
+    background: #409EFF;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .reg_select {
+    width: 100%;
+  }
+
+  .empty {
+    width: 100%;
+    height: 20px;
+    background: #1e253d;
+  }
+
+  .Verification {
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 4%;
+    cursor: pointer;
+  }
 </style>

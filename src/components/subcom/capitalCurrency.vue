@@ -1,41 +1,11 @@
 <template>
   <div class="fund_box">
+    <tips></tips>
     <div class="cards">
       <div class="add_card" @click="showAddWin">
         <p>+</p>
         <span>添加币种地址</span>
       </div>
-      <!--<el-dialog title="添加币种地址" :visible.sync="dialogFormVisible" width="30%" center>-->
-      <!--<el-form :model="form" id="from_add">-->
-      <!--<el-form-item label="提现管理" class="border_bottom">-->
-      <!--<div class="add_right">-->
-      <!--<el-input v-model="form.adminis" auto-complete="off"></el-input>-->
-      <!--</div>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="备注" class="border_bottom">-->
-      <!--<div class="add_right">-->
-      <!--<el-input v-model="form.remarks" auto-complete="off"></el-input>-->
-      <!--</div>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="交易密码" prop="pass" class="border_bottom">-->
-      <!--<div class="add_right">-->
-      <!--<el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入交易密码"></el-input>-->
-      <!--</div>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="短信验证" class="border_bottom">-->
-      <!--<div class="add_right">-->
-      <!--<el-input v-model="form.ver" placeholder="请输入验证码"></el-input>-->
-      <!--<p class="Verification">-->
-      <!--<span>|</span>&nbsp;-->
-      <!--<span>发送验证码</span>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--</el-form-item>-->
-      <!--</el-form>-->
-      <!--<div slot="footer" class="dialog-footer">-->
-      <!--<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>-->
-      <!--</div>-->
-      <!--</el-dialog>-->
 
       <!--新增提现地址-->
       <i class="dialog">
@@ -88,29 +58,7 @@
   export default {
     props: ['selectCoin'],//父组件传来的币种id
     data() {
-      // var validatePass = (rule, value, callback) => {
-      //   if (value === '') {
-      //     callback(new Error('请输入密码'));
-      //   } else {
-      //     if (this.ruleForm2.checkPass !== '') {
-      //       this.$refs.ruleForm2.validateField('checkPass');
-      //     }
-      //     callback();
-      //   }
-      // };
       return {
-        // dialogFormVisible: false,
-        // form: {
-        //   adminis: '',
-        //   remarks: '',
-        //   ver: ''
-        // },
-        // ruleForm2: {
-        //   pass: '',
-        //   checkPass: '',
-        // },
-
-
         dialogFormVisible: false,//新增提现地址框
         newWithdrawAddress: '',//新增提现地址
         remark: '',//新增提现地址备注
@@ -177,7 +125,7 @@
         fd.append('withdrawAddr', this.newWithdrawAddress);
         fd.append('totpCode', 0);
         fd.append('phoneCode', this.msgForNewAddress);
-        fd.append('symbol', this.activeCoinId);
+        fd.append('symbol', this.selectCoin);
         fd.append('password', this.tradePwd);
         fd.append('remark', this.remark);
         ajax(addNewAddressUrl, 'post', fd, (res) => {
@@ -186,7 +134,12 @@
             this.addAddressErrorMsg = res.data.msg;
             return;
           }
-          this.$store.commit('changeDialogInfo', res.data.msg);
+          this.dialogFormVisible = false;
+          this.$store.commit('changeDialogInfo', {dataInfo: res.data.msg});
+          this.$parent.changeTabId(0);
+          this.$parent.change();
+        }, (err) => {
+          this.addAddressErrorMsg = err;
         });
       },
 
@@ -238,31 +191,6 @@
           })
 
         }
-
-        // let msgUrl = common.apidomain + 'user/send_sms';
-        //
-        // let fd = new FormData();
-        //
-        // fd.append('type', 111);
-        // fd.append('msgtype', 1);
-        // fd.append('areaCode', '+86');
-        // fd.append('phone', this.registerInfo.phoneNum);
-        // fd.append('vcode', this.imgCode);
-        // fd.append('imageRedisKey', this.imageRedisKey);
-        // fd.append('uid', 0);
-        // ajax(msgUrl, 'post', fd, (res) => {
-        //   console.log(res);
-        //   if (res.data.code !== 200) {
-        //     this.errorMsg = res.data.msg;
-        //     return;
-        //   } else {
-        //     this.msgTime = 60;
-        //     this.msgDisabled = true;
-        //     this.msgTimer();
-        //   }
-        // })
-        // }
-        // });
       },
       addMsgTimer() {
         if (this.addAddressTimer > 0) {
@@ -323,7 +251,9 @@
     created() {
     },
     computed: {},
-    components: {}
+    components: {
+      tips,//友情提示
+    }
   }
 </script>
 <style scoped>
@@ -343,7 +273,7 @@
 
   .add_card {
     width: 430px;
-    height: 80px;
+    height: 85px;
     border: 1px solid #c2c3c8;
     border-radius: 5px;
     cursor: pointer;

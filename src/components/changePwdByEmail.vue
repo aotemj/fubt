@@ -6,7 +6,7 @@
       <!--共用部分-->
       <div class="mobileReg-box">
         <div class="select-box">
-          <input type="text" name="" placeholder="邮箱地址">
+          <input type="text" name="" placeholder="邮箱地址" v-model="emailaddress">
         </div>
 
         <!--证件类型-->
@@ -23,6 +23,9 @@
         <div class="select-box">
           <input type="text" name="" placeholder="验证码">
         </div>
+        
+        <!-- 提示信息 -->
+        <div class="tipinfo">{{tipinfo}}</div>
 
         <input class="register-btn dis-in-blk" type="button" v-on:click="next" value="下一步">
       </div>
@@ -35,11 +38,17 @@
     data(){
       return {
         // activeId:1,//激活面板
+        tipinfo:'我是提示信息',
+        emailaddress:'asdf',//邮箱地址
       }
     },
     methods:{
       next(){
-        this.$router.push({ path: '/addNewPwdByEmail' })
+        if(!this.emailaddress){
+          
+        }
+
+        // this.$router.push({ path: '/addNewPwdByEmail' })
       }
     },
     created(){},
@@ -49,6 +58,11 @@
   }
 </script>
 <style scoped>
+  /*提示信息样式*/
+  .tipinfo{
+    height: 15px;
+    line-height: 15px;
+  }
   .con-box>.inner-box{
     width:900px;
     /*height:400px;*/

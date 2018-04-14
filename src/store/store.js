@@ -25,6 +25,8 @@ export default new Vuex.Store({
     },
     voteTipsStatus:false,//投票状态
 
+    phoneResetSecond:'',//忘记密码-手机找回-下一步按钮第二次调用接口/validate/reset_phone时候，返回的数据（下一步需要这个字段值当做参数传递要保存下来）
+
   },
 	mutations:{
     //用户登录
@@ -76,6 +78,11 @@ export default new Vuex.Store({
       state.voteTipsStatus = false;//关闭外层弹窗
       // console.log(state.message.skipurl);
       router.push({path:state.message.skipurl});
+    },
+
+    // 6.0将忘记密码-手机找回-下一步按钮第二次调用接口返回的数据保存起来：设置phoneResetSecond的方法
+    setphoneResetSecond(state,data){
+      state.phoneResetSecond = data;
     },
   }
 })

@@ -23,7 +23,8 @@
         <input class="register-btn dis-in-blk" v-on:click="next" type="button" value="下一步">
       </div>
       <div class="success" v-show="success">
-        <h4>恭喜您,登录密码修改成功!</h4>
+        <!-- <h4>恭喜您,登录密码修改成功!</h4> -->
+        <h4>{{successtip}}</h4>
         <input class="register-btn dis-in-blk" v-on:click="login" type="button" value="立即登录">
       </div>
     </div>
@@ -44,6 +45,7 @@
         rNewPwd: '',//重复新密码
         errorMsg: '',//错误提示
         phoneNum:'',//手机号
+        successtip:'',//修改手机成功提示
       }
     },
     methods: {
@@ -61,8 +63,7 @@
         } else {
           this.errorMsg = '';
           this.resetPwd();
-        }
-        // this.success = true;//修改成功的提示状态
+        }  
       },
 
       // 3.0修改完成立即登录按钮
@@ -77,30 +78,21 @@
           fd.append('totpCode',0);
           fd.append('newPassword',this.newPwd);
           fd.append('newPassword2',this.rNewPwd);
-          // fd.append('phoneResetSecond ',XXXXXXXXXXXXXX);
+          fd.append('phoneResetSecond',this.$store.state.phoneResetSecond);
           ajax(resetUrl, 'post', fd, (res) => {
-            console.log(res);
-            console.log(res.data);
+            // console.log("phoneResetSecond:"+this.$store.state.phoneResetSecond);
+            // console.log(res.data);
+            // console.log(res.data.msg);
+            if(res.data.code!==200){
+              this.errorMsg = res.data.msg;
+              return;
+            }
+            if(res.data.code==200){
+              this.successtip = res.data.msg;
+              this.success = true;//修改成功的提示状态
+            }
           });
       },
-      // resetPwd(){
-        //   return new Promise((resolve, reject)=>{
-        //     let resetUrl = common.apidomain+'validate/reset_passwd_by_phone';
-        //     let fd = new FormData();
-        //     /*
-        //     * totpCode
-        //     * newPassword
-        //     * phoneResetSecond
-        //     * */
-        //     fd.append('totpCode',0);
-        //     fd.append('newPassword',this.newPwd);
-        //     fd.append('newPassword2',this.rNewPwd);
-        //     // fd.append('phoneResetSecond ',XXXXXXXXXXXXXX);
-        //     ajax(resetUrl, 'post', fd, (res) => {
-        //       console.log(res);
-        //     });
-        //   })
-      // },
     },
 
     created() {

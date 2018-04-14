@@ -1,5 +1,6 @@
 <template>
   <div class="fund_box">
+    <tips></tips>
     <div class="cards">
       <div class="add_card" @click="dialogFormVisible = true">
         <p>+</p>
@@ -46,12 +47,12 @@
 <script>
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
-
+  import tips from "./friendlyTips"
   export default {
     data() {
       return {
         dialogFormVisible: false,
-        username: '',//用户姓名
+        username: this.$store.state.userInfo.frealname,//用户姓名
         aliAccount: '',//支付宝账号
         addAddressErrorMsg: '',//错误信息
         msgForNewAddress: '',//短信验证码
@@ -94,9 +95,10 @@
             this.addAddressErrorMsg = res.data.msg;
             return;
           }
-          this.$store.commit('changeDialogInfo', res.data.msg);
+          this.$store.commit('changeDialogInfo', {dataInfo:res.data.msg});
+          this.$parent.changeTabId(2);
+          this.dialogFormVisible = false;
         });
-        this.$parent.changeTabId(2);
       },
       //发送验证码
       sendCode(msgType) {
@@ -186,7 +188,9 @@
     created() {
     },
     computed: {},
-    components: {}
+    components: {
+      tips,//友情提示
+    }
   }
 </script>
 <style scoped>
