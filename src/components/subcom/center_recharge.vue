@@ -46,7 +46,7 @@
       return {
         activeName: 'first',
         activeNames: ['1'],
-        inputArr: '',//充值码
+        inputArr:'',//充值码
         Recharge:[],//充值码记录
         errorMsg: '',//错误提示
         pwdReg:/^[a-zA-Z0-9]{16}$/,//number验证
@@ -54,25 +54,22 @@
     },
     methods: {
       onSubmit() {
-        if (!this.inputArr) {
+        if(!this.inputArr){
           this.errorMsg = "请输入充值码";
-        }else if(this.inputArr.length <= 15){
-          this.errorMsg = "充值码为16位";
           return;
-        }else if(this.inputArr.length >= 17){
-          this.errorMsg = "充值码为16位";
-          return;
-        }else if(!/^[a-zA-Z0-9]{16}$/.test(this.inputArr)){
+        }else if(!this.pwdReg.test(this.inputArr)){
           this.errorMsg = "充值码格式不正确";
           return;
         }else{
           this.errorMsg = '';
         }
-
-        var JournalUrl = common.apidomain + 'deposit/alipay_manual'
-        ajax(JournalUrl, 'post', {}, (res) => {
-          // console.log(res);
+        var JournalUrl = common.apidomain + 'activity/exchange'
+        var Jfd = new FormData();
+        Jfd.append('code',this.inputArr);
+        ajax(JournalUrl, 'post', Jfd, (res) => {    
+          console.log(res);
         });
+
       },
      
     },

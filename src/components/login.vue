@@ -34,8 +34,12 @@
       return {
         // username: 18625512982,//赵鑫磊账号
         // password: 'a111111',//赵鑫磊密码
-        username: 15738818082,//任付伟账号
-        password: 'admin123',//任付伟密码
+        // username: 13253655737,//赵鑫磊账号
+        // password: 'a111111',//赵鑫磊密码
+        username: 13639753981,//赵鑫磊账号
+        password: 'lvby199112',//赵鑫磊密码
+        // username: 15738818082,//任付伟账号
+        // password: 'admin123',//任付伟密码
         // username: 15994026836,//杨孝喜账号
         // password: 'a123456',//杨孝喜密码
         errorMsg: '',//错误提示

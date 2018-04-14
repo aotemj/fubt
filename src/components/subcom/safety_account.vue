@@ -29,9 +29,9 @@
                 <input class="modifyInput"  type="password" v-model="confirmPwd" placeholder="确认新密码">
               </el-form-item>
               <el-form-item label="短信验证码" class="modify">
-                <input class="modifyInput" type="text" v-model="msgCode">
-                <input class="verify-btn" :disabled="msgDisabled" type="button" v-on:click="sendCode"
-                 v-model="msgBtnTxt">
+                <input class="modifyInput" type="text" v-model="loginCode">
+                <input class="verify-btn" :disabled="loginDisabled" type="button" v-on:click="sendCode"
+                 v-model="loginBtnTxt">
               </el-form-item>
             </el-form>
             <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
@@ -54,9 +54,9 @@
                 {{userInfo.ftelephone.substring(0,3)}}****{{userInfo.ftelephone.substring(7,11)}}
               </el-form-item>
               <el-form-item label="短信验证码" class="modify">
-                <input class="modifyInput" type="text" v-model="msgCode">
-                <input class="verify-btn" :disabled="msgDisabled" type="button" v-on:click="phoneCode"
-                 v-model="msgBtnTxt">
+                <input class="modifyInput" type="text" v-model="bindCode">
+                <input class="verify-btn" :disabled="bindDisabled" type="button" v-on:click="bindingCode"
+                 v-model="bindBtnTxt">
               </el-form-item>
               <el-form-item label="所在地" class="modify">
                <select class="modifyInput">
@@ -64,23 +64,23 @@
                 </select>
               </el-form-item>
               <el-form-item label="更换手机号" class="modify">
-               <input class="modifyInput inp" type="text">
+                <input class="modifyInput inp" type="text" v-model="phoneNum">
                 <p class="Mainland">+{{ userInfo.fareacode }}</p>
               </el-form-item>
               <el-form-item label="验证码" class="modify">
-                <input class="modifyInput" type="text">
+                <input class="modifyInput" type="text" v-model="imgCode">
                 <div class="inner-box cp" @click="refreshCode">
-                  <sIdentify class="image" :identifyCode="identifyCode"></sIdentify>
+                  <Graphic class="image" :identifyCode="identifyCode"></Graphic>
                 </div>
               </el-form-item>
               <el-form-item label="短信验证码" class="modify">
-                 <input class="modifyInput" type="text" v-model="msgCode">
-                <input class="verify-btn" :disabled="msgDisabled" type="button" v-on:click="sendCode"
-                 v-model="msgBtnTxt">
+                 <input class="modifyInput" type="text" v-model="bsendCode">
+                <input class="verify-btn" :disabled="sendDisabled" type="button" v-on:click="bindsendCode"
+                 v-model="sendBtnTxt">
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer footertop">
-                <el-button type="primary" @click="phoneFormVisible = false">确 定</el-button>
+                <el-button type="primary" v-on:click="phoneVisible">确 定</el-button>
             </div>
           </el-dialog>
         </li>
@@ -127,7 +127,7 @@
                  v-model="magBtnTxt">
               </el-form-item>
             </el-form>
-            <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+            <div class="false-tips fz12"><i v-show="tranrMsg"></i>{{tranrMsg}}</div>
             <div slot="footer" class="dialog-footer footertop">
                 <el-button type="primary" v-on:click="Transactionpwd">确 定</el-button>
             </div>
@@ -218,6 +218,8 @@ version:61                                    //版本号
 videoTime:null*/
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
+  import Graphic from "./GraphicVerification.vue"
+
   export default {
     data() {
       return {
@@ -226,24 +228,42 @@ videoTime:null*/
         },
         // 登录密码
         modifyFormVisible: false,
-        errorMsg: '',//错误提示
         codepassword:'',//旧密码
         password: '',//新密码
         confirmPwd: '',//确认密码
-        msgDisabled: false,//短信验证码按钮状态
-        msgBtnTxt: "发送验证码",//短信验证码按钮文字
-        msgCode: '',//短信验证码
+        loginTime:0,//短信验证码时间
+        loginDisabled: false,//短信验证码按钮状态
+        loginBtnTxt: "发送验证码",//短信验证码按钮文字
+        loginCode: '',//短信验证码
+        errorMsg: '',//错误提示
+
         //绑定手机
         phoneFormVisible: false,
+        bindTime:0,//短信验证码时间
+        bindDisabled: false,//短信验证码按钮状态
+        bindBtnTxt: "发送验证码",//短信验证码按钮文字
+        phoneNum:'',//新手机号
+        bindCode: '',//短信验证码
+        sendTime:0,//短信验证码时间
+        imgCode: '',//图形验证码
+        trueImgCode: '',//正确的图形验证码
+        bsendCode:'',//新短信验证码
+        sendDisabled: false,//短信验证码按钮状态
+        sendBtnTxt: "发送验证码",//短信验证码按钮文字
+        identifyCode: "",//图验证码'
+        imageRedisKey: "",//图片验证码key
+        bindfdMsg:'',//错误提示
 
         // 修改交易密码
+        transactionFormVisible:false,
         IDNumber:'',//身份证
         newpassword:'',//交易新密码
         confirmpassword:'',//交易确认密码
+        magTime: 0,//短信验证码时间
         magDisabled: false,//短信验证码按钮状态
         magBtnTxt: "发送验证码",//短信验证码按钮文字
         magCode:'',
-
+        tranrMsg: '',//错误提示
          // 绑定邮箱
         EmailFormVisible:false,
         EmailNum:'',
@@ -256,19 +276,15 @@ videoTime:null*/
         realname:'',//真实姓名
         realnameID:'',//证件号码
         identitytype:'',//证件类型
-        identifyCode: "",//验证码'
-        imageRedisKey: "",//图片验证码key
         RealMsg:'',//错误提示
-        //修改交易密码
-        transactionFormVisible:false,
-        errorMsg: '',//错误提示
+        phoneReg: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/,
         emailReg: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
         pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,//密码
         isIDCard: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,//身份证
     }
     },
     methods: {
-      //修改登录密码
+//修改登录密码
       loginPassword(){
         if(!this.codepassword){
           this.errorMsg = '请输入旧密码';
@@ -292,72 +308,314 @@ videoTime:null*/
           this.errorMsg = '';
         }
        
-        var regUrl = common.apidomain +'user/modify_passwd';
+        let regUrl = common.apidomain +'user/modify_passwd';
         let fda = new FormData();
-        fda.append('password', this.password);//密码
+        fda.append('originPwd', this.codepassword);//旧密码
+        fda.append('newPwd', this.password);//密码
+        fda.append('reNewPwd', this.confirmPwd);//密码
+        fda.append('phoneCode', this.loginCode);//密码
         ajax(regUrl, 'post', fda, (res) => {
+          this.errorMsg = res.data.msg;
+          return;
           console.log(res)
-         
         })
       },
-
-      //修改交易密码
-      Transactionpwd(){
-        if(!this.IDNumber){
-          this.errorMsg = '请输入身份证';
-          return;
-        }else if (!this.isIDCard.test(this.IDNumber)) {
-          this.errorMsg = "身份证格式错误，必须等于18位只能为数字！"
-          return;
-        }else if (!this.pwdReg.test(this.newpassword)) {
-          this.errorMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字！"
-          return;
-        }else if (!this.newpassword) {
-          this.errorMsg = '请输入密码';
-          return;
-        } else if (!this.pwdReg.test(this.newpassword)) {
-          this.errorMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字！"
-          return;
-        } else if (!this.confirmpassword) {
-          this.errorMsg = '请再次输入密码';
-          return;
-        } else if (this.newpassword !== this.confirmpassword) {
-          this.errorMsg = '两次输入密码不一致'
-          return;
-        }else {
-          this.errorMsg = '';
-        }
-        var regUrl = common.apidomain +'user/modify_passwd';
-        
-        ajax(regUrl, 'post', {}, (res) => {
-          
-          console.log(res)
-         
-        })
-
-      },
-      //60s短信倒计时
-       msgTimer() {
-        if (this.msgTime > 0) {
-          this.msgTime--;
-          this.msgBtnTxt = this.msgTime + "s后重新获取"
-          setTimeout(this.msgTimer, 1000);
-        } else {
-          this.msgTime = 0;
-          this.msgBtnTxt = "获取验证码";
-          this.msgDisabled = false;
-        }
-      },
-      //短信验证码验证
-      msgCodeReg() {
-        if (!this.msgCode) {
+     
+      //修改登录密码短信验证码验证
+      magCodeReg() {
+        if (!this.loginCode) {
           this.errorMsg = '请输入短信验证码';
           return 0;
         }else {
           return 1;
         }
       },
-      //绑定邮箱
+      //修改登录密码发送验证码
+      sendCode() {
+        let loginUrl = common.apidomain + 'user/send_sms';
+        let fd = new FormData();
+        fd.append('type', 106);
+        fd.append('msgtype', 1);
+        fd.append('areaCode', 0);
+        fd.append('phone', 0);
+        fd.append('vcode', 0);
+        fd.append('uid', 0);
+        ajax(loginUrl, 'post', fd, (res) => {
+          if(res.data.code!==200){
+            this.errorMsg = res.data.msg;
+            return;
+          }else{
+            this.loginTime = 60;
+            this.loginDisabled = true;
+            this.loginTimer();
+          }
+        })
+      },
+       //修改登录密码60s短信倒计时
+      loginTimer() {
+        if (this.loginTime > 0) {
+          this.loginTime--;
+          this.loginBtnTxt = this.loginTime + "s后重新获取"
+          setTimeout(this.loginTimer, 1000);
+        } else {
+          this.loginTime = 0;
+          this.loginBtnTxt = "获取验证码";
+          this.loginDisabled = false;
+        }
+      },
+
+
+//绑定手机
+      phoneVisible(){
+        if(!this.phoneNumReg() || !this.imgCodeReg() || !this.msgCodeReg()) {
+          return;
+        }
+        let phoneUrl = common.apidomain + 'user/bind_phone';
+        let bindfd = new FormData();
+        bindfd.append('oldcode',this.bindCode)//旧验证码
+        bindfd.append('areaCode', '+86');//地区代码
+        bindfd.append('phone', this.phoneNum);//手机号
+        bindfd.append('imgcode', this.imgCode);//图片验证码
+        bindfd.append('totpCode', this.bindsendCode);//短信验证码
+        bindfd.append('imageRedisKey', this.imageRedisKey);
+        ajax(phoneUrl, 'post', bindfd, (res) => {
+          this.logging = false;//注册完成
+          console.log(res);
+          //  调用失败
+          if (res.data.code !== 200) {
+            this.$store.commit('changeDialogInfo', res.data.msg)
+          } else {
+            //调用成功
+            this.$store.commit('changeDialogInfo', res.data.msg);
+          }
+        })
+      },
+      //绑定手机60s短信倒计时
+      bindTimer() {
+        if (this.bindTime > 0) {
+          this.bindTime--;
+          this.bindBtnTxt = this.bindTime + "s后重新获取"
+          setTimeout(this.bindTimer, 1000);
+        } else {
+          this.bindTime = 0;
+          this.bindBtnTxt = "获取验证码";
+          this.bindDisabled = false;
+        }
+      },
+      //绑定手机短信验证码验证
+      magCodeReg() {
+        if (!this.bindnCode) {
+          this.bindfdMsg = '请输入短信验证码';
+          return 0;
+        }else {
+          return 1;
+        }
+      },
+      // 绑定手机验证码
+      bindingCode(){
+        let bindUrl = common.apidomain + 'user/send_sms';
+        let bindfd = new FormData();
+        bindfd.append('type', 106);
+        bindfd.append('msgtype', 1);
+        bindfd.append('areaCode', 0);
+        bindfd.append('phone', 0);
+        bindfd.append('vcode', 0);
+        bindfd.append('uid', 0);
+        ajax(bindUrl, 'post', bindfd, (res) => {
+          if(res.data.code!==200){
+            this.bindfdMsg = res.data.msg;
+            return;
+          }else{
+            this.bindTime = 60;
+            this.bindDisabled = true;
+            this.bindTimer();
+          }
+        })
+      },
+      /*图片验证码开始*/
+      randomNum(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      },
+      refreshCode() {
+          if (!this.phoneNumReg()) {
+            return;
+          }
+        this.makeCode();
+      },
+      makeCode() {
+        let url = common.apidomain + 'servlet/ValidateImageServlet';
+        ajax(url, 'post', {}, (res) => {
+          if (res.data.code !== 200) {
+            this.bindfdMsg = '获取图形验证码错误，请稍后再试'
+            return;
+          }
+          this.identifyCode = res.data.data.verifyCode;
+          this.imageRedisKey = res.data.data.imageRedisKey;
+          // console.log(this.imageRedisKey);
+          this.trueImgCode = this.identifyCode;
+          console.log(this.trueImgCode)
+        })
+      },
+      /*图片验证码结束*/
+      //手机号验证：
+      phoneNumReg() {
+        if (!this.phoneNum) {
+          this.bindfdMsg = '请输入手机号';
+          return 0;
+        } else if (!this.phoneReg.test(this.phoneNum)) {
+          this.bindfdMsg = '您输入的手机号格式不正确';
+          return 0;
+        } else {
+          this.bindfdMsg = '';
+          return 1;
+        }
+      },
+       //账号是否存在验证
+      phoneNumExistTest(type) {
+        let promise = new Promise((resolve) => {
+        let testUrl = common.apidomain + 'user/check_user_exist';
+        let fd = new FormData();
+        //手机号已存在验证
+        if (!type) {
+          fd.append('name', this.phoneNum);
+        } 
+        fd.append('type', type);
+        ajax(testUrl, 'post', fd, (res) => {
+          resolve(res);
+        })
+        })
+        return promise;
+      },
+      bindsendCode(){
+        let bindsendUrl = common.apidomain + 'user/send_sms';
+        let bindsendfd = new FormData();
+        bindsendfd.append('type', 106);
+        bindsendfd.append('msgtype', 1);
+        bindsendfd.append('areaCode', 0);
+        bindsendfd.append('phone', 0);
+        bindsendfd.append('vcode', 0);
+        bindsendfd.append('uid', 0);
+        ajax(bindsendUrl, 'post', bindsendfd, (res) => {
+          console.log(res);
+          if(res.data.code!==200){
+            this.bindfdMsg = res.data.msg;
+            return;
+          }else{
+            this.sendTime = 60;
+            this.sendDisabled = true;
+            this.sendTimer();
+          }
+        })
+      },
+      //绑定新手机60s短信倒计时
+      sendTimer() {
+        if (this.sendTime > 0) {
+          this.sendTime--;
+          this.sendBtnTxt = this.sendTime + "s后重新获取"
+          setTimeout(this.sendTimer, 1000);
+        } else {
+          this.sendTime = 0;
+          this.sendBtnTxt = "获取验证码";
+          this.sendDisabled = false;
+        }
+      },
+      //绑定新手机短信验证码验证
+      magCodeReg() {
+        if (!this.bindnCode) {
+          this.bindfdMsg = '请输入短信验证码';
+          return 0;
+        }else {
+          return 1;
+        }
+      },
+
+
+//修改交易密码
+      Transactionpwd(){
+        if(!this.IDNumber){
+          this.tranrMsg = '请输入身份证';
+          return;
+        }else if (!this.isIDCard.test(this.IDNumber)) {
+          this.tranrMsg = "身份证格式错误，必须等于18位只能为数字！"
+          return;
+        }else if (!this.newpassword) {
+          this.tranrMsg = "请输入密码！"
+          return;
+        }else if (!this.pwdReg.test(this.newpassword)) {
+          this.tranrMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字！"
+          return;
+        }else if (!this.newpassword) {
+          this.tranrMsg = '请输入密码';
+          return;
+        } else if (!this.pwdReg.test(this.newpassword)) {
+          this.tranrMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字！"
+          return;
+        } else if (!this.confirmpassword) {
+          this.tranrMsg = '请再次输入密码';
+          return;
+        } else if (this.newpassword !== this.confirmpassword) {
+          this.tranrMsg = '两次输入密码不一致'
+          return;
+        }else {
+          this.tranrMsg = '';
+        }
+        let transactionUrl = common.apidomain +'user/modify_passwd';
+        let tranfd = new FormData();
+        tranfd.append('identityCode', this.IDNumber);// 身份证
+        tranfd.append('newPwd', this.newpassword);//新密码
+        ftranfdda.append('reNewPwd', this.confirmpassword);//确认密码
+        tranfd.append('phoneCode', this.magCode);//验证码
+        ajax(transactionUrl, 'post', tranfd, (res) => {
+          this.tranrMsg = res.data.msg;
+          return;
+          console.log(res)
+        })
+      },
+      //60s短信倒计时
+      msgTimer() {
+        if (this.magTime > 0) {
+          this.magTime--;
+          this.magBtnTxt = this.magTime + "s后重新获取"
+          setTimeout(this.magTimer, 1000);
+        } else {
+          this.magTime = 0;
+          this.magBtnTxt = "获取验证码";
+          this.magDisabled = false;
+        }
+      },
+      //短信验证码验证
+      magCodeReg() {
+        if (!this.msgCode) {
+          this.tranrMsg = '请输入短信验证码';
+          return 0;
+        }else {
+          return 1;
+        }
+      },
+      // 交易密码
+      phoneCode(){
+        let TrUrl = common.apidomain + 'user/send_sms';
+        let fd = new FormData();
+          fd.append('type', 106);
+          fd.append('msgtype', 1);
+          fd.append('areaCode', 0);
+          fd.append('phone', 0);
+          fd.append('vcode', 0);
+          fd.append('uid', 0);
+          ajax(TrUrl, 'post', fd, (res) => {
+            console.log(res);
+            if(res.data.code!==200){
+              this.tranrMsg = res.data.msg;
+              return;
+            }else{
+              this.magTime = 60;
+              this.magDisabled = true;
+              this.magTimer();
+            }
+          })
+      },
+
+//绑定邮箱
       Bindingmailbox(){
         if(!this.EmailNum){
           this.emailMsg = '请输入邮箱';
@@ -378,134 +636,10 @@ videoTime:null*/
           return; 
         })
       },
-      //修改登录密码发送验证码
-      sendCode() {
-        let msgUrl = common.apidomain + 'user/send_sms';
-        let fd = new FormData();
-        /*
-        type: 106
-        msgtype: 1
-        areaCode: 0
-        phone: 0
-        vcode: 0
-        uid: 0*/
-        fd.append('type', 106);
-        fd.append('msgtype', 1);
-        fd.append('areaCode', 0);
-        fd.append('phone', 0);
-        fd.append('vcode', 0);
-        fd.append('uid', 0);
-        ajax(msgUrl, 'post', fd, (res) => {
-          console.log(res);
-          if(res.data.code!==200){
-            this.errorMsg = res.data.msg;
-            return;
-          }else{
-            this.msgTime = 60;
-            this.msgDisabled = true;
-            this.msgTimer();
-          }
-        })
-      },
-    // 手机绑定
-     phoneCode(){
-       let msgUrl = common.apidomain + 'user/send_sms';
-        let fd = new FormData();
-        /*
-        type: 106
-        msgtype: 1
-        areaCode: 0
-        phone: 0
-        vcode: 0
-        uid: 0*/
-        fd.append('type', 106);
-        fd.append('msgtype', 1);
-        fd.append('areaCode', 0);
-        fd.append('phone', 0);
-        fd.append('vcode', 0);
-        fd.append('uid', 0);
-        ajax(msgUrl, 'post', fd, (res) => {
-          console.log(res);
-          if(res.data.code!==200){
-            this.errorMsg = res.data.msg;
-            return;
-          }else{
-            this.msgTime = 60;
-            this.msgDisabled = true;
-            this.msgTimer();
-          }
-        })
-     },
-      msgTimer() {
-        if (this.msgTime > 0) {
-          this.msgTime--;
-          this.msgBtnTxt = this.msgTime + "s后重新获取"
-          setTimeout(this.msgTimer, 1000);
-        } else {
-          this.msgTime = 0;
-          this.msgBtnTxt = "获取验证码";
-          this.msgDisabled = false;
-        }
-      },
-      emailTimer() {
-        if (this.emailTime > 0) {
-          this.emailTime--;
-          this.emailBtnTxt = this.emailTime + "s后重新获取"
-          setTimeout(this.emailTimer, 1000);
-        } else {
-          this.emailTime = 0;
-          this.emailBtnTxt = "获取验证码";
-          this.emailDisabled = false;
-        }
-      },
-      /*发送验证码结束*/
-      /*图片验证码开始*/
-      randomNum(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
-      },
-      refreshCode() {
-        if (this.regType == 0) {
-          if (!this.phoneNumReg()) {
-            return;
-          }
-        } else {
-          if (!this.emailNumReg()) {
-            return;
-          }
-        }
-        this.makeCode();
-      },
-      makeCode() {
-        let url = common.apidomain + 'servlet/ValidateImageServlet';
-        ajax(url, 'post', {}, (res) => {
-          if (res.data.code !== 200) {
-            this.errorMsg = '获取图形验证码错误，请稍后再试'
-            return;
-          }
-          this.identifyCode = res.data.data.verifyCode;
-          this.imageRedisKey = res.data.data.imageRedisKey;
-          // console.log(this.imageRedisKey);
-          this.trueImgCode = this.identifyCode;
-          console.log(this.trueImgCode)
-        })
-      },
-      /*图片验证码结束*/
-      //手机号验证：
-      phoneNumReg() {
-        if (!this.registerInfo.phoneNum) {
-          this.errorMsg = '请输入手机号';
-          return 0;
-        } else if (!this.phoneReg.test(this.registerInfo.phoneNum)) {
-          this.errorMsg = '您输入的手机号格式不正确';
-          return 0;
-        } else {
-          this.errorMsg = '';
-          return 1;
-        }
-      },
 
-     //实名认证
-     Realnamebox(){
+
+//实名认证
+      Realnamebox(){
         if(!this.realname){
           this.RealMsg = '请输入用户名';
           return;
@@ -527,10 +661,15 @@ videoTime:null*/
         
         ajax(RealUrl, 'post', Rfd, (res) => {
           console.log(res)
-          this.errorMsg = res.data.msg;
+          this.RealMsg = res.data.msg;
           return; 
         })  
-     }
+      },
+
+
+     
+
+    
 
     },
     computed: {
@@ -542,11 +681,16 @@ videoTime:null*/
       console.log(this.$store.state.userInfo.ftradepassword)
     },
     components: {
-      
+      Graphic
     }
   }
 </script>
 <style scoped>
+.inner-box{
+    position: absolute;
+    top: 8px;
+    right: 1px;
+}
 /* 短信验证 */
 .verify-btn{
     width: 105px;

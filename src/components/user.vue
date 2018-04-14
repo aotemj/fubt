@@ -9,9 +9,10 @@
         </el-tab-pane>
         <el-tab-pane label="用户中心" name="second">
           <award></award>
-          <rechange></rechange>
+          <!-- <rechange></rechange> 充值码充值暂无用 -->
           <site></site>
           <candies></candies>
+          <Api></Api>
         </el-tab-pane>
         <el-tab-pane label="推广中心" name="third">
           <generalize></generalize>
@@ -30,11 +31,13 @@
   //用户中心
   import Award from "./subcom/center_award"
   //充值码记录
-  import Rechange from "./subcom/center_recharge"
+  // import Rechange from "./subcom/center_recharge"
   //收货地址
   import Site from "./subcom/center_site"
   //糖果奖励
   import Candies from "./subcom/center_candies"
+  //API 申请
+  import Api from "./subcom/centerApi.vue"
   //推广
   import Generalize from "./subcom/center_generalize"
 
@@ -58,9 +61,10 @@
       Account,//safety-奖励记录
       History,//safety-历史
       Award,//center-奖励记录
-      Rechange,//cneter-充值码
+      // Rechange,//cneter-充值码
       Site,//center-地址
       Candies,//糖果奖励
+      Api,//API申请
       Generalize,//推广
     }
   }

@@ -14,59 +14,67 @@
               id="1">
             </el-date-picker>
           </div>
-          <el-col :span="12">
-            <span>市场</span>
-            <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                全部<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>FBT交易区</el-dropdown-item>
-                <el-dropdown-item>FUC交易区</el-dropdown-item>
-                <el-dropdown-item>BTC交易区</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+
+          <el-col class="w5p lh60">
+            <span class="fr">市场</span>
           </el-col>
+          <!--市场-->
           <el-col :span="12">
-            <span>币种</span>
-            <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                全部<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>FBT</el-dropdown-item>
-                <el-dropdown-item>FUC</el-dropdown-item>
-                <el-dropdown-item>BTC</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-select v-model="selectMarket" placeholder="请选择">
+              <el-option
+                v-for="item in market"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-col>
-          <el-col :span="12">
-            <span>类型</span>
-            <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                全部<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>FBT提现</el-dropdown-item>
-                <el-dropdown-item>FBT充值</el-dropdown-item>
-                <el-dropdown-item>FUC提现</el-dropdown-item>
-                <el-dropdown-item>FUC充值</el-dropdown-item>
-                <el-dropdown-item>BTC提现</el-dropdown-item>
-                <el-dropdown-item>BTC充值</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+
+          <el-col class="w5p lh60">
+            <span class="fr">币种</span>
           </el-col>
+          <!--币种-->
+          <el-col :span="12" class="w8p fz12">
+            <el-select v-model="selectCoin" placeholder="请选择">
+              <el-option class="fz12"
+                v-for="item in coinTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+
+          <el-col class="w5p lh60">
+            <span class="fr">类型</span>
+          </el-col>
+          <!--类型-->
+          <el-col :span="12" class="w8p">
+            <el-select v-model="selectType" placeholder="请选择">
+              <el-option
+                v-for="item in typeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col class="w5p lh60">
+            <span class="fr">状态</span>
+          </el-col>
+          <!--类型-->
           <el-col :span="12">
-            <span>状态</span>
-            <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                全部<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>买</el-dropdown-item>
-                <el-dropdown-item>卖</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+
+            <!--<el-col>-->
+            <el-select class="fl" v-model="selectStatus" placeholder="请选择">
+
+              <el-option class=""
+                v-for="item in statusList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-col>
         </el-row>
       </div>
@@ -101,6 +109,61 @@
   export default {
     data() {
       return {
+        //市场
+        market: [
+          {
+            value: '0',
+            label: 'FBT交易区'
+          }, {
+            value: '1',
+            label: 'FUC交易区'
+          }, {
+            value: '2',
+            label: 'BTC交易区'
+          }
+        ],
+        selectMarket: '',//市场选中值
+        //币种列表
+        coinTypeList: [
+          {
+            value: '3',
+            label: 'FBT交易区'
+          }, {
+            value: '4',
+            label: 'FUC交易区'
+          }, {
+            value: '5',
+            label: 'BTC交易区'
+          }
+        ],
+        selectCoin: '',//币种选中值
+
+        //类型
+        typeList: [
+          {
+            value: '6',
+            label: '充值'
+          },
+          {
+            value:'7',
+            label:'提现'
+          }
+        ],
+        selectType:'6',//类型选中值
+
+        //状态
+        statusList:[
+          {
+            vlaue:'8',
+            label:'等待提现'
+          },
+          {
+            value:'9',
+            label:'提现完成'
+          }
+        ],
+        selectStatus:8,//状态选中值
+
         pickerOptions1: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -127,7 +190,31 @@
           }
         ]
       };
-    }
+    },
+    methods:{
+      getRecord(){
+        let recordUrl = common.apidomain+'financial/record';
+        let fd = new FormData();
+        // fd.append('symbol',);
+        // fd.append('currentPage',);
+        // fd.append('type',);
+        // fd.append('datetype',);
+        // fd.append('begindate',);
+        // fd.append('enddate',);
+        /*
+        * 参数
+        * symbol: 15
+        * //currentPage
+          type: 1
+          datetype: 0
+          begindate: 2018-04-13
+          enddate: 2018-04-13
+          */
+
+      },//获取表单数据
+    },
+    computed:{},
+    created(){}
   };
 </script>
 <style scoped>
@@ -203,7 +290,8 @@
   .block-col-2 {
     padding: 0 15px;
   }
-  .el-date-editor .el-range__icon{
+
+  .el-date-editor .el-range__icon {
     /*line-height: 24px;*/
   }
 </style>

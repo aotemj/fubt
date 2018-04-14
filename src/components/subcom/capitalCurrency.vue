@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-  
+
   export default {
     data(){
       var validatePass = (rule, value, callback) => {
@@ -71,7 +71,7 @@
     created(){},
     computed:{},
     components:{
-      
+
     }
   }
 </script>
@@ -88,8 +88,8 @@
     margin-right: 3%;
 }
 .add_card{
-    width: 250px;
-    height: 130px;
+    width: 275px;
+    height: 135px;
     border: 1px solid #c2c3c8;
     border-radius:5px;
     cursor: pointer;

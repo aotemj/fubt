@@ -13,7 +13,7 @@
                     </div>
                     <span class="hint_information">*银行卡账户名必须与您实名认证姓名一致</span>
                 </el-form-item>
-                
+
                 <el-form-item label="银行卡号" class="border_bottom">
                     <div class="add_right">
                         <el-input v-model="form.card" auto-complete="off"></el-input>
@@ -59,7 +59,7 @@
   </div>
 </template>
 <script>
-  
+
   export default {
     data(){
       return {
@@ -89,7 +89,7 @@
     created(){},
     computed:{},
     components:{
-      
+
     }
   }
 </script>
@@ -106,8 +106,8 @@
     margin-right: 3%;
 }
 .add_card{
-    width: 250px;
-    height: 130px;
+    width: 275px;
+    height: 135px;
     border: 1px solid #c2c3c8;
     border-radius:5px;
     cursor: pointer;

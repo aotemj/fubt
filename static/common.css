@@ -476,6 +476,18 @@ el-carousel-item img{
 .withdraw-deposit-box .el-select{
   width: 400px;
 }
+.billing_box .el-col-12{
+  line-height: 60px;
+}
+
+.fund_box .el-input--suffix .el-input__inner, .el-form-item__label{
+  border:none;
+  background-color:#0f1425;
+}
+.fund_box .tabs li.active .el-input--suffix .el-input__inner, .el-form-item__label{
+  color:#407edf;
+}
+
 /*错误提示*/
 .false-tips {
   margin-top: 20px;

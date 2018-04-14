@@ -156,6 +156,23 @@
                         </el-dialog>
                       </i>
                     </li>
+                    <!--BTC提现-->
+                    <li class="pr" v-if="item.shortName=='BTC'">
+                      <span class="fl">BTC网络手续费</span>
+                      <el-select class="fr" v-model="btcfeesIndex" placeholder="请选择">
+                        <el-option key="0" value="0" label="0.0001"></el-option>
+                        <el-option key="1" value="1" label="0.0002"></el-option>
+                        <el-option key="2" value="2" label="0.0003"></el-option>
+                        <el-option key="3" value="3" label="0.0004"></el-option>
+                        <el-option key="4" value="4" label="0.0005"></el-option>
+                        <el-option key="5" value="5" label="0.0006"></el-option>
+                        <el-option key="6" value="6" label="0.0007"></el-option>
+                        <el-option key="7" value="7" label="0.0008"></el-option>
+                        <el-option key="8" value="8" label="0.0009"></el-option>
+                        <el-option key="9" value="9" label="0.0010"></el-option>
+
+                      </el-select>
+                    </li>
 
                     <li v-if="item.shortName!=='TYZ'">
                       <span class="fl">提现数量</span>
@@ -177,12 +194,16 @@
                     <li class="verify-li">
                       <span class="fl">短信验证码</span>
                       <input class="fr" type="text" v-model="submitWithdrawMsg">
-                      <input class="verify-btn" v-on:click="sendCode('submitWithdraw')" type="button" :disabled="msgDisabledForSubmitWithdraw" v-model="submitBtnTxt">
+                      <input class="verify-btn" v-on:click="sendCode('submitWithdraw')" type="button"
+                             :disabled="msgDisabledForSubmitWithdraw" v-model="submitBtnTxt">
                     </li>
                     <li>
-                      <div class="false-tips fz12 mt-10"><i v-show="submitWithdrawErrorMsg"></i>{{submitWithdrawErrorMsg}}</div>
+                      <input class="fr submit" type="button" value="提交提现订单" v-on:click="submitWithdraw(item.shortName)">
 
-                        <input class="fr submit" type="button" value="提交提现订单" v-on:click="submitWithdraw(item.shortName)">
+                    </li>
+                    <li>
+                      <div class="false-tips fz12 mt-10"><i v-show="submitWithdrawErrorMsg"></i>{{submitWithdrawErrorMsg}}
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -252,16 +273,16 @@
         //  新增提现地址
         withdrawAddress: '',//1.提现地址
         withdrawAddressList: [
-        /*
-        * fadderess:"FqKekmNtx43b5amcW9oTKbSQWfAoTabZy9"
-          fcoinid:1
-          fcreatetime:1523502617000
-          fid:269
-          fremark:""
-          fuid:300221
-          init:true
-          version:0
-          */
+          /*
+          * fadderess:"FqKekmNtx43b5amcW9oTKbSQWfAoTabZy9"
+            fcoinid:1
+            fcreatetime:1523502617000
+            fid:269
+            fremark:""
+            fuid:300221
+            init:true
+            version:0
+            */
         ],
 
         newWithdrawAddress: '',//新增提现地址
@@ -280,12 +301,14 @@
         //非天涯币
         withdrawCount: '',//提现数量
         submitWithdrawMsg: '',//提现短信验证码
-        submitWithdrawErrorMsg:'',//提交订单错误信息
-        msgDisabledForSubmitWithdraw:false,//短信验证码按钮状态
-        submitTimer:0,//提交订单发送验证码时间
-        submitBtnTxt:'获取验证码',//短信验证码文字
-        activeCoinId:'',//提现币种id
+        submitWithdrawErrorMsg: '',//提交订单错误信息
+        msgDisabledForSubmitWithdraw: false,//短信验证码按钮状态
+        submitTimer: 0,//提交订单发送验证码时间
+        submitBtnTxt: '获取验证码',//短信验证码文字
+        activeCoinId: '',//提现币种id
+        btcfeesIndex:0,//btc提现手续费
         //天涯币
+
       }
     },
     methods: {
@@ -421,7 +444,13 @@
       submitWithdraw(coinType) {
         //非天涯币
         if (coinType != 'TYZ') {
-          console.log('非');
+
+            console.log(this.withdrawAddress);
+            console.log(this.withdrawCount);
+            console.log(this.tradePwd);
+            console.log(this.submitWithdrawMsg);
+            console.log(this.btcfeesIndex);
+            console.log(this.activeCoinId);
 
           /*
           * withdrawAddr: 273
@@ -432,15 +461,29 @@
             symbol: 1
             btcfeesIndex: 0*/
 
-          let withdrawUrl = common.apidomain+'withdraw/coin_manual';
+          let withdrawUrl = common.apidomain + 'withdraw/coin_manual';
           let fd = new FormData();
-          fd.append('withdrawAddr',this.withdrawAddress);
-          fd.append('withdrawAmount',this.withdrawCount);
-          fd.append('tradePwd',this.tradeCode);
-          fd.append('totpCode',0);
-          fd.append('phoneCode',this.submitWithdrawMsg);
-          fd.append('symbol',this.activeCoinId);
-          fd.append('btcfeesIndex',);
+          fd.append('withdrawAddr', this.withdrawAddress);
+          fd.append('withdrawAmount', this.withdrawCount);
+          fd.append('tradePwd', this.tradePwd);
+          fd.append('totpCode', 0);
+          fd.append('phoneCode', this.submitWithdrawMsg);
+          fd.append('symbol', this.activeCoinId);
+          // if(coinType=='BTC'){
+            fd.append('btcfeesIndex',this.btcfeesIndex);
+          // }
+          ajax(withdrawUrl,'post',fd,(res)=>{
+            console.log(res.data);
+            this.submitWithdrawErrorMsg=res.data.msg;
+            if(res.data.code!=200){
+              this.submitWithdrawErrorMsg == res.data.msg;
+              // this.submitWithdrawErrorMsg == '错误';
+              return;
+            }else{
+              this.$store.commit('changeDialogInfo',res.data.msg);
+
+            }
+          });
         } else {
           //  天涯币
           console.log('天涯币');
@@ -485,10 +528,11 @@
           symbol: 1
           password:
           remark: */
+        console.log(this.activeCoinId);
         fd.append('withdrawAddr', this.newWithdrawAddress);
         fd.append('totpCode', 0);
         fd.append('phoneCode', this.msgForNewAddress);
-        fd.append('symbol', 1);
+        fd.append('symbol', this.activeCoinId);
         fd.append('password', this.tradePwd);
         fd.append('remark', this.remark);
         ajax(addNewAddressUrl, 'post', fd, (res) => {
@@ -532,8 +576,8 @@
               this.addMsgTimer();
             }
           });
-        }else if (msgType =='submitWithdraw'){
-          this.sendCodeAll('submitWithdraw').then((res)=>{
+        } else if (msgType == 'submitWithdraw') {
+          this.sendCodeAll('submitWithdraw').then((res) => {
             console.log(res);
 
             if (res.data.code !== 200) {
@@ -596,7 +640,7 @@
             ajax(msgUrl, 'post', fd, (res) => {
               resolve(res);
             })
-          }else if (msgType =='submitWithdraw'){
+          } else if (msgType == 'submitWithdraw') {
             /*
             *
             * type: 105
