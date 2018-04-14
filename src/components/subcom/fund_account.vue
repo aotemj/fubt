@@ -18,43 +18,41 @@
     <div class="cards clearfix">
       <div v-show="tabId===0">
         <!--虚拟币列表-->
-        <ul>
-          <li class="bank-card-item fw7" v-for="(item,index) in accountcoinList">
+        <ul v-if="accountcoinList.length">
+          <li class="bank-card-item account-item fw7" v-for="(item,index) in accountcoinList">
             <div class="inner-box">
               <!--顶部-->
               <div class="top clearfix">
-                <div class="logo fl mr20"
-                     v-bind:style="{'background':'url(https://www.fubt.top/front/images/finance/banklogo/'+item.fbanktype+'.png) no-repeat center center'}">
 
-                </div>
-                <!--银行卡号-->
+                <!--虚拟币地址-->
                 <div class="bank-name fl clearfix mr10">
                   <!--银行名称-->
-                  <div class="name tl fw7">{{item.fname}}</div>
-                  <!--银行卡号-->
-                  <div class="num fw7 lh30">**** **** ****
-                    {{item.fbanknumber.substring(item.fbanknumber.length-4,item.fbanknumber.length)}}
-                  </div>
+                  <div class="name tl fw7">{{item.fadderess}}</div>
                 </div>
                 <!--删除按钮-->
-                <div class="del fr lh40 fz16">
+                <div class="del fr lh20 fz16">
                   <i class="el-icon-delete"></i>
                 </div>
               </div>
               <!--底部-->
               <div class="bottom tl">
+                <div class="desc pr lh30">
+                  <i class="iconfont icon-erweima fw4 mr10" v-on:mouseenter="showErcode(index,item.fadderess)"
+                     v-on:mouseleave="hiddenErcode"></i>
+                  {{item.fremark}}
+                  <!--<div class="ercode pa" v-show="ercodeIsShowId==index"></div>-->
+                  <VueQrcode class=" ercode pa" :value="String(item.fadderess)" :options="{ size: 100 }"
+                             v-show="ercodeIsShowId==index"></VueQrcode>
 
-                <div class="desc">
-                  {{item.fname}}，{{item.faddress}}
                 </div>
                 <div class="address">
-                  {{item.fprov}}{{item.fcity}}
+
                 </div>
               </div>
             </div>
           </li>
         </ul>
-        <Currency class="fl"></Currency>
+        <Currency class="fl" :select-coin="selectCoin"></Currency>
       </div>
       <div v-show="tabId===1">
         <!--银行卡列表-->
@@ -87,7 +85,7 @@
                 <div class="desc">
                   {{item.fname}}，{{item.faddress}}
                 </div>
-                <div class="address">
+                <div class="address lh30">
                   {{item.fprov}}{{item.fcity}}
                 </div>
               </div>
@@ -146,6 +144,7 @@
   import Currency from './capitalCurrency.vue' //币种地址
   import Bank from './capitalBank.vue' //银行卡地址
   import Alipay from './capitalAlipay.vue' //支付宝地址
+  import VueQrcode from '@xkeshi/vue-qrcode'//二维码
 
   export default {
     data() {
@@ -183,121 +182,134 @@
 
         //银行卡列表
         bankCardList: [
-          {
-            "fid": 104,
-            "fuid": 300200,
-            "fname": "不知道银行",
-            "fbanknumber": "6217994910112120383",
-            "fbanktype": 10,
-            "fbanktype_s": null,
-            "fcreatetime": 1523604175000,
-            "fstatus": 1,
-            "version": 0,
-            "init": true,
-            "faddress": "123",
-            "frealname": "吕冰洋",
-            "fprov": "河南",
-            "fcity": "郑州",
-            "ftype": 0,
-            "fdist": "中原区"
-          },
-          {
-            "fid": 104,
-            "fuid": 300200,
-            "fname": "不知道银行",
-            "fbanknumber": "6217994910112120383",
-            "fbanktype": 10,
-            "fbanktype_s": null,
-            "fcreatetime": 1523604175000,
-            "fstatus": 1,
-            "version": 0,
-            "init": true,
-            "faddress": "123",
-            "frealname": "吕冰洋",
-            "fprov": "河南",
-            "fcity": "郑州",
-            "ftype": 0,
-            "fdist": "中原区"
-          },
-          {
-            "fid": 104,
-            "fuid": 300200,
-            "fname": "不知道银行",
-            "fbanknumber": "6217994910112120383",
-            "fbanktype": 10,
-            "fbanktype_s": null,
-            "fcreatetime": 1523604175000,
-            "fstatus": 1,
-            "version": 0,
-            "init": true,
-            "faddress": "123",
-            "frealname": "吕冰洋",
-            "fprov": "河南",
-            "fcity": "郑州",
-            "ftype": 0,
-            "fdist": "中原区"
-          },
-          {
-            "fid": 104,
-            "fuid": 300200,
-            "fname": "不知道银行",
-            "fbanknumber": "6217994910112120383",
-            "fbanktype": 10,
-            "fbanktype_s": null,
-            "fcreatetime": 1523604175000,
-            "fstatus": 1,
-            "version": 0,
-            "init": true,
-            "faddress": "123",
-            "frealname": "吕冰洋",
-            "fprov": "河南",
-            "fcity": "郑州",
-            "ftype": 0,
-            "fdist": "中原区"
-          },
-          {
-            "fid": 104,
-            "fuid": 300200,
-            "fname": "不知道银行",
-            "fbanknumber": "6217994910112120383",
-            "fbanktype": 10,
-            "fbanktype_s": null,
-            "fcreatetime": 1523604175000,
-            "fstatus": 1,
-            "version": 0,
-            "init": true,
-            "faddress": "123",
-            "frealname": "吕冰洋",
-            "fprov": "河南",
-            "fcity": "郑州",
-            "ftype": 0,
-            "fdist": "中原区"
-          }
+          // {
+          //   "fid": 104,
+          //   "fuid": 300200,
+          //   "fname": "不知道银行",
+          //   "fbanknumber": "6217994910112120383",
+          //   "fbanktype": 10,
+          //   "fbanktype_s": null,
+          //   "fcreatetime": 1523604175000,
+          //   "fstatus": 1,
+          //   "version": 0,
+          //   "init": true,
+          //   "faddress": "123",
+          //   "frealname": "吕冰洋",
+          //   "fprov": "河南",
+          //   "fcity": "郑州",
+          //   "ftype": 0,
+          //   "fdist": "中原区"
+          // },
+          // {
+          //   "fid": 104,
+          //   "fuid": 300200,
+          //   "fname": "不知道银行",
+          //   "fbanknumber": "6217994910112120383",
+          //   "fbanktype": 10,
+          //   "fbanktype_s": null,
+          //   "fcreatetime": 1523604175000,
+          //   "fstatus": 1,
+          //   "version": 0,
+          //   "init": true,
+          //   "faddress": "123",
+          //   "frealname": "吕冰洋",
+          //   "fprov": "河南",
+          //   "fcity": "郑州",
+          //   "ftype": 0,
+          //   "fdist": "中原区"
+          // },
+          // {
+          //   "fid": 104,
+          //   "fuid": 300200,
+          //   "fname": "不知道银行",
+          //   "fbanknumber": "6217994910112120383",
+          //   "fbanktype": 10,
+          //   "fbanktype_s": null,
+          //   "fcreatetime": 1523604175000,
+          //   "fstatus": 1,
+          //   "version": 0,
+          //   "init": true,
+          //   "faddress": "123",
+          //   "frealname": "吕冰洋",
+          //   "fprov": "河南",
+          //   "fcity": "郑州",
+          //   "ftype": 0,
+          //   "fdist": "中原区"
+          // },
+          // {
+          //   "fid": 104,
+          //   "fuid": 300200,
+          //   "fname": "不知道银行",
+          //   "fbanknumber": "6217994910112120383",
+          //   "fbanktype": 10,
+          //   "fbanktype_s": null,
+          //   "fcreatetime": 1523604175000,
+          //   "fstatus": 1,
+          //   "version": 0,
+          //   "init": true,
+          //   "faddress": "123",
+          //   "frealname": "吕冰洋",
+          //   "fprov": "河南",
+          //   "fcity": "郑州",
+          //   "ftype": 0,
+          //   "fdist": "中原区"
+          // },
+          // {
+          //   "fid": 104,
+          //   "fuid": 300200,
+          //   "fname": "不知道银行",
+          //   "fbanknumber": "6217994910112120383",
+          //   "fbanktype": 10,
+          //   "fbanktype_s": null,
+          //   "fcreatetime": 1523604175000,
+          //   "fstatus": 1,
+          //   "version": 0,
+          //   "init": true,
+          //   "faddress": "123",
+          //   "frealname": "吕冰洋",
+          //   "fprov": "河南",
+          //   "fcity": "郑州",
+          //   "ftype": 0,
+          //   "fdist": "中原区"
+          // }
         ],
         //支付宝
         alipayList: [
-          {
-            "fid": 105,
-            "fuid": 300200,
-            "fname": "支付宝",
-            "fbanknumber": "13639753981",
-            "fbanktype": null,
-            "fbanktype_s": null,
-            "fcreatetime": 1523612739000,
-            "fstatus": 1,
-            "version": 0,
-            "init": true,
-            "faddress": null,
-            "frealname": "吕冰洋",
-            "fprov": null,
-            "fcity": null,
-            "ftype": 1,
-            "fdist": null
-          }
+          // {
+          //   "fid": 105,
+          //   "fuid": 300200,
+          //   "fname": "支付宝",
+          //   "fbanknumber": "13639753981",
+          //   "fbanktype": null,
+          //   "fbanktype_s": null,
+          //   "fcreatetime": 1523612739000,
+          //   "fstatus": 1,
+          //   "version": 0,
+          //   "init": true,
+          //   "faddress": null,
+          //   "frealname": "吕冰洋",
+          //   "fprov": null,
+          //   "fcity": null,
+          //   "ftype": 1,
+          //   "fdist": null
+          // }
         ],
 
         //虚拟币列表
-        accountcoinList: [],
+        accountcoinList: [
+          // {
+          //   fadderess: "FmSFk3bySA3K6zDsARmqcZnphvV9M76kTD",
+          //   fcoinid: 1,
+          //   fcreatetime: 1523520915000,
+          //   fid: 271,
+          //   fremark: "测试",
+          //   fuid: 300200,
+          //   init: true,
+          //   version: 0
+          // }
+        ],
+
+        ercodeIsShowId: -1,//现有虚拟币地址二维码显示状态id
         tabId: 1,
         form: {
           FUC: ''
@@ -305,6 +317,24 @@
       }
     },
     methods: {
+      //显示二维码
+      showErcode(index, address) {
+        this.ercodeIsShowId = index;
+
+      },
+      //隐藏二维码
+      hiddenErcode() {
+        this.ercodeIsShowId = -1;
+      },
+      //加载支付宝信息
+      loadAlipayList() {
+        return new Promise((resolve, reject) => {
+          let aliUrl = common.apidomain + 'financial/accountalipay';
+          ajax(aliUrl, 'post', {}, (res) => {
+            resolve(res);
+          });
+        });
+      },
       //加载银行信息
       loadAccountbankInfo() {
         return new Promise((resolve, reject) => {
@@ -317,17 +347,35 @@
       changeTabId(num) {
         this.tabId = num;
 
+        //银行卡
         if (this.tabId == 1) {
-
+          this.loadAccountbankInfo().then((res) => {
+            if (res.data.code !== 200) {
+              return;
+            }
+            this.bankCardList = res.data.data.fbankinfoWithdraws;
+          });
+        } else if (this.tabId == 2) {
+          //  支付宝
+          this.loadAlipayList().then((res) => {
+            if (res.data.code !== 200) {
+              return;
+            }
+            this.alipayList = res.data.data.fbankinfoWithdraws;
+          });
         }
       },
       //选择不同虚拟币
       change() {
+        this.accountcoinList = [];
         this.tabId = 0;
-        console.log(this.selectCoin);
-        this.loadAccountInfo().then((res)=>{
-          console.log(res);
-
+        this.loadAccountInfo().then((res) => {
+          if (res.data.code !== 200) {
+            return;
+          }
+          if (res.data.data.fvirtualaddressWithdraws.length !== 0) {
+            this.accountcoinList = res.data.data.fvirtualaddressWithdraws;
+          }
         });
       },
       // 加载虚拟币管理地址
@@ -346,7 +394,6 @@
     },
     created() {
       this.loadAccountbankInfo().then((res) => {
-        console.log(res);
         if (res.data.code !== 200) {
           return;
         }
@@ -361,6 +408,7 @@
       Currency,//添加地址
       Bank,//银行卡
       Alipay,//支付宝
+      VueQrcode,//二维码组件
     }
   }
 </script>
@@ -425,7 +473,7 @@
     box-sizing: border-box;
     /*background-color: pink;*/
     width: 100%;
-    height: 400px;
+    /*height: 400px;*/
   }
 
   /*.clearfix:after {*/
@@ -462,7 +510,7 @@
   }
 
   /*单个银行卡*/
-  .bank-card-item, .alipay-item {
+  .bank-card-item, .alipay-item .account-item {
     float: left;
     width: 275px;
     height: 135px;
@@ -475,6 +523,11 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+  }
+
+  .account-item {
+    width: 430px;
+    height: 85px;
   }
 
   .bank-card-item .inner-box, .alipay-item .inner-box {
@@ -501,8 +554,14 @@
   }
 
   .bank-card-item .inner-box .bottom, .alipay-item .inner-box .bottom {
-    padding: 10px 10px;
-
+    padding: 5px 15px;
   }
+
+  .account-item .desc .ercode {
+    width: 100px;
+    height: 100px;
+    background-color: pink;
+  }
+
 </style>
 

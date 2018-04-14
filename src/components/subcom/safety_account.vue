@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="security">
+      <tips></tips>    <!-- 杨孝喜 -->
       <p class="account-info">账户信息</p>
       <ul class="subMenu">
         <li>
@@ -219,7 +220,7 @@ videoTime:null*/
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
   import Graphic from "./GraphicVerification.vue"
-
+  import tips from './friendlyTips'//提示信息杨孝喜
   export default {
     data() {
       return {
@@ -312,10 +313,10 @@ videoTime:null*/
         let fda = new FormData();
         fda.append('originPwd', this.codepassword);//旧密码
         fda.append('newPwd', this.password);//密码
-        fda.append('reNewPwd', this.confirmPwd);//密码
-        fda.append('phoneCode', this.loginCode);//密码
+        fda.append('reNewPwd', this.confirmPwd);//确认密码
+        fda.append('phoneCode', this.loginCode);//验证码
         ajax(regUrl, 'post', fda, (res) => {
-          this.errorMsg = res.data.msg;
+          this.$store.commit('changeDialogInfo',{datainfo:'修改成功',skipurl:'login'})
           return;
           console.log(res)
         })
@@ -418,7 +419,7 @@ videoTime:null*/
         bindfd.append('type', 106);
         bindfd.append('msgtype', 1);
         bindfd.append('areaCode', 0);
-        bindfd.append('phone', 0);
+        bindfd.append('phone', this.phoneNum);
         bindfd.append('vcode', 0);
         bindfd.append('uid', 0);
         ajax(bindUrl, 'post', bindfd, (res) => {
@@ -563,16 +564,38 @@ videoTime:null*/
         let tranfd = new FormData();
         tranfd.append('identityCode', this.IDNumber);// 身份证
         tranfd.append('newPwd', this.newpassword);//新密码
-        ftranfdda.append('reNewPwd', this.confirmpassword);//确认密码
+        tranfd.append('reNewPwd', this.confirmpassword);//确认密码
         tranfd.append('phoneCode', this.magCode);//验证码
         ajax(transactionUrl, 'post', tranfd, (res) => {
-          this.tranrMsg = res.data.msg;
-          return;
+          this.$store.commit('changeDialogInfo','修改成功')
+          this.transactionFormVisible = false
           console.log(res)
         })
       },
+       // 交易密码
+      phoneCode(){
+        let TrUrl = common.apidomain + 'user/send_sms';
+        let fd = new FormData();
+        fd.append('type', 106);
+        fd.append('msgtype', 1);
+        fd.append('areaCode', 0);
+        fd.append('phone', 0);
+        fd.append('vcode', 0);
+        fd.append('uid', 0);
+        ajax(TrUrl, 'post', fd, (res) => {
+          console.log(res);
+          if(res.data.code!==200){
+            this.tranrMsg = res.data.msg;
+            return;
+          }else{
+            this.magTime = 60;
+            this.magDisabled = true;
+            this.magTimer();
+          }
+        })
+      },
       //60s短信倒计时
-      msgTimer() {
+      magTimer() {
         if (this.magTime > 0) {
           this.magTime--;
           this.magBtnTxt = this.magTime + "s后重新获取"
@@ -592,28 +615,7 @@ videoTime:null*/
           return 1;
         }
       },
-      // 交易密码
-      phoneCode(){
-        let TrUrl = common.apidomain + 'user/send_sms';
-        let fd = new FormData();
-          fd.append('type', 106);
-          fd.append('msgtype', 1);
-          fd.append('areaCode', 0);
-          fd.append('phone', 0);
-          fd.append('vcode', 0);
-          fd.append('uid', 0);
-          ajax(TrUrl, 'post', fd, (res) => {
-            console.log(res);
-            if(res.data.code!==200){
-              this.tranrMsg = res.data.msg;
-              return;
-            }else{
-              this.magTime = 60;
-              this.magDisabled = true;
-              this.magTimer();
-            }
-          })
-      },
+     
 
 //绑定邮箱
       Bindingmailbox(){
@@ -681,7 +683,8 @@ videoTime:null*/
       console.log(this.$store.state.userInfo.ftradepassword)
     },
     components: {
-      Graphic
+      Graphic,//图形验证码杨孝喜
+      tips,//弹窗组件杨孝喜
     }
   }
 </script>

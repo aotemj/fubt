@@ -1,127 +1,264 @@
 <template>
   <div class="fund_box">
     <div class="cards">
-        <div class="add_card" @click="dialogFormVisible = true">
-            <p>+</p>
-            <span>添加银行卡</span>
-        </div>
-        <el-dialog title="添加银行卡" :visible.sync="dialogFormVisible" width="30%" center>
-            <el-form :model="form" id="from_add">
-                <el-form-item label="开户姓名" class="border_bottom">
-                    <div class="add_right">
-                        <el-input v-model="form.name" auto-complete="off"></el-input>
-                    </div>
-                    <span class="hint_information">*银行卡账户名必须与您实名认证姓名一致</span>
-                </el-form-item>
-
-                <el-form-item label="银行卡号" class="border_bottom">
-                    <div class="add_right">
-                        <el-input v-model="form.card" auto-complete="off"></el-input>
-                    </div>
-                </el-form-item>
-                    <el-form-item label="确认卡号" class="border_bottom">
-                    <div class="add_right">
-                        <el-input v-model="form.confirmcard" auto-complete="off"></el-input>
-                    </div>
-                </el-form-item>
-                <el-form-item label="开户银行" class="border_bottom">
-                    <el-select class="reg_select" v-model="form.AccountOpening " placeholder="请选择银行类型">
-                    <el-option label="中国工商银行" value="gongshang"></el-option>
-                    <el-option label="中国建设银行" value="jianshe"></el-option>
-                    <el-option label="中国农业银行" value="nongye"></el-option>
-                    <el-option label="中国交通银行" value="jiaotong"></el-option>
-                    <el-option label="中国招商银行" value="zhaoshang"></el-option>
-                    <el-option label="中国邮政储蓄银行" value="cuxu"></el-option>
-                    <el-option label="中国银行" value="zhongguo"></el-option>
-                    <el-option label="中国民生银行" value="minsheng"></el-option>
-                    <el-option label="中国光大银行" value="guangda"></el-option>
-                    <el-option label="兴业银行" value="xingye"></el-option>
-                    <el-option label="上海浦东银行" value="pudong"></el-option>
-                    <el-option label="中信银行" value="zhongxin"></el-option>
-                    <el-option label="华夏银行" value="huaxia"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="短信验证" class="border_bottom">
-                    <div class="add_right">
-                        <el-input v-model="form.ver" placeholder="请输入验证码"></el-input>
-                        <p class="Verification">
-                            <span>|</span>&nbsp;
-                            <span>发送验证码</span>
-                        </p>
-                    </div>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <div class="add_card" @click="dialogFormVisible = true">
+        <p>+</p>
+        <span>添加银行卡</span>
+      </div>
+      <el-dialog title="添加银行卡" :visible.sync="dialogFormVisible" width="30%" center>
+        <el-form  id="from_add">
+          <el-form-item label="开户姓名" class="border_bottom">
+            <div class="add_right">
+              <el-input v-model="username" auto-complete="off"></el-input>
             </div>
-        </el-dialog>
+            <span class="hint_information">*银行卡账户名必须与您实名认证姓名一致</span>
+          </el-form-item>
+
+          <el-form-item label="银行卡号" class="border_bottom">
+            <div class="add_right">
+              <el-input v-model="bankAccount" auto-complete="off"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="确认卡号" class="border_bottom">
+            <div class="add_right">
+              <el-input v-model="confirmBankAccount" auto-complete="off"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="开户银行" class="border_bottom">
+            <el-select class="reg_select" v-model="AccountOpening " placeholder="请选择银行类型">
+              <el-option label="中国工商银行" value="gongshang"></el-option>
+              <el-option label="中国建设银行" value="jianshe"></el-option>
+              <el-option label="中国农业银行" value="nongye"></el-option>
+              <el-option label="中国交通银行" value="jiaotong"></el-option>
+              <el-option label="中国招商银行" value="zhaoshang"></el-option>
+              <el-option label="中国邮政储蓄银行" value="cuxu"></el-option>
+              <el-option label="中国银行" value="zhongguo"></el-option>
+              <el-option label="中国民生银行" value="minsheng"></el-option>
+              <el-option label="中国光大银行" value="guangda"></el-option>
+              <el-option label="兴业银行" value="xingye"></el-option>
+              <el-option label="上海浦东银行" value="pudong"></el-option>
+              <el-option label="中信银行" value="zhongxin"></el-option>
+              <el-option label="华夏银行" value="huaxia"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <!--<el-form-item label="短信验证" class="border_bottom">-->
+          <!--<div class="add_right">-->
+          <!--<el-input v-model="form.ver" placeholder="请输入验证码"></el-input>-->
+          <!--<p class="Verification">-->
+          <!--<span>|</span>&nbsp;-->
+          <!--<span>发送验证码</span>-->
+          <!--</p>-->
+          <!--</div>-->
+          <!--</el-form-item>-->
+
+
+          <el-form-item label="短信验证码">
+            <el-input class="input-info input-with-select" v-model="msgForNewAddress"
+                      placeholder="请输入短信验证码">
+              <el-button slot="append" size="mini" class="bdr0 w100p"
+                         :disabled="msgDisabledForAddress"
+                         v-on:click="sendCode('addAddress')">{{msgBtnTxt}}
+              </el-button>
+            </el-input>
+          </el-form-item>
+          <!--错误提示-->
+          <el-form-item label="      ">
+            <div class="false-tips fz12 mt-10"><i v-show="addAddressErrorMsg"></i>{{addAddressErrorMsg}}
+            </div>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 <script>
 
   export default {
-    data(){
+    data() {
       return {
-        active: false,
-        sites:[
-            {name:'FBT'},
-            {name:'FUC'},
-            {name:'BTC'},
-            {name:'FUC'},
-            {name:'FUC'},
-            {name:'FUC'},
-            {name:'FUC'},
-            {name:'FUC'}
-        ],
+
         dialogFormVisible: false,
-        form: {
-          name: '',
-          card: '',
-          confirmcard: '',
-          AccountOpening:'',
-          ver:'',
-        }
+        username: '',//用户姓名
+        bankAccount: '',//银行卡号
+        confirmBankAccount:'',//确认银行卡号
+        AccountOpening:'',//开户行
+        addAddressErrorMsg: '',//错误信息
+        msgForNewAddress: '',//短信验证码
+        msgDisabledForAddress: false,//短信验证码按钮状态
+        msgBtnTxt: '发送验证码',//短信验证码按钮文字
       }
     },
-    methods:{
-    },
-    created(){},
-    computed:{},
-    components:{
+    methods: {
 
-    }
+      //新增提现地址
+      addNewAddress() {
+        if (!this.username) {
+          this.addAddressErrorMsg = '请输入您的真实姓名';
+          return;
+        } else if (!this.aliAccount) {
+          this.addAddressErrorMsg = '请输入您的支付宝账号';
+          return;
+        } else if (!this.msgForNewAddress) {
+          this.addAddressErrorMsg = '请输入短信验证码';
+          return;
+        } else {
+          this.addAddressErrorMsg = '';
+        }
+
+        let addNewAddressUrl = common.apidomain + 'user/save_alipay';
+        let fd = new FormData();
+        /*
+        *
+        * account: 13939753981
+          totpCode: 0
+          phoneCode: 111111
+          payeeAddr: 测试
+          */
+        fd.append('account', this.aliAccount);//支付宝账号
+        fd.append('totpCode', 0);//
+        fd.append('phoneCode', this.msgForNewAddress);//手机验证码
+        fd.append('payeeAddr', this.username);//真实姓名
+        ajax(addNewAddressUrl, 'post', fd, (res) => {
+          console.log(res);
+          if (res.data.code !== 200) {
+            this.addAddressErrorMsg = res.data.msg;
+            return;
+          }
+          this.$store.commit('changeDialogInfo', res.data.msg);
+        });
+        this.$parent.changeTabId(2);
+      },
+      //发送验证码
+      sendCode(msgType) {
+        if (!this.username) {
+          this.addAddressErrorMsg = '请输入您的真实姓名';
+          return;
+        } else if (!this.aliAccount) {
+          this.addAddressErrorMsg = '请输入您的支付宝账号';
+          return;
+        } else {
+          this.addAddressErrorMsg = '';
+        }
+        this.sendCodeAll('addAddress').then((res) => {
+          console.log(res);
+          if (res.data.code !== 200) {
+            this.addAddressErrorMsg = res.data.msg;
+            return;
+          } else {
+            this.addAddressErrorMsg = '';
+            this.addAddressTimer = 60;
+            this.msgDisabledForAddress = true;
+            this.addMsgTimer();
+          }
+        });
+
+        // let msgUrl = common.apidomain + 'user/send_sms';
+        //
+        // let fd = new FormData();
+        //
+        // fd.append('type', 111);
+        // fd.append('msgtype', 1);
+        // fd.append('areaCode', '+86');
+        // fd.append('phone', this.registerInfo.phoneNum);
+        // fd.append('vcode', this.imgCode);
+        // fd.append('imageRedisKey', this.imageRedisKey);
+        // fd.append('uid', 0);
+        // ajax(msgUrl, 'post', fd, (res) => {
+        //   console.log(res);
+        //   if (res.data.code !== 200) {
+        //     this.errorMsg = res.data.msg;
+        //     return;
+        //   } else {
+        //     this.msgTime = 60;
+        //     this.msgDisabled = true;
+        //     this.msgTimer();
+        //   }
+        // })
+        // }
+        // });
+      },
+      addMsgTimer() {
+        if (this.addAddressTimer > 0) {
+          this.addAddressTimer--;
+          this.msgBtnTxt = this.addAddressTimer + "s后重新获取"
+          setTimeout(this.addMsgTimer, 1000);
+        } else {
+          this.addAddressTimer = 0;
+          this.msgBtnTxt = "获取验证码";
+          this.msgDisabledForAddress = false;
+        }
+      },
+      //发送验证码
+      sendCodeAll(msgType) {
+        return new Promise((resolve, reject) => {
+          let msgUrl = common.apidomain + 'user/send_sms';
+          let fd = new FormData();
+          /*
+           *type: 110
+            msgtype: 1
+            areaCode: 0
+            phone: 0
+            vcode: 0
+            uid: 0*/
+          fd.append('type', 110);
+          fd.append('msgtype', 1);
+          fd.append('areaCode', 0);
+          fd.append('phone', 0);
+          fd.append('vcode', 0);
+          fd.append('uid', 0);
+          ajax(msgUrl, 'post', fd, (res) => {
+            resolve(res);
+          })
+
+        })
+      },
+
+    },
+    created() {
+    },
+    computed: {},
+    components: {}
   }
 </script>
 <style scoped>
-.border_bottom{
+  .border_bottom {
     margin-bottom: 10px;
-}
-#from_add{
+  }
+
+  #from_add {
     width: 90%;
-}
-.add_right{
+  }
+
+  .add_right {
     width: 80%;
     float: right;
     margin-right: 3%;
-}
-.add_card{
+  }
+
+  .add_card {
     width: 275px;
     height: 135px;
     border: 1px solid #c2c3c8;
-    border-radius:5px;
+    border-radius: 5px;
     cursor: pointer;
-}
-.hint_information{
+  }
+
+  .hint_information {
     display: inline-block;
     margin-left: 20%;
-}
-.reg_select{
+  }
+
+  .reg_select {
     width: 80%;
     float: right;
     margin-right: 3%;
-}
-.add_card>p{
+  }
+
+  .add_card > p {
     width: 30px;
     height: 30px;
     border: 1px solid #c2c3c8;
@@ -130,15 +267,17 @@
     line-height: 30px;
     text-align: center;
     margin: 15% auto 5px;
-}
-.Verification{
-  float: right;
-  position:absolute;
-  top: 0px;
-  right: 6%;
-  cursor: pointer;
-}
-button {
+  }
+
+  .Verification {
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 6%;
+    cursor: pointer;
+  }
+
+  button {
     width: 70%;
     height: 35px;
     border-radius: 5px;
@@ -148,13 +287,15 @@ button {
     margin: 0 auto;
     color: #c2c3c8;
     margin-left: 14%;
-}
-.user-recharge>section>button:hover{
-  background: #409EFF;
-  color: #fff;
-  cursor: pointer;
-}
-.dialog-footer{
+  }
+
+  .user-recharge > section > button:hover {
+    background: #409EFF;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .dialog-footer {
     margin-top: -30px;
-}
+  }
 </style>

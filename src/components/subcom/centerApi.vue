@@ -1,5 +1,6 @@
 <template>
   <div style="margin:2% 0;">
+    <tips></tips>
     <div class="security">
       <div class="user-main">
         <el-collapse v-model="activeNames">
@@ -7,21 +8,25 @@
             <div class="api_box">
                 <label for="">密钥绑定IP</label>
                 <input type="text" placeholder="只有绑定的IP才能够通过API进行访问,若要填写多个ip中间用,分割" v-model="key">
-                <button v-on:click="IPkey">Api开启</button>
+                <button v-on:click="IPkey" v-show="ApiIP">Api开启</button>
             </div>
-            <!-- <div>{{this.Apikey}}</div>
-            <div>{{this.Msdify}}</div> -->
-            <!-- <p>温馨提示：私有秘钥允许您通过fubt开放协议提供API访问您的账户并执行交易指令，我们为您提供的秘钥非常重要，请妥善保管，Api私有秘钥(Sceret Key)：仅显示一次，若遗忘请重新。</p> -->
-            <div class="modify">
+            <p v-show="ApiIP">温馨提示：私有秘钥允许您通过fubt开放协议提供API访问您的账户并执行交易指令，我们为您提供的秘钥非常重要，请妥善保管，Api私有秘钥(Sceret Key)：仅显示一次，若遗忘请重新。</p>
+            <div class="modify" v-show="keyshow">
                 <button v-on:click="modifykey">修改秘钥绑定IP</button>
                 <label for="">API 访问密钥<br />(Access Key)</label>
-                <input type="text" v-model="Msdify" v-html="this.Msdify">
+                <input type="text" v-model="Msdify" disabled>
                 <label for="" style="margin-top: 0;">API 私有密钥<br />(Secret Key)</label>
-                <input type="password" v-model="Rese" v-html="this.Rese">
+                <input type="password" v-model="Rese" disabled>
                 <button v-on:click="Resetapi">重置API私有秘钥</button>
             </div>
           </el-collapse-item>
         </el-collapse>
+        <el-dialog title="温馨提示" :visible.sync="centerDialogVisible" width="35%" center>
+            <span style="color:#c2c3c8">{{ this.keytext }}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
   </div>
 </div>
@@ -29,13 +34,19 @@
 <script>
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+  import tips from './friendlyTips'//提示信息
   export default {
    data() {
       return {
+        centerDialogVisible: false,
+        keytext:'',
         activeNames: ['1'],
         key:'',//添加api
         Msdify:'',//修改api
         Rese:'',//重置api
+        Apikey:'',
+        keyshow:false,
+        ApiIP:true,
       };
     },
     methods: {
@@ -48,13 +59,18 @@
         */ 
         //添加api
         IPkey(){
+            // centerDialogVisible = true
             let ApiUrl = common.apidomain + 'user/addApikey';
             let Apifd = new FormData();
             Apifd.append('ip',this.key);
             ajax(ApiUrl, 'post', Apifd, (res) => {
-                // this.Apikey = res.data.msg;
-                console.log(this.Apikey);
+                this.Apikey = res.data.msg;
+                this.keytext = this.Apikey
+                // console.log(this.Apikey);
             });
+            this.keyshow = true;
+            this.ApiIP = false;
+            this.centerDialogVisible = true
         },
         //修改api
         modifykey(){
@@ -62,28 +78,36 @@
             let modifyfd = new FormData();
             modifyfd.append('ip',this.Msdify);
             ajax(modifyUrl, 'post', modifyfd, (res) => {
-                // this.Msdify = res.data.msg;
-                console.log(this.Msdify);
+                this.$store.commit('changeDialogInfo','修改成功')
+                // console.log(this.Msdify);
             });
         },
         //重置api
         Resetapi(){
-            let ResetUrl = common.apidomain + 'user/updateApiIp';
+            let ResetUrl = common.apidomain + 'user/resetApiKey';
             let Resetfd = new FormData();
-            Apifd.append('ip',this.Rese);
+            Resetfd.append('ip',this.Rese);
             ajax(ResetUrl, 'post', Resetfd, (res) => {
-                // this.Rese = res.data.msg;
-                console.log(this.Rese);
+                this.Rese = res.data.msg;
+                this.keytext = this.Rese
+                // console.log(this.Rese);
             });
+            this.centerDialogVisible = true
         }
-
-
     },
     computed:{},
     created(){
-      
+        this.ApiIP = true
+        this.keyshow = true
+        let Url = common.apidomain + 'user/apikey';
+        ajax(Url, 'post', {}, (res) => {
+            this.Msdify = res.data.data.api.apiaccesskey;
+            this.Rese = res.data.data.api.apisecretkey;
+        });
     },
-    components:{}
+    components:{
+        tips,//弹窗组件
+    }
   }
 </script>
 <style scoped>

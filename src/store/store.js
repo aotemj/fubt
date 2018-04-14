@@ -20,7 +20,8 @@ export default new Vuex.Store({
     // 弹出框信息
     message:{
       status:false,
-      dataInfo:''
+      dataInfo:'',
+      skipurl:''//要跳转的路由（第三个参数）
     },
     voteTipsStatus:false,//投票状态
 
@@ -52,17 +53,30 @@ export default new Vuex.Store({
     getPersonalAsset(state,data){
      state.personalAsset = data;
     },
-    // 4.0改变弹出框信息
-    changeDialogInfo(state,data){
+    // 4.0改变弹出框信息-友情提示-加入第三个跳转路由参数之 前 的
+    // changeDialogInfo(state,data){
+    //   state.message.status=true;
+    //   state.message.dataInfo=data;
+    // },
+    changeDialogInfo(state,data){//加入第三个跳转路由参数之 后 的
       state.message.status=true;
-      state.message.dataInfo=data;
+      state.message.dataInfo=data.dataInfo;
+      state.message.skipurl=data.skipurl;
+      // console.log(state.message.skipurl);
     },
-    // 5.0关闭弹窗
-    close(state){
+    // 5.0关闭弹窗-加入第三个跳转路由参数之前的
+    // close(state){
+    //   state.message.status=false;
+    //   state.message.dataInfo='';
+    //   state.voteTipsStatus = false;//关闭外层弹窗
+    // }
+    close(state){//加入第三个跳转路由参数之 后 的
       state.message.status=false;
       state.message.dataInfo='';
       state.voteTipsStatus = false;//关闭外层弹窗
-    }
+      // console.log(state.message.skipurl);
+      router.push({path:state.message.skipurl});
+    },
   }
 })
 
