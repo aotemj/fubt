@@ -1,58 +1,109 @@
 <template>
  <div>
     <div class="container-screen">
-      <!--<header>新币投票</header>-->
       <div class="voteNew">
-        <ul v-for="(item,index) in newrecordTab">
-            <li>{{item.time}}</li>
-            <li>{{item.currency}}</li>
-            <li>{{item.address}}</li>
-            <li>{{item.number}}</li>
-            <li>{{item.confirmation}}</li>
-            <li>{{item.state}}</li>
+        <ul>
+            <li>时间</li>
+            <li>币种</li>
+            <li>充值地址</li>
+            <li>充值数量</li>
+            <li>确认数</li>
+            <li>状态</li>
         </ul>
-        <div id="voteNew-list" v-show="newrecordList.length!==0">
-          <article v-for="(item,index) in newrecordList">
-            <span>{{item.time}}</span>
-            <span>{{item.currency}}</span>
-            <span>{{item.address}}</span>
-            <span>{{item.number}}</span>
-            <span>{{item.confirmation}}</span>
-            <span>{{item.state}}</span>
+        <div id="voteNew-list" v-show="recordList.length!==0">
+          <article v-for="(item,index) in recordList" :key="index">
+            <span>{{ item.fcreatetime }}</span>
+            <span>{{ item.updata }}</span>
+            <span>{{ item.address }}</span>
+            <span>{{ item.number }}</span>
+            <span>{{ item.confirmations }}</span>
+            <span>{{ item.status }}</span>
           </article>
         </div>
-        <div class="wu" v-show="newrecordList.length==0">暂无记录</div>
+        <div class="wu" v-show="recordList.length==0">暂无记录</div>
       </div>
     </div>
   </div>
 </template>
 <script>
+
+    // // 主键ID
+    // private Integer fid;
+    // // 银行卡ID
+    // private Integer fsysbankid;
+    // // 用户ID
+    // private Integer fuid;
+    // // 币种id
+    // private Integer fcoinid;
+    // // 创建时间
+    // private Date fcreatetime;
+    // // 数量
+    // private BigDecimal famount;
+    // // 充值或提现 CapitalOperationTypeEnum，汇款or提现
+    // private Integer finouttype;
+    // // 充值类型
+    // private Integer ftype;
+    // private String ftype_s;
+    // // 状态
+    // private Integer fstatus;// CapitalOperationInStatus||CapitalOperationOutStatus
+    // private String fstatus_s;
+    // // 汇款类型
+    // private Integer fremittancetype;
+    // // 备注
+    // private String fremark;
+    // // 充值银行
+    // private String fbank;
+    // // 银行帐号
+    // private String faccount;
+    // // 开户姓名
+    // private String fpayee;
+    // // 手机号
+    // private String fphone;
+    // // 更新时间
+    // private Date fupdatetime;
+    // // 审核管理员ID
+    // private Integer fadminid;
+    // // 手续费
+    // private BigDecimal ffees;
+    // // 版本号
+    // private Integer version;
+    // // 是否充值
+    // private Boolean fischarge;
+    // // 开户地址
+    // private String faddress;
+    // // 来源
+    // private Integer fsource;
+    // private String fsource_s;
+    // // 订单来源平台
+    // private Integer fplatform;
+    // private String fplatform_s;
+
+    // /********** 扩展字段 ************/
+
+    // // 登录名
+    // private String floginname;
+    // // 昵称
+    // private String fnickname;
+    // // 真实姓名
+    // private String frealname;
+    // // 审核人
+    // private String fadminname;
+
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
   export default {
     data(){
       return {
-        newrecordTab:[
-          {
-            time:'时间',
-            currency:'币种',
-            address:'充值地址',
-            number:'充值数量',
-            confirmation:'确认数',
-            state:'状态'
-          }
-        ],
         //充值列表
-        newrecordList:[
-        ]
+        recordList:[],
       }
     },
     methods:{
       newrecord() {
         return new Promise((resolve, reject) => {
-          let recordUrl = common.apidomain + 'operationRecord/coin_operationRecord';
+          let recordUrl = common.apidomain + 'financial/record';
           let record = new FormData();
-          record.append('operationType',1);
+          record.append('type',1);
           record.append('fuid',this.$store.state.userInfo.fid);
           ajax(recordUrl, 'post', record, (res) => {
             resolve(res);
@@ -65,8 +116,9 @@
         if (res.data.code !== 200) {
           return;
         }else{
-          this.newrecordList = res.data.data.page.data
           console.log(res)   
+          this.recordList = res.data.data.list.data
+          console.log(this.recordList)   
         }
       });
     },

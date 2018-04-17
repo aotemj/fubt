@@ -1,27 +1,26 @@
 <template>
  <div>
     <div class="container-screen">
-      <!--<header>新币投票</header>-->
       <div class="voteNew">
-        <ul v-for="(item,index) in newrecordTab">
-            <li>{{item.time}}</li>
-            <li>{{item.currency}}</li>
-            <li>{{item.address}}</li>
-            <li>{{item.number}}</li>
-            <li>{{item.confirmation}}</li>
-            <li>{{item.state}}</li>
+        <ul>
+            <li>时间</li>
+            <li>币种</li>
+            <li>提现地址</li>
+            <li>提现数量</li>
+            <li>确认数</li>
+            <li>状态</li>
         </ul>
-        <div id="voteNew-list" v-for="(item,index) in newrecordList" v-show="newrecordList.length!==0">
-          <article v-for="(item,index) in newrecordList">
-            <span>{{item.time}}</span>
-            <span>{{item.currency}}</span>
-            <span>{{item.address}}</span>
-            <span>{{item.number}}</span>
-            <span>{{item.confirmation}}</span>
-            <span>{{item.state}}</span>
+        <div id="voteNew-list" v-show="recordList.length!==0">
+          <article v-for="(item,index) in recordList" :key="index">
+            <span>{{ item.fcreatetime }}</span>
+            <span>{{ item.updata }}</span>
+            <span>{{ item.address }}</span>
+            <span>{{ item.number }}</span>
+            <span>{{ item.confirmations }}</span>
+            <span>{{ item.status }}</span>
           </article>
         </div>
-        <div class="wu" v-show="newrecordList.length==0">暂无记录</div>
+        <div class="wu" v-show="recordList.length==0">暂无记录</div>
       </div>
     </div>
   </div>
@@ -32,34 +31,15 @@
   export default {
     data(){
       return {
-        newrecordTab:[
-          {
-            time:'时间',
-            currency:'币种',
-            address:'提现地址',
-            number:'提现数量',
-            confirmation:'确认数',
-            state:'状态'
-          }
-        ],
-        newrecordList:[
-          {
-            time:'2018.3.29 20:30:20',
-            currency:'FTB',
-            address:'山东省',
-            number:'155631',
-            confirmation:'6',
-            state:'已确认'
-          }
-        ]
+        recordList:[]
       }
     },
     methods:{
       loadAlipayList() {
         return new Promise((resolve, reject) => {
-          let recordUrl = common.apidomain + 'operationRecord/coin_operationRecord';
+          let recordUrl = common.apidomain + 'financial/record';
           let record = new FormData();
-          record.append('operationType',2);
+          record.append('type',2);
           record.append('fuid',this.$store.state.userInfo.fid);
           ajax(recordUrl, 'post', record, (res) => {
             resolve(res);
@@ -72,7 +52,7 @@
           if (res.data.code !== 200) {
             return;
           }else{
-            this.newrecordList = res.data.data.page.data
+            this.recordList = res.data.data.list.data
             console.log(res)
           }
 
