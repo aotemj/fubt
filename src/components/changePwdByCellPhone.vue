@@ -47,9 +47,14 @@
           <span class="fz12">证件类型</span>
           <!--<input style="width:85%" class="mobile-input fl " type="text" v-model="idNum" placeholder="证件类型">-->
         </div>
-        <div class="select-box">
+        <!-- <div class="select-box">
           <input type="text" name="" placeholder="证件号码" v-model="idNum">
+        </div> -->
+        <div class="select-box" style="display:inline-block;">
+           <input type="text" name="" placeholder="证件号码" v-model="idNum">
         </div>
+        <span style="display:inline-block;">如果账户未实名可不填</span>
+
         <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
 
         <input class="register-btn dis-in-blk" type="button" value="下一步" v-on:click="next">

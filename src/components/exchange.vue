@@ -5,12 +5,337 @@
     <!-- 币种资料 -->
     <div class="currencyData">
       <div class="inner-box clearfix">
-        <div class="left fl clearfix">
-          <button class="chg-cur-btn fl" v-on:click="toggleCurList">
-            {{activeCoinInfo.sellsymbol}}/{{activeCoinInfo.buysymbol}}
-          </button>
-          <i class="iconfont fl" v-bind:class="{'icon-xiala':!curListIsShow,'icon-shangla-copy':curListIsShow}"></i>
-          <router-link to="/currencyInfo" class="cur-desc fff fl"><i class="iconfont icon-bianji"></i>币种资料</router-link>
+        <div class="left fl clearfix pr">
+          <el-collapse v-model="activeNames" @change="handleChange" class="pa">
+            <el-collapse-item name="1">
+              <template slot="title">
+                <!--{{activeCoinInfo.sellsymbol}}/{{activeCoinInfo.buysymbol}}-->
+                FUC / FBT
+              </template>
+              <div class="inner-cont pr">
+                <el-tabs v-model="marketActiveName">
+                  <!--FBT交易区-->
+                  <el-tab-pane name="fbt">
+                    <span slot="label"> ● FBT交易区</span>
+                    <div class="table" v-if="marketActiveName === 'fbt'">
+                      <el-table
+                        @row-click="chooseRow"
+                        align="left"
+                        :data="fbtFilteredData"
+                      >
+                        <!--市场-->
+                        <el-table-column
+                          :label="$t('m.pairs')"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                  <span class="ml30">
+                      <img :src="scope.row.image" alt="" class="bitIcon mr5">
+                    {{ scope.row.sellsymbol }}
+                    <!--<i>/</i>-->
+                    <!--<span class="fw4 fz12">{{scope.row.buysymbol}}</span>-->
+                  </span>
+                          </template>
+                        </el-table-column>
+
+                        <!--最新价格-->
+                        <el-table-column
+                          label="最新价格(***)"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span class="ml40">{{scope.row.price}}</span>
+                              <transition @before-enter="beforeEnterUp" @enter="enterUp" @after-enter="afterEnterUp">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose >0" class="iconfont icon-up fz12"></i>
+                  </span>
+                              </transition>
+                              <transition @before-enter="beforeEnterDown" @enter="enterDown"
+                                          @after-enter="afterEnterDown">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose<0" class="iconfont icon-down fz12"></i>
+                  </span>
+                              </transition>
+                            </div>
+
+                          </template>
+                        </el-table-column>
+
+                        <!--成交量-->
+                        <el-table-column
+                          label="成交量"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="ml50">
+                              {{scope.row.total|keepTwoNum}}
+                            </div>
+                          </template>
+                        </el-table-column>
+
+                        <!--24小时涨跌-->
+                        <el-table-column
+                          label="24小时涨跌"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                            </div>
+                          </template>
+                        </el-table-column>
+
+
+                      </el-table>
+                    </div>
+                  </el-tab-pane>
+                  <!--BTC交易区-->
+                  <el-tab-pane name="btc">
+                    <span slot="label"> ● BTC交易区</span>
+                    <div class="table" v-if="marketActiveName === 'btc'">
+                      <el-table
+                        @row-click="chooseRow"
+                        align="left"
+                        :data="btcFilteredData"
+                      >
+                        <!--市场-->
+                        <el-table-column
+                          :label="$t('m.pairs')"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                  <span class="ml30">
+                      <img :src="scope.row.image" alt="" class="bitIcon mr5">
+                    {{ scope.row.sellsymbol }}
+                    <!--<i>/</i>-->
+                    <!--<span class="fw4 fz12">{{scope.row.buysymbol}}</span>-->
+                  </span>
+                          </template>
+                        </el-table-column>
+
+                        <!--最新价格-->
+                        <el-table-column
+                          label="最新价格(***)"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span class="ml40">{{scope.row.price}}</span>
+                              <transition @before-enter="beforeEnterUp" @enter="enterUp" @after-enter="afterEnterUp">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose >0" class="iconfont icon-up fz12"></i>
+                  </span>
+                              </transition>
+                              <transition @before-enter="beforeEnterDown" @enter="enterDown"
+                                          @after-enter="afterEnterDown">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose<0" class="iconfont icon-down fz12"></i>
+                  </span>
+                              </transition>
+                            </div>
+
+                          </template>
+                        </el-table-column>
+
+                        <!--成交量-->
+                        <el-table-column
+                          label="成交量"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="ml50">
+                              {{scope.row.total|keepTwoNum}}
+                            </div>
+                          </template>
+                        </el-table-column>
+
+                        <!--24小时涨跌-->
+                        <el-table-column
+                          label="24小时涨跌"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                            </div>
+                          </template>
+                        </el-table-column>
+
+
+                      </el-table>
+                    </div>
+                  </el-tab-pane>
+                  <!--FUC交易区-->
+                  <el-tab-pane name="fuc">
+                    <span slot="label"> <span class="fz30">●</span> FUC交易区</span>
+                    <div class="table" v-if="marketActiveName === 'fuc'">
+                      <el-table
+                        @row-click="chooseRow"
+                        align="left"
+                        :data="fucFilteredData"
+                      >
+                        <!--市场-->
+                        <el-table-column
+                          :label="$t('m.pairs')"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                  <span class="ml30">
+                      <img :src="scope.row.image" alt="" class="bitIcon mr5">
+                    {{ scope.row.sellsymbol }}
+                    <!--<i>/</i>-->
+                    <!--<span class="fw4 fz12">{{scope.row.buysymbol}}</span>-->
+                  </span>
+                          </template>
+                        </el-table-column>
+
+                        <!--最新价格-->
+                        <el-table-column
+                          label="最新价格(***)"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span class="ml40">{{scope.row.price}}</span>
+                              <transition @before-enter="beforeEnterUp" @enter="enterUp" @after-enter="afterEnterUp">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose >0" class="iconfont icon-up fz12"></i>
+                  </span>
+                              </transition>
+                              <transition @before-enter="beforeEnterDown" @enter="enterDown"
+                                          @after-enter="afterEnterDown">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose<0" class="iconfont icon-down fz12"></i>
+                  </span>
+                              </transition>
+                            </div>
+
+                          </template>
+                        </el-table-column>
+
+                        <!--成交量-->
+                        <el-table-column
+                          label="成交量"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="ml50">
+                              {{scope.row.total|keepTwoNum}}
+                            </div>
+                          </template>
+                        </el-table-column>
+
+                        <!--24小时涨跌-->
+                        <el-table-column
+                          label="24小时涨跌"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                            </div>
+                          </template>
+                        </el-table-column>
+
+
+                      </el-table>
+                    </div>
+                  </el-tab-pane>
+                  <!--收藏-->
+                  <el-tab-pane name="like">
+                    <span slot="label"> <i class="el-icon-star-on fz16"></i> 收藏</span>
+                    <div class="table" v-if="marketActiveName === 'like'">
+                      <el-table
+                        @row-click="chooseRow"
+                        align="left"
+                        :data="likeList"
+                      >
+                        <!--市场-->
+                        <el-table-column
+                          :label="$t('m.pairs')"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                  <span class="ml30">
+                      <img :src="scope.row.image" alt="" class="bitIcon mr5">
+                    {{ scope.row.sellsymbol }}
+                    <!--<i>/</i>-->
+                    <!--<span class="fw4 fz12">{{scope.row.buysymbol}}</span>-->
+                  </span>
+                          </template>
+                        </el-table-column>
+
+                        <!--最新价格-->
+                        <el-table-column
+                          label="最新价格(***)"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span class="ml40">{{scope.row.price}}</span>
+                              <transition @before-enter="beforeEnterUp" @enter="enterUp" @after-enter="afterEnterUp">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose >0" class="iconfont icon-up fz12"></i>
+                  </span>
+                              </transition>
+                              <transition @before-enter="beforeEnterDown" @enter="enterDown"
+                                          @after-enter="afterEnterDown">
+                  <span v-show="upDownShow" class="animate pa">
+                  <i v-show="scope.row.rose<0" class="iconfont icon-down fz12"></i>
+                  </span>
+                              </transition>
+                            </div>
+
+                          </template>
+                        </el-table-column>
+
+                        <!--成交量-->
+                        <el-table-column
+                          label="成交量"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="ml50">
+                              {{scope.row.total|keepTwoNum}}
+                            </div>
+                          </template>
+                        </el-table-column>
+
+                        <!--24小时涨跌-->
+                        <el-table-column
+                          label="24小时涨跌"
+                          align="left"
+                        >
+                          <template slot-scope="scope">
+                            <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
+                              <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                            </div>
+                          </template>
+                        </el-table-column>
+
+
+                      </el-table>
+                    </div>
+                  </el-tab-pane>
+                </el-tabs>
+                <div class="search-box pa">
+                  <el-input class="" v-bind:placeholder="$t('m.search')" v-model="sName">
+                    <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                  </el-input>
+                </div>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+
+          <!--<button class="chg-cur-btn fl" v-on:click="toggleCurList">-->
+          <!--{{activeCoinInfo.sellsymbol}}/{{activeCoinInfo.buysymbol}}-->
+          <!--</button>-->
+          <!--<i class="iconfont fl" v-bind:class="{'icon-xiala':!curListIsShow,'icon-shangla-copy':curListIsShow}"></i>-->
+
+
+          <router-link to="/currencyInfo" class="cur-desc fff fl ml150"><i class="iconfont icon-bianji"></i>币种资料
+          </router-link>
         </div>
         <div class="right fr">
           <ul class="clearfix">
@@ -38,93 +363,97 @@
             </li>
           </ul>
         </div>
+
+
         <!--币种列表-->
         <el-collapse-transition>
           <div class="currencyList" v-show="curListIsShow">
-          <el-tabs type="">
-            <el-tab-pane>
-              <span slot="label"><span style="font-size:18px;">●</span> FBT交易</span>
-              <div class="table">
-                <ul class="th">
-                  <li class="td">币种</li>
-                  <li class="td">最新成交价</li>
-                  <li class="td">24H成交量</li>
-                  <li class="td">日涨跌</li>
-                </ul>
-                <div class="tbody" v-on:click="selectedCurrency">
-                  <div :id="item.id" class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover"
-                       v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
-                    <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
-                    <li class="data-item">{{item.price}}</li>
-                    <li class="data-item">{{item.total}}</li>
-                    <li class="data-item">{{item.rose}}</li>
+
+
+            <el-tabs type="">
+              <el-tab-pane>
+                <span slot="label"><span style="font-size:18px;">●</span> FBT交易</span>
+                <div class="table">
+                  <ul class="th">
+                    <li class="td">币种</li>
+                    <li class="td">最新成交价</li>
+                    <li class="td">24H成交量</li>
+                    <li class="td">日涨跌</li>
+                  </ul>
+                  <div class="tbody" v-on:click="selectedCurrency">
+                    <div :id="item.id" class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover"
+                         v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
+                      <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
+                      <li class="data-item">{{item.price}}</li>
+                      <li class="data-item">{{item.total}}</li>
+                      <li class="data-item">{{item.rose}}</li>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane>
-              <span slot="label"><span style="font-size:18px;">●</span> BTC交易</span>
-              <div class="table">
-                <ul class="th">
-                  <li class="td">币种</li>
-                  <li class="td">最新成交价</li>
-                  <li class="td">24H成交量</li>
-                  <li class="td">日涨跌</li>
-                </ul>
-                <div class="tbody" v-on:click="selectedCurrency">
-                  <div :id="item.id" class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover"
-                       v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
-                    <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
-                    <li class="data-item">{{item.price}}</li>
-                    <li class="data-item">{{item.total}}</li>
-                    <li class="data-item">{{item.rose}}</li>
+              </el-tab-pane>
+              <el-tab-pane>
+                <span slot="label"><span style="font-size:18px;">●</span> BTC交易</span>
+                <div class="table">
+                  <ul class="th">
+                    <li class="td">币种</li>
+                    <li class="td">最新成交价</li>
+                    <li class="td">24H成交量</li>
+                    <li class="td">日涨跌</li>
+                  </ul>
+                  <div class="tbody" v-on:click="selectedCurrency">
+                    <div :id="item.id" class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover"
+                         v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
+                      <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
+                      <li class="data-item">{{item.price}}</li>
+                      <li class="data-item">{{item.total}}</li>
+                      <li class="data-item">{{item.rose}}</li>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane>
-              <span slot="label"><span style="font-size:18px;">●</span> FUC交易</span>
-              <div class="table">
-                <ul class="th">
-                  <li class="td">币种</li>
-                  <li class="td">最新成交价</li>
-                  <li class="td">24H成交量</li>
-                  <li class="td">日涨跌</li>
-                </ul>
-                <div class="tbody" v-on:click="selectedCurrency">
-                  <div :id="item.id" class="item" v-for="(item,index) in fucFilteredData" v-on:mouseover="hover"
-                       v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
-                    <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
-                    <li class="data-item">{{item.price}}</li>
-                    <li class="data-item">{{item.total}}</li>
-                    <li class="data-item">{{item.rose}}</li>
+              </el-tab-pane>
+              <el-tab-pane>
+                <span slot="label"><span style="font-size:18px;">●</span> FUC交易</span>
+                <div class="table">
+                  <ul class="th">
+                    <li class="td">币种</li>
+                    <li class="td">最新成交价</li>
+                    <li class="td">24H成交量</li>
+                    <li class="td">日涨跌</li>
+                  </ul>
+                  <div class="tbody" v-on:click="selectedCurrency">
+                    <div :id="item.id" class="item" v-for="(item,index) in fucFilteredData" v-on:mouseover="hover"
+                         v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">
+                      <li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>
+                      <li class="data-item">{{item.price}}</li>
+                      <li class="data-item">{{item.total}}</li>
+                      <li class="data-item">{{item.rose}}</li>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane>
-              <span slot="label"><span style="font-size: 10px;">★ </span>收藏</span>
-              <div class="table">
-                <ul class="th">
-                  <li class="td">币种</li>
-                  <li class="td">最新成交价</li>
-                  <li class="td">24H成交量</li>
-                  <li class="td">日涨跌</li>
-                </ul>
-                <div class="tbody">
-                  <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover">
-                    <li class="data-item">{{item.name}}</li>
-                    <li class="data-item">{{item.newestPrice}}</li>
-                    <li class="data-item">{{item.tfDoneCunt}}</li>
-                    <li class="data-item">{{item.upAndDown}}</li>
+              </el-tab-pane>
+              <el-tab-pane>
+                <span slot="label"><span style="font-size: 10px;">★ </span>收藏</span>
+                <div class="table">
+                  <ul class="th">
+                    <li class="td">币种</li>
+                    <li class="td">最新成交价</li>
+                    <li class="td">24H成交量</li>
+                    <li class="td">日涨跌</li>
+                  </ul>
+                  <div class="tbody">
+                    <div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover">
+                      <li class="data-item">{{item.name}}</li>
+                      <li class="data-item">{{item.newestPrice}}</li>
+                      <li class="data-item">{{item.tfDoneCunt}}</li>
+                      <li class="data-item">{{item.upAndDown}}</li>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-          <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i
-          class="el-icon-search search-icon"></i>
-        </div>
+              </el-tab-pane>
+            </el-tabs>
+            <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i
+            class="el-icon-search search-icon"></i>
+          </div>
         </el-collapse-transition>
       </div>
     </div>
@@ -289,7 +618,8 @@
               <li class="td">操作</li>
             </ul>
             <div class="tbody" v-show="entrutsCur.length!=0">
-              <ul class="item" v-for="(item,index) in entrutsCur.slice((currentPage-1)*pagesize,currentPage*pagesize)" v-on:mouseover="hover">
+              <ul class="item" v-for="(item,index) in entrutsCur.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                  v-on:mouseover="hover">
                 <li class="data-item">{{item.time}}</li>
                 <li class="data-item">{{item.types}}</li>
                 <li class="data-item">{{item.source}}</li>
@@ -338,7 +668,9 @@
               <li class="td">操作</li>
             </ul>
             <div class="tbody" v-show="entrutsHis.length!=0">
-              <ul class="item" v-for="(item,index) in entrutsHis.slice((currentPageHis-1)*pagesizeHis,currentPageHis*pagesizeHis)" v-on:mouseover="hover">
+              <ul class="item"
+                  v-for="(item,index) in entrutsHis.slice((currentPageHis-1)*pagesizeHis,currentPageHis*pagesizeHis)"
+                  v-on:mouseover="hover">
                 <li class="data-item">{{item.time}}</li>
                 <li class="data-item">{{item.types}}</li>
                 <li class="data-item">{{item.source}}</li>
@@ -377,7 +709,6 @@
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
   import Header from "./header.vue";
-  import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 
   //在线客服
   import Customer from './subcom/customer_service'
@@ -385,7 +716,11 @@
   export default {
     data() {
       return {
+        upDownShow: false,//上涨下降箭头
+        sName: '',//搜索过滤
+        marketActiveName: 'btc',//market激活面板
         activeName: 'first',
+        activeNames: ['1'],
         currentCurrency01: {
           name: 'FUC',//币种
           count: 0,//数量
@@ -464,10 +799,10 @@
         // 委单记录
         entrutsHis: [],//历史委单
         entrutsCur: [],//当前委单
-        currentPage:1,//当前委单当前页
-        pagesize:5,//当前委单每页显示数据数量
-        currentPageHis:1,//历史委单当前页
-        pagesizeHis:5,//历史委单当前页
+        currentPage: 1,//当前委单当前页
+        pagesize: 5,//当前委单每页显示数据数量
+        currentPageHis: 1,//历史委单当前页
+        pagesizeHis: 5,//历史委单当前页
       }
     },
     filters: {
@@ -476,6 +811,11 @@
       // }
     },
     methods: {
+      chooseRow(e) {
+        console.log(e.id);
+
+
+      },
       //显示隐藏币种选择框
       toggleCurList() {
         // this.isShow = !this.isShow;
@@ -503,39 +843,43 @@
       say: function (id, sellName, buyName) {
         this.sell5Max = 0;
         this.buy5Max = 0;
-        this.getMarket().then((res) => {
-          this.currencyList = res.data.data;
 
-          this.currencyList.forEach((item, index) => {
-            if (item.id == id) {
-              // console.log(item.id)
-              //单个列表数据
-              this.activeCoinInfo = item;
-            }
-          })
-          //获取委单记录
-          console.log(this.activeCoinInfo);
-          this.renderEntrutsList(this.activeCoinInfo.id)
-          // this.getEntruts().then((res) => {
-          //   console.log(res);
-          //   if (res.data.code !== 200) {
-          //     return;
-          //   }
-          //   this.entrutsCur = res.data.data.entrutsCur;
-          //   this.entrutsHis = res.data.data.entrutsHis;
-          // });
+        // this.getMarket().then((res) => {
+        //   this.currencyList = res.data.data;
+        this.currencyList = this.$store.state.marketList;
+        // consoel.log(this.currencyList);
 
-          // 个人资产
-          this.personalAsset.forEach((item, index) => {
-            if (item.shortName == sellName) {
-              this.activeSellTotal = item.total;
-
-            }
-            if (item.shortName == buyName) {
-              this.activeBuyTotal = item.total;
-            }
-          })
+        this.currencyList.forEach((item, index) => {
+          if (item.id == id) {
+            // console.log(item.id)
+            //单个列表数据
+            this.activeCoinInfo = item;
+          }
         })
+        //获取委单记录
+        console.log(this.activeCoinInfo);
+        this.renderEntrutsList(this.activeCoinInfo.id)
+        // this.getEntruts().then((res) => {
+        //   console.log(res);
+        //   if (res.data.code !== 200) {
+        //     return;
+        //   }
+        //   this.entrutsCur = res.data.data.entrutsCur;
+        //   this.entrutsHis = res.data.data.entrutsHis;
+        // });
+
+        // 个人资产
+        this.personalAsset.forEach((item, index) => {
+          if (item.shortName == sellName) {
+            this.activeSellTotal = item.total;
+
+          }
+          if (item.shortName == buyName) {
+            this.activeBuyTotal = item.total;
+          }
+        })
+        // })
+
         //请求买一卖一数据
         this.getRealMarket(id).then((res) => {
           // console.log(res);`
@@ -562,8 +906,6 @@
           }
           // console.log(this.sellReferencePrice);
         })
-
-
         this.curListIsShow = false;
       },
       //获取市场数据(币种)
@@ -623,11 +965,8 @@
         }
         //未设置交易密码
         if (!this.$store.state.userInfo.ftradepassword) {
-
         }
-
         this.tradeType = tradeType;
-
         //买入
         if (!tradeType) {
           if (!this.buyCount) {
@@ -713,7 +1052,7 @@
         })
       },
       //渲染委单列表
-      renderEntrutsList(id,startNum){
+      renderEntrutsList(id, startNum) {
         this.getEntruts(id).then((res) => {
           console.log(res);
           if (res.data.code !== 200) {
@@ -730,12 +1069,45 @@
         fd.append('id', id);
         ajax(cancelEnUrl, 'post', fd, (res) => {
           console.log(res);
-          if(res.data.code!==200){
-            this.$store.commit('changeDialogInfo',res.data.msg);
+          if (res.data.code !== 200) {
+            this.$store.commit('changeDialogInfo', res.data.msg);
             return;
           }
           this.renderEntrutsList(this.activeCoinInfo.id)
         });
+      },
+      toggleUpDownShow() {
+        this.upDownShow = !this.upDownShow;
+      },
+      //动画
+      beforeEnterDown(el) {
+        el.style = "padding-top:-5px";
+        // el.style.opacity = "1";
+      },
+      enterDown(el, done) {
+        el.offsetWidth;
+        el.style.paddingTop = "5px";
+        el.style.opacity = "0";
+        done();
+      },
+      afterEnterDown(el) {
+        // this.upDownShow = false;
+        this.isShow = !this.isShow;
+      },
+      //动画
+      beforeEnterUp(el) {
+        el.style = "margin-top:5px";
+        // el.style.opacity = "1";
+      },
+      enterUp(el, done) {
+        el.offsetWidth;
+        el.style.marginTop = "-5px";
+        el.style.opacity = "0";
+        done();
+      },
+      afterEnterUp(el) {
+        // this.upDownShow = false;
+        // this.isShow = !this.isShow;
       },
       //当前委单分页
       handleSelectionChange(val) {
@@ -747,7 +1119,7 @@
       handleCurrentChange(val) {
         this.currentPage = val;
       },
-    //  历史委单分页
+      //  历史委单分页
 
       handleCurrentChangeHis(val) {
         this.multipleSelection = val;
@@ -758,24 +1130,31 @@
       handleCurrentChangeHis(val) {
         this.currentPageHis = val;
       },
+
+      handleChange() {
+
+      }
     },
     created() {
-      this.getMarket().then((res) => {
-        this.currencyList = res.data.data;
-        this.say(this.currencyList[0].id, this.currencyList[0].sellsymbol, this.currencyList[0].buysymbol);
+      // this.getMarket().then((res) => {
+      //   this.currencyList = res.data.data;
+      this.currencyList = JSON.parse(localStorage.getItem('localMarketList')) || this.$store.state.marketList;
 
-        //   this.activeCoinInfo = this.currencyList[0];
-        //
-        //   this.personalAsset.forEach((item, index) => {
-        //     if (item.shortName == this.activeCoinInfo.sellsymbol) {
-        //       this.activeCoinInfo.sellItem = item;
-        //     }
-        //     if (item.shortName == this.activeCoinInfo.buysymbol) {
-        //       this.activeCoinInfo.buyItem = item;
-        //     }
-        //   })
-        //   console.log(this.activeCoinInfo);
-      })
+      console.log(this.currencyList);
+      this.say(this.currencyList[0].id, this.currencyList[0].sellsymbol, this.currencyList[0].buysymbol);
+
+      //   this.activeCoinInfo = this.currencyList[0];
+      //
+      //   this.personalAsset.forEach((item, index) => {
+      //     if (item.shortName == this.activeCoinInfo.sellsymbol) {
+      //       this.activeCoinInfo.sellItem = item;
+      //     }
+      //     if (item.shortName == this.activeCoinInfo.buysymbol) {
+      //       this.activeCoinInfo.buyItem = item;
+      //     }
+      //   })
+      //   console.log(this.activeCoinInfo);
+      // })
       // 币种数据接口
       // var url = common.apidomain + 'real/indexmarket';
       // ajax(url, 'get', {}, (res) => {
@@ -819,19 +1198,30 @@
         return this.$store.state.personalAsset;
       },
       // 币种列表过滤
-      fbtFilteredData: function () {
+      filteredData: function () {
+        var self = this;
         return this.currencyList.filter(function (item) {
+          return item['sellname'].indexOf((self.sName).toLocaleUpperCase()) !== -1;
+        })
+      },
+      fbtFilteredData: function () {
+        return this.filteredData.filter(function (item) {
           return item['type'] == 2;
         });
       },
       btcFilteredData: function () {
-        return this.currencyList.filter(function (item) {
+        return this.filteredData.filter(function (item) {
           return item['type'] == 1;
         })
       },
       fucFilteredData: function () {
-        return this.currencyList.filter(function (item) {
+        return this.filteredData.filter(function (item) {
           return item['type'] == 3;
+        })
+      },
+      likeList() {
+        return this.filteredData.filter((item) => {
+          return item['isLike'] == 1;
         })
       },
       // 买过滤
@@ -855,7 +1245,6 @@
       Header,//头部
       Customer,//在线客服
       tips,//友情提示弹窗
-      CollapseTransition,//动画收起
     }
   }
 </script>
@@ -1132,5 +1521,23 @@
     right: 80px;
     top: 17px;
   }
+
+  /*币种资料*/
+  .inner-cont {
+    width: 600px;
+    height: 400px;
+    z-index: 9999;
+  }
+
+  .search-box {
+    width: 150px;
+    overflow: hidden;
+    right: 0;
+    top: 6px;
+    height: 25px;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
 </style>
 

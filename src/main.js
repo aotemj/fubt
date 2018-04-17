@@ -16,7 +16,7 @@ import '../static/reset.css'//重置样式
 // import 'vue2-animate/dist/vue2-animate.min.css';//animate
 
 // fade/zoom 等 动画
-// import 'element-ui/lib/theme-chalk/base.css';
+import 'element-ui/lib/theme-chalk/base.css';
 
 //字体图标
 import '../static/iconfont/iconfont.css'

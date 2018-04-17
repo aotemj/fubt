@@ -109,10 +109,15 @@
           'zh-FN': false,//中文繁体
         },
         per: false,//悬浮弹窗个人信息默认是隐藏的
+
       }
     },
     created() {
       this.activeRoute = this.$route.name;//头部点击样式添加
+
+      // console.log(this.localMarketList);
+
+
       // let msgUrl = common.apidomain + 'user/send_sms';
       //
       // let fd = new FormData();
@@ -175,6 +180,7 @@
         // ajax(url, 'post', {}, (res) => {
         // });
       },
+
     },
     computed: {
       isLogin() {
@@ -371,7 +377,7 @@
 
   .personal_center {
     width: 400px;
-    height: 500px;
+    /*height: 500px;*/
     background: rgba(0, 0, 0, 0.5);
     position: absolute;
     top: 85px;

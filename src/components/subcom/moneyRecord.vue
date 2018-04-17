@@ -3,26 +3,26 @@
     <header>记录</header>
     <div class="empty"></div>
     <div class="voteNew">
-    <ul v-for="(item,index) in pushTab">
-        <li>{{item.currency}}</li>
-        <li>{{item.type}}</li>
-        <li>{{item.number}}</li>
-        <li>{{item.earnings}}</li>
-        <li>{{item.grantTime}}</li>
-        <li>{{item.creationTime}}</li>
-        <li>{{item.state}}</li>
-        <li>{{item.operation}}</li>
+    <ul>
+        <li class="name">币种</li>
+        <li class="fname">收益类型</li>
+        <li class="famount">数量</li>
+        <li class="famount">预计收益</li>
+        <li class="fupdatetime">预计发放时间</li>
+        <li class="fupdatetime">创建时间</li>
+        <li class="famount">状态</li>
+        <li class="famount">操作</li>
     </ul>
-    <div id="voteNew-list">
-      <article v-for="(item,index) in pushList" v-show="pushList.length!==0">
-        <span>{{item.currency}}</span>
-        <span>{{item.type}}</span>
-        <span>{{item.number}}</span>
-        <span>{{item.earnings}}</span>
-        <span>{{item.grantTime}}</span>
-        <span>{{item.creationTime}}</span>
-        <span>{{item.state}}</span>
-        <span>{{item.operation}}</span>
+    <div id="voteNew-list" v-show="pushList.length!==0">
+      <article v-for="(item,index) in pushList" :key="index">
+        <span class="name" v-for="(item,index) in profit" :key="index">{{ item.name }}</span>
+        <span class="fname">{{ item.fname }}</span>
+        <span class="famount">{{ item.famount }}</span>
+        <span class="famount">{{ item.frate }}</span>
+        <span class="fupdatetime">{{ item.fupdatetime }}</span>
+        <span class="fupdatetime">{{ item.fcreatetime }}</span>
+        <span class="famount">{{ item.fstate_s }}</span>
+        <span class="famount">dfgafg</span>
       </article>
     </div>
     <div class="noRecord" v-show="pushList.length==0">暂无记录</div>
@@ -30,40 +30,41 @@
   </div>
 </template>
 <script>
-
+  import common from "../../kits/domain";
+  import {ajax} from "../../kits/http";
   export default {
     data(){
       return {
-        pushTab:[
-          {
-            currency:'币种',
-            type:'收益类型',
-            number:'数量',
-            earnings:'预计收益',
-            grantTime:'预计发放时间',
-            creationTime:'创建时间',
-            state:'状态',
-            operation:'操作',
-          }
-        ],
-        pushList:[
-          // {
-          //   currency:'FBT',
-          //   type:'类型',
-          //   number:'954642',
-          //   earnings:'12.1345',
-          //   grantTime:'2018/3/30 14:31',
-          //   creationTime:'2018/3/30 14:31',
-          //   state:'已存入',
-          //   operation:'已审核',
-          // }
-        ]
+        profit:[],
+        pushList: []
       }
     },
     methods:{
-
+      recordList() {
+        return new Promise((resolve, reject) => {
+          let recordUrl = common.apidomain + 'financial/finances';
+          ajax(recordUrl, 'post', {}, (res) => {
+            resolve(res);
+          });
+        });
+      }
     },
-    created(){},
+    created(){
+      this.recordList().then((res) => {
+        if (res.data.code !== 200) {
+          // this.errorMsg = res.data.msg;
+          return;
+        } else {
+          this.pushList = res.data.data.page.data
+          this.profit = res.data.data.financesCoinMap
+          console.log(1)
+          console.log(res)
+          console.log(res.data.data.financesCoinMap[0].name)
+          console.log(2)
+          
+        }
+      });
+    },
     computed:{},
     components:{
 
@@ -104,7 +105,6 @@ header,
 }
 
 .voteNew>ul>li {
-    width: 12.5%;
     float: left;
     font-size: 12px;
 }
@@ -121,9 +121,26 @@ header,
 
 #voteNew-list>article>span {
     display: inline-block;
-    width: 12.5%;
+    /* width: 12.5%; */
     color: #c2c3c8;
     float: left;
     font-size: 12px;
 }
+.name{
+  width: 5%;
+  margin-left: 4%;
+}
+.fname{
+  margin: 0 3%;
+  width: 27%;
+}
+.famount{
+  width: 5%;
+  margin-left: 2%;
+}
+.fupdatetime{
+  width: 10%;
+  margin-left: 3%;
+}
+
 </style>

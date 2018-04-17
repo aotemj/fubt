@@ -22,6 +22,8 @@ import changePwdByEmail from "@/components/changePwdByEmail"
 import addNewPwdByPhone from "@/components/subcom/addNewPwdByPhone"
 import addNewPwdByEmail from "@/components/subcom/addNewPwdByEmail"
 import c2c_instructions from "@/components/subcom/c2c_instructions"
+import nofind404 from "@/components/nofind404"//404
+
 Vue.use(Router)
 
 const router = new Router({
@@ -129,6 +131,11 @@ const router = new Router({
       path: '/c2c_instructions',//操作说明
       name: 'c2c_instructions',
       component: c2c_instructions
+    },
+    {
+      path: '/noFindPage',//nofind404页面
+      name: 'nofind404',
+      component: nofind404
     }
   ]
 })

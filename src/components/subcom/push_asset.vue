@@ -8,28 +8,26 @@
         <el-input v-model="Sellerid"></el-input>
       </el-form-item>
       <el-form-item label="资产类型" class="border_bottom">
-        <el-select class="reg_select" v-model="Assetstype" placeholder="TKC">
-          <!--<el-option  value="TKC" v-for="(item,index) in regionList"></el-option>-->
+        <el-select class="reg_select" v-model="pushcoinid" placeholder="TKC">
+          <el-option  value="TKC" v-for="(item,index) in regionList" :key="index">{{ item.name }}</el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="数量" class="border_bottom">
-        <el-input v-model="number" placeholder="最小数量为100"></el-input>
+        <el-input v-model="pushcount" placeholder="最小数量为100"></el-input>
       </el-form-item>
       <el-form-item label="价格" class="border_bottom">
-        <el-input v-model="price"></el-input>
+        <el-input v-model="pushprice"></el-input>
       </el-form-item>
       <el-form-item label="交易密码" prop="pass" class="border_bottom">
-        <el-input type="password" v-model="tranpassword" auto-complete="off" placeholder="请输入交易密码"></el-input>
+        <el-input type="password" v-model="tradepwd" auto-complete="off" placeholder="请输入交易密码"></el-input>
       </el-form-item>
       <el-form-item label="短信验证码">
-        <el-input class="input-info input-with-select" v-model="msgForNewAddress"
-                  placeholder="请输入短信验证码">
-          <!-- <el-button slot="append" size="mini" class="bdr0 w100p"
-                      :disabled="msgDisabledForAddress"
-                      v-on:click="sendCode('addAddress')">{{msgBtnTxt}}
-          </el-button> -->
+        <el-input class="input-info input-with-select" v-model="msgForNewAddress" placeholder="请输入短信验证码">
+          <el-button slot="append" size="mini" class="bdr0 w100p" :disabled="msgDisabledForAddress" v-on:click="sendCode()">{{msgBtnTxt}}
+          </el-button>
         </el-input>
       </el-form-item>
+      <div class="false-tips fz12"><i v-show="pushMsg"></i>{{pushMsg}}</div>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm2')">提交PUSH</el-button>
       </el-form-item>
@@ -39,31 +37,30 @@
   </div>
 </template>
 <script>
+
+  // pushcoinid //资产类型
+  // pushuid //卖方id
+  // pushcount //数量
+  // pushprice //价格
+  // tradepwd  //交易密码
+  // phonecode //短信验证码
+
   import Push from "./pushRecord.vue"
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
 
   export default {
     data() {
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.ruleForm2.checkPass !== '') {
-            this.$refs.ruleForm2.validateField('checkPass');
-          }
-          callback();
-        }
-      };
       return {
         Sellerid: '',//卖方id
-        Assetstype: '',//资产类型
-        number: '',//数量
-        price: '',//价格
-        tranpassword: '',//交易密码
-        checkPass: '',
+        pushcoinid: '',//资产类型
+        pushcount: '',//数量
+        pushprice: '',//价格
+        tradepwd: '',//交易密码
+        phonecode: '',
         //push info
         tradePwd: '',//交易密码
+        pushMsg:'',//错误提示信息
         msgForNewAddress: '',//新增提现地址短信验证码
         msgBtnTxt: '获取验证码',//短信验证码文字
         msgDisabledForAddress: false,//短信验证码按钮状态
@@ -76,29 +73,42 @@
       }
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+      submitForm() {
+        if(!this.Sellerid){
+          this.pushMsg = '请输入id';
+          return;
+        }else if(!this.pushcount){
+          this.pushMsg = '请输入数量';
+          return;
+        }else if(!this.pushcount){
+          this.pushMsg = '请输入数量';
+          return;
+        }else if(!this.pushcount){
+          this.pushMsg = '请输入数量';
+          return;
+        }else if(this.$store.state.userInfo.frealname == null){
+          this.errorMsg = "请实名认证"
+          return;
+        }
       },
       //加载push信息
       loadPushInfo() {
         return new Promise((resolve, reject) => {
           let pushUrl = common.apidomain + 'financial/push';
           let fd = new FormData();
-          fd.append('currentPage', 1);
+          fd.append('pushUid', this.Sellerid);
+          fd.append('pushcoinid', this.pushcoinid);
+          fd.append('pushcount', this.pushcount);
+          fd.append('pushprice', this.pushprice);
+          fd.append('tradepwd', this.tradepwd);
+          fd.append('phonecode', this.msgForNewAddress);
           ajax(pushUrl, 'post', fd, (res) => {
             resolve(res);
           });
         })
       },
       //发送验证码
-      sendCode(msgType) {
+      sendCode() {
         //新增用户地址
         // if(msgType=='addAddress'){
         /*
@@ -158,7 +168,7 @@
         }
       },
       //发送验证码
-      sendCodeAll(msgType) {
+      sendCodeAll() {
         return new Promise((resolve, reject) => {
           let msgUrl = common.apidomain + 'user/send_sms';
           let fd = new FormData();

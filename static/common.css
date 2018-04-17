@@ -236,6 +236,7 @@ el-carousel-item img {
 
 .el-collapse-item__content {
   padding-bottom: 0;
+  padding:0 15px;
 }
 
 .el-collapse-item__wrap {
@@ -612,6 +613,33 @@ el-carousel__arrow--right {
   color: yellow;
 }
 
+/*tab栏*/
+.content .el-tabs__nav {
+}
+
+.content .el-tabs__item {
+  width: 150px;
+}
+
+.el-tabs__nav-wrap::after {
+  background-color: transparent;
+}
+
+.el-tabs__header {
+  margin: 0;
+}
+
+/*交易中心页面*/
+.el-collapse-item__header {
+  width: 120px;
+  margin-left: 20px;
+  margin-top:13px;
+  border: none;
+}
+/*下拉箭头*/
+.el-collapse-item__arrow{
+  margin-top:15px;
+}
 .bitIcon {
   margin: 0 auto;
   width: 15px !important;

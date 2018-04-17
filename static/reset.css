@@ -97,9 +97,11 @@ input::-ms-input-placeholder { /*Internet Explorer*/
 .pa {
   position: absolute;
 }
-
+fz30{
+  font-size:30px !important;
+}
 .fz22 {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .fz16 {
@@ -174,7 +176,7 @@ input::-ms-input-placeholder { /*Internet Explorer*/
 }
 
 .ml50 {
-  margin-left: 50px;
+  margin-left: 50px !important;
 }
 
 .ml60 {
@@ -194,7 +196,11 @@ input::-ms-input-placeholder { /*Internet Explorer*/
 }
 
 .ml100 {
-  margin-left: 100px;
+  margin-left: 100px !important;
+}
+
+.ml150 {
+  margin-left: 150px !important;
 }
 
 .mr5{

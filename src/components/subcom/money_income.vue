@@ -16,7 +16,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数量" class="border_bottom">
-        <el-input v-model="numb" min="100" placeholder="最小数量为100"></el-input>
+        <el-input v-model="numb" min="100" placeholder="最小数量为100" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();"></el-input>
       </el-form-item>
       <el-form-item label="交易密码" prop="pass" class="border_bottom">
         <el-input type="password" v-model="password" auto-complete="off" placeholder="请输入交易密码"></el-input>
@@ -54,57 +54,58 @@
         }
       };
       return {
-          tota:'',//账户余额
-          assetstype: '【定期不可提前取回】90天收益3.75%收益-合年化15%',//资产类型
-          profit: 'FUC',//收益类型
-          currencyList:[],//收益类型
-          numb:'',//数量
-          password:'',//交易密码
-          assetsTime: 0,//短信验证码时间
-          assetsDisabled: false,//短信验证码按钮状态
-          assetsBtnTxt: "发送验证码",//短信验证码按钮文字
-          ver: '',//短信验证码
-          assets:[],//
-          errorMsg:'',//错误提示
-          pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,//密码验证
+        tota:'',//账户余额
+        assetstype: '【定期不可提前取回】90天收益3.75%收益-合年化15%',//资产类型
+        profit: 'FUC',//收益类型
+        currencyList:[],//收益类型
+        numb:'',//数量
+        password:'',//交易密码
+        assetsTime: 0,//短信验证码时间
+        assetsDisabled: false,//短信验证码按钮状态
+        assetsBtnTxt: "发送验证码",//短信验证码按钮文字
+        ver: '',//短信验证码
+        assets:[],//
+        errorMsg:'',//错误提示
+        pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,//密码验证
       }
     },
     methods:{
       submi(){
-          if(!this.numb){
-            this.errorMsg = "请输入数量"
-            return;
-          }else if(this.numb > this.tota){
-            this.errorMsg = "余额不足"
-            return;
-          }else if(!this.password){
-            this.errorMsg = "请输入密码"
-            return;
-          }else if(!this.pwdReg.test(this.password)){
-            this.errorMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字！"
-            return;
-          }else if(!this.ver){
-            this.errorMsg = "请输入验证码！"
+        if(!this.numb){
+          this.errorMsg = "请输入数量"
+          return;
+        }else if(!this.password){
+          this.errorMsg = "请输入密码"
+          return;
+        }else if(!this.pwdReg.test(this.password)){
+          this.errorMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字！"
+          return;
+        }else if(this.$store.state.userInfo.frealname == null){
+          this.errorMsg = "请实名认证"
+          return;
+        }else if(!this.ver){
+          this.errorMsg = "请输入验证码！"
+          return;
+        }else{
+          this.errorMsg = ""
+        }
+
+        let moneyUrla = common.apidomain + 'financial/finances';
+        let moneya = new FormData();
+        moneya.append('fname',this.assetstype);//存币收益
+        moneya.append('name',this.profit);//收益类型
+        moneya.append('sumNumber',this.numb);//数量
+        moneya.append('ftradepassword',this.password);//交易密码
+        moneya.append('phoneCode',this.ver);//短信验证
+        moneya.append('frealname',this.$store.state.userInfo.frealname);//短信验证
+        ajax(moneyUrla, 'post', moneya, (res) => {
+          if(res.data.code !==200){
             return;
           }else{
-            this.errorMsg = ""
+            this.$store.commit('changeDialogInfo','存入成功')
           }
 
-          let moneyUrla = common.apidomain + 'financial/finances';
-          let moneya = new FormData();
-          moneya.append('fname',this.assetstype);//存币收益
-          moneya.append('name',this.profit);//收益类型
-          moneya.append('sumNumber',this.numb);//数量
-          moneya.append('ftradepassword',this.password);//交易密码
-          moneya.append('phoneCode',this.ver);//短信验证
-          ajax(moneyUrla, 'post', moneya, (res) => {
-            if(res.data.code !==200){
-              return;
-            }else{
-              this.$store.commit('changeDialogInfo','提交成功')
-            }
-
-          });
+        });
       },
 
       submitForm() {
@@ -120,6 +121,14 @@
         if(!this.password){
           this.errorMsg = "请输入密码"
           return;
+        }else if(this.numb == 0){
+          this.errorMsg = "數量不能为0"
+          return;
+        }else if(this.numb > this.tota){
+            this.errorMsg = "余额不足"
+            return;
+        }else{
+            this.errorMsg = ""
         }
         let loginUrl = common.apidomain + 'user/send_sms';
         let fd = new FormData();
@@ -162,11 +171,12 @@
             this.tota = res.data.data.userWallet.total
             this.assets =  res.data.data.typeList
             this.currencyList = res.data.data.financesCoinMap
-            this.profit = res.data.data.financesCoinMap.name
+            this.profit = res.data.data.financesCoinMap[0].name
             console.log(res)
             // this.currencytype = res.data.data.financesCoinMap
           }
       });
+      // console.log(this.$store.state.userInfo.frealname)
     },
     computed:{
     },
