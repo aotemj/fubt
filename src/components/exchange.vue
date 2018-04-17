@@ -39,7 +39,8 @@
           </ul>
         </div>
         <!--币种列表-->
-        <div class="currencyList" v-show="curListIsShow">
+        <el-collapse-transition>
+          <div class="currencyList" v-show="curListIsShow">
           <el-tabs type="">
             <el-tab-pane>
               <span slot="label"><span style="font-size:18px;">●</span> FBT交易</span>
@@ -124,6 +125,7 @@
           <input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i
           class="el-icon-search search-icon"></i>
         </div>
+        </el-collapse-transition>
       </div>
     </div>
 
@@ -375,6 +377,8 @@
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
   import Header from "./header.vue";
+  import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+
   //在线客服
   import Customer from './subcom/customer_service'
   import tips from './subcom/friendlyTips'//友情提示
@@ -851,6 +855,7 @@
       Header,//头部
       Customer,//在线客服
       tips,//友情提示弹窗
+      CollapseTransition,//动画收起
     }
   }
 </script>
@@ -939,7 +944,7 @@
     /*text-align: left;*/
     width: 1300px;
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: 15px;
     height: 400px;
     /*padding:0 100px;*/
     /*text-align: left;*/

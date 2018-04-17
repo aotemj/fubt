@@ -779,11 +779,6 @@ const arrAll = [
         sub: [{name: "请选择"}, {name: "驿城区"}, {name: "确山县"}, {name: "新蔡县"}, {name: "上蔡县"}, {name: "西平县"}, {name: "泌阳县"}, {name: "平舆县"}, {name: "汝南县"}, {name: "遂平县"}, {name: "正阳县"}, {name: "其他"}],
         type: 0
       },
-      {
-        name: "焦作",
-        sub: [{name: "请选择"}, {name: "济源市"}, {name: "其他"}],
-        type: 0
-      },
       {name: "其他"}
     ],
     type: 1

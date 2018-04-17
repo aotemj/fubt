@@ -1,5 +1,6 @@
 <template>
   <div class="con-box">
+    <tips></tips>
     <Header class="header"></Header>
     <div class="inner-box">
       <h4><span class ="active" v-on:click="activeId=1">邮箱找回密码</span></h4>
@@ -21,13 +22,21 @@
         </div>
         
         <!-- 证件号码 -->
-        <div class="select-box">
+        <div class="select-box" style="display:inline-block;">
           <input type="text" name=""  placeholder="证件号码"  v-model="idacard">
         </div>
+        <span style="display:inline-block;">如果账户未实名可不填</span>
 
-        <!-- 验证码 -->
-        <div class="select-box sendinput">
-          <input type="text" name="" placeholder="验证码" class="yanzm"><button class="sendma">发送验证码</button>
+        <!-- 图片验证码 -->
+        <!-- <div class="select-box">
+          <input type="text" name="" placeholder="验证码">
+        </div> -->
+
+        <div class="select-box identify-box">
+          <input type="text" v-model="imgCode" placeholder="验证码">
+          <div class="inner-box cp" @click="refreshCode">
+            <sIdentify class="image" :identifyCode="identifyCode"></sIdentify>
+          </div>
         </div>
         
         <!-- 提示信息 -->
@@ -45,10 +54,18 @@
   import Header from "./header"
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
+  import sIdentify from "./subcom/identify"//引入图片验证码组件
+  import tips from './subcom/friendlyTips'//提示信息
 
   export default {
     data(){
       return {
+        refreshStatus: false,//是否允许刷新
+        imgCode: '',//图形验证码
+        trueImgCode: '',//正确的图形验证码
+        identifyCode: "",//验证码'
+        imageRedisKey: "",//图片验证码key
+
         // activeId:1,//激活面板
         tipinfo:'',
         emailaddress:'',//邮箱地址
@@ -56,18 +73,7 @@
       }
     },
     methods:{
-
-
-      // 1.0下一步
-      next(){
-        if (!this.emailReg() || !this.idcard()){
-          return;
-        }
-        // this.$router.push({ path: '/addNewPwdByEmail' })
-      },
-
-
-      // 2.0邮箱验证
+      // 1.0邮箱验证
       emailReg(){
         var regEmail= /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
         if(this.emailaddress==''){
@@ -82,58 +88,86 @@
         }
       },
 
-
-      // 3.0身份证验证
-      idcard(){
-        var regidcard = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-        if(this.idacard==''){
-          this.tipinfo="请输入身份证号";
-          return 0;
-        }else if(!regidcard.test(this.idacard)){
-          this.tipinfo="身份证格式不正确";
-          return 0;
-        }else{
-          this.tipinfo="";
-          return 1;
-        }
-      },
-
-      // 4.0发送邮箱验证码
+      // 2.0发送邮箱验证码
       sendEmailcard(){
         var url = common.apidomain + 'validate/send_findbackmail';
         var fd = new FormData();
-        fd.append('email','');
-        fd.append('idcard','');
-        fd.append('idcardno','');
-        fd.append('imageRedisKey','');
-        fd.append('imgcode','');
+        fd.append('email',this.emailaddress);//必填项
+        fd.append('imgcode',this.imgCode);//必填项
+        fd.append('imageRedisKey',this.imageRedisKey);//必填项
+        fd.append('idcard',1);//可选项
+        fd.append('idcardno',this.idacard);//可选项
         ajax(url, 'post', fd, (res) => {
           console.log(res.data);
+          if(res.data.code==200){
+            this.tipinfo = res.data.msg;
+            return;
+          }
+          if(res.data.code!==200){
+            //弹出友情提示框
+            // this.$store.commit('changeDialogInfo',{dataInfo:'邮件发送成功，请点击邮件链接找回密码！'});
+
+            //此条为假数据，用于验证成功后跳转到密码重置界面的:注意上面的不等号应该换一下位置才是正确的逻辑，此处只是为了测试
+            this.$store.commit('changeDialogInfo',{dataInfo:'邮件发送成功，请点击邮件链接找回密码！',skipurl:'/addNewPwdByEmail'});
+            // this.$router.push({ path: '/addNewPwdByEmail' })//路由跳转
+          }
         });
       },
 
+      // 3.0图片验证码开始
+      randomNum(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      },
+      refreshCode() {
+        this.makeCode();
+      },
+      makeCode() {
+        let url = common.apidomain + 'servlet/ValidateImageServlet';
+        ajax(url, 'post', {}, (res) => {
+          if (res.data.code !== 200) {
+            this.tipinfo = '获取图形验证码错误，请稍后再试';
+            return;
+          }
+          this.identifyCode = res.data.data.verifyCode;
+          this.imageRedisKey = res.data.data.imageRedisKey;
+          console.log(res.data.data.imageRedisKey);
+          // console.log(this.imageRedisKey);
+          this.trueImgCode = this.identifyCode;
+          // console.log(this.trueImgCode);
+        })
+      },
+
+      // 4.0下一步按钮
+      next(){
+        if (!this.emailReg()){//验证邮箱
+          return;
+        }
+        if(this.imgCode==''){//验证码为空验证
+          this.tipinfo = '请输入图片验证码';
+          return;
+        }
+        this.sendEmailcard();// 发送请求
+        
+      },
+
+      
+
+    
+
     },
     created(){},
+    mounted(){
+      this.makeCode();
+    },
     components:{
       Header,
+      sIdentify,//图片验证码
+      tips,//友情提示框
     }
   }
 </script>
 <style scoped>
-  /*发送验证码样式*/
-  .sendinput{
-    position: relative;
-  }
-  .yanzm{
-  }
-  .sendma{
-    position: absolute;
-    right: 0;
-    top:10px;
-    cursor: pointer;
-    padding-left: 20px;
-    border-left: 1px solid #fff;
-  }
+
 
   /*提示信息样式*/
   .tipinfo{
@@ -212,6 +246,28 @@
     border:none !important;
     background-color:#445895;
     padding:10px 20px;
+  }
 
+
+
+  .identify-box {
+    position: relative;
+  }
+
+  .identify-box .inner-box {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 25.5%;
+    height: 100%;
+    /*background-color: pink;*/
+    border-radius: 5px;
+    /*border:1px solid #fff;*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .identify-box .image {
+    width: 100% !important;
   }
 </style>

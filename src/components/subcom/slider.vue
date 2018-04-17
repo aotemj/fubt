@@ -1,6 +1,6 @@
 <template>
 	<div class="block">
-	  <el-carousel height="500px">
+	  <el-carousel height="500px" arrow="always" :interval="10000000">
 	    <el-carousel-item v-for="(item,index) in imgList" :key="index">
 				<img :src="item.src" alt="" width="100%" height="100%">
 	    </el-carousel-item>

@@ -27,18 +27,18 @@
 		},
 		created(){
 			// 1.0 公告标题请求数据
-		    var url = common.apidomain + 'service/appnewmore';
-		    var formData = new FormData();
-		    formData.append('id',2);
-		    formData.append('cur',1);
-		    ajax(url, 'post', formData, (res) => {
-				// console.log(res)
-				// console.log(res.data)
-				// console.log(res.data.data.items)
-		        this.items = res.data.data.items;
-		    });
-		    //2.0 调用公告无缝滚动方法
-		    setInterval(this.scroll,3000);
+            // var url = common.apidomain + 'service/appnewmore';
+            // var formData = new FormData();
+            // formData.append('id',2);
+            // formData.append('cur',1);
+            // ajax(url, 'post', formData, (res) => {
+			// 	// console.log(res)
+			// 	// console.log(res.data)
+			// 	// console.log(res.data.data.items)
+		     //    this.items = res.data.data.items;
+            // });
+            // //2.0 调用公告无缝滚动方法
+            // setInterval(this.scroll,3000);
 		},
 		methods:{
 			// 公告无缝滚动方法

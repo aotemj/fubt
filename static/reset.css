@@ -110,7 +110,7 @@ input::-ms-input-placeholder { /*Internet Explorer*/
   font-size:14px;
 }
 .fz12 {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 .middle {
@@ -153,6 +153,9 @@ input::-ms-input-placeholder { /*Internet Explorer*/
 .mb-20 {
   margin-bottom: -20px;
 }
+.ml5{
+  margin-left:5px;
+}
 
 .ml10 {
   margin-left: 10px;
@@ -194,6 +197,9 @@ input::-ms-input-placeholder { /*Internet Explorer*/
   margin-left: 100px;
 }
 
+.mr5{
+  margin-right:5px;
+}
 .mr10 {
   margin-right: 10px;
 }

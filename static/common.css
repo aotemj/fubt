@@ -1,67 +1,78 @@
-body{
+body {
   font-size: 14px;
-  color:#c7cde5;
+  color: #c7cde5;
 }
-.con-box{
-	width:100%;
-	/*background-color: green;*/
+
+.con-box {
+  width: 100%;
+  /*background-color: green;*/
 }
-.header{
-	width:100%;
-	height:85px;
-	line-height:85px;
-	background-color: rgba(0,0,0,.7);
-	box-sizing: border-box;
-	padding:0 100px;
-	position: fixed;
-	top:0;
-	z-index: 999;
+
+.header {
+  width: 100%;
+  height: 85px;
+  line-height: 85px;
+  background-color: rgba(0, 0, 0, .7);
+  box-sizing: border-box;
+  padding: 0 100px;
+  position: fixed;
+  top: 0;
+  z-index: 999;
 }
-.slider{
-	height:500px;
-	width:100%;
+
+.slider {
+  height: 500px;
+  width: 100%;
 }
-.block{
-	height: 100%;
+
+.block {
+  height: 100%;
 }
-el-carousel,el-carousel-item{
-	width:100%;
+
+el-carousel, el-carousel-item {
+  width: 100%;
 }
-el-carousel-item img{
-	width:100%;
+
+el-carousel-item img {
+  width: 100%;
 }
 
 /*.news-item {*/
-	/*color:#fff;*/
-	/*background-color: rgba(14, 19, 40,1);*/
+/*color:#fff;*/
+/*background-color: rgba(14, 19, 40,1);*/
 /*}*/
 
 /*表单内容*/
-.content{
-  width:1300px;
-	/*width:100%;*/
-	/*padding:0 100px;*/
-	position: relative;
+.content {
+  width: 1200px;
+  /*width:100%;*/
+  /*padding:0 100px;*/
+  position: relative;
 }
-.el-tabs__item:hover{
-	color:#2884e6;
+
+.el-tabs__item:hover {
+  color: #2884e6;
 }
-.el-tabs__item{
-	color:#fff;
-  padding:0 10px;
+
+.el-tabs__item {
+  color: #fff;
+  padding: 0 10px;
 }
+
 /* 任付为加的面包屑导航样式---开始 */
-.el-breadcrumb__inner, .el-breadcrumb__inner a{
+.el-breadcrumb__inner, .el-breadcrumb__inner a {
   color: #DCDFD8;
 }
-.el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover{
+
+.el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
   color: #1275DA;
 }
+
 /* 任付为加的面包屑导航样式---结束 */
 /* 新闻公告部分开始 */
 .news {
-  height:60px;
-  width:100%;
+  height: 60px;
+  width: 100%;
   /* 任付伟改动公告滚动背景颜色 :background-color: #0E1327; */
   background-color: #0E1327;
   line-height: 60px;
@@ -70,73 +81,87 @@ el-carousel-item img{
 /* 新闻公告部分结束 */
 
 /* 任付伟财务中心样式覆盖修改---开始 */
-.financeContent .el-tabs__item{
+.financeContent .el-tabs__item {
   width: 170px;
   height: 60px;
   line-height: 60px;
   /*font-size: 16px;*/
 }
-.financeContent .el-tabs--left .el-tabs__item.is-left{
+
+.financeContent .el-tabs--left .el-tabs__item.is-left {
   text-align: left;
-  padding-left:46px;
+  padding-left: 46px;
 }
-.financeContent .el-tabs__item.is-disabled{
+
+.financeContent .el-tabs__item.is-disabled {
   color: #fff;
   background-color: #0E1326;
   box-shadow: 2px 4px 6px #000;
   z-index: 99;
 }
-.financeContent .el-tabs--left .el-tabs__active-bar.is-left, .el-tabs--left .el-tabs__nav-wrap.is-left::after{
+
+.financeContent .el-tabs--left .el-tabs__active-bar.is-left, .el-tabs--left .el-tabs__nav-wrap.is-left::after {
   width: 16px;
   background-color: #1D2538;
   z-index: 998;
 }
-.financeContent .el-tabs__item.is-active{
+
+.financeContent .el-tabs__item.is-active {
   background-color: #081025;
 }
+
 /* 任付伟财务中心样式覆盖修改---结束 */
 
 /*  任付伟改新闻部分导航样式-开始 */
-.newNavs .el-tabs__nav{
+.newNavs .el-tabs__nav {
   float: none;
-// position: relative;
+/ / position: relative;
 }
-.newNavs .el-tabs__nav-wrap{
+
+.newNavs .el-tabs__nav-wrap {
   height: 60px;
   line-height: 60px;
 }
-.newNavs .el-tabs__item{
+
+.newNavs .el-tabs__item {
   font-size: 16px;
   margin: 0 14%;
 }
-.newNavs .el-tabs__header{
+
+.newNavs .el-tabs__header {
   background-color: #0F1427;
 }
-.newNavs .el-tabs__nav-wrap::after{
+
+.newNavs .el-tabs__nav-wrap::after {
   background-color: #0F1427;
 }
-.newNavs .el-tabs__content{
-// overflow: none;
+
+.newNavs .el-tabs__content {
+/ / overflow: none;
 }
-.newNavs .el-tabs__active-bar{
+
+.newNavs .el-tabs__active-bar {
   background-color: transparent;
 }
-.newNavs .titleNavs{
-// display:inline-block;
-  padding:10px;
+
+.newNavs .titleNavs {
+/ / display: inline-block;
+  padding: 10px;
   box-sizing: border-box;
   position: relative;
 
 }
-.newNavs .titleNavs>i {
+
+.newNavs .titleNavs > i {
   position: absolute;
-  left:-3px;
-  bottom:0;
-  width:88px;
-  height:2px;
-// background-color:transparent;
+  left: -3px;
+  bottom: 0;
+  width: 88px;
+  height: 2px;
+/ / background-color: transparent;
 }
-.newNavs .titleNavs>i.active{
+
+.newNavs .titleNavs > i.active {
   background-color: #2769B3;
 }
 
@@ -144,46 +169,53 @@ el-carousel-item img{
 
 /* 任付伟更改财务中心push资产样式-开始 */
 
-.pushAss{
+.pushAss {
   background-color: #0E1326;
 }
 
-.pushAss button{
+.pushAss button {
   background: #192136;
   border: 1px solid #a0a3ab;
 }
-.pushAss button:hover{
+
+.pushAss button:hover {
   background: #66B1FF;
   border: 1px solid #a0a3ab;
 }
-.pushAss .el-form-item__label{
+
+.pushAss .el-form-item__label {
   padding-right: 20px;
 }
+
 /* 任付伟更改财务中心push资产样式-结束 */
 
 /* 任付伟更改财务中心币存收益样式-开始 */
-.push_box{
+.push_box {
   background-color: #0E1326;
 }
-.push_box .el-form-item__label{
+
+.push_box .el-form-item__label {
   padding-right: 20px;
 }
-.push_box button{
+
+.push_box button {
   background: #192136;
   border: 1px solid #a0a3ab;
 }
-.push_box button:hover{
+
+.push_box button:hover {
   background: #66B1FF;
   border: 1px solid #a0a3ab;
 }
+
 /* 任付伟更改财务中心币存收益样式-结束 */
 
-.friendlyTip .el-icon-close:before{
+.friendlyTip .el-icon-close:before {
   content: ''
 }
 
 /* 任付伟更改弹出窗 ×--去掉 -新币投票大弹窗*/
-.newCoins .el-icon-close:before{
+.newCoins .el-icon-close:before {
   content: ''
 }
 
@@ -235,7 +267,7 @@ el-carousel-item img{
 }
 
 .el-input__prefix {
-  top: -5px;
+  /*top: -5px;*/
 }
 
 .el-picker-panel {
@@ -316,176 +348,193 @@ el-carousel-item img{
 .el-form-item__label {
   /*width: 16%;*/
 }
+
 .el-tooltip__popper.is-dark {
   background: transparent;
 }
 
-
-
-
 /*.el-collapse-item__header {*/
-  /*background: #11182c;*/
-  /*color: #c2c3c8;*/
-  /*text-align: left;*/
-  /*!*font-size: 16px;*!*/
-  /*padding-left: 2.5%;*/
-  /*box-sizing: border-box;*/
+/*background: #11182c;*/
+/*color: #c2c3c8;*/
+/*text-align: left;*/
+/*!*font-size: 16px;*!*/
+/*padding-left: 2.5%;*/
+/*box-sizing: border-box;*/
 /*}*/
 
 /*.el-collapse {*/
-  /*border: 0;*/
+/*border: 0;*/
 /*}*/
 
 /*.el-collapse-item__content {*/
-  /*padding-bottom: 0;*/
+/*padding-bottom: 0;*/
 /*}*/
 
 /*.el-collapse-item__wrap {*/
-  /*border: 0;*/
-  /*background: #11182c;*/
-  /*padding-top: 3%;*/
+/*border: 0;*/
+/*background: #11182c;*/
+/*padding-top: 3%;*/
 /*}*/
 
 /*.el-form {*/
-  /*width: 36.5%;*/
-  /*margin: 0 auto;*/
-  /*color: #c2c3c8;*/
+/*width: 36.5%;*/
+/*margin: 0 auto;*/
+/*color: #c2c3c8;*/
 /*}*/
 
 /*.el-input__inner {*/
-  /*background: #11182c;*/
-  /*border: 1px solid #a0a3ab;*/
+/*background: #11182c;*/
+/*border: 1px solid #a0a3ab;*/
 /*}*/
 /*.el-tabs--left .el-tabs__header.is-left{*/
-  /*margin-right:0;*/
+/*margin-right:0;*/
 /*}*/
 
-
-
 /*表头*/
-.el-table th{
-  background-color:#0e1425;
-  color:#c7cde5;
+.el-table th {
+  background-color: #0e1425;
+  color: #c7cde5;
   font-weight: 700;
 }
+
 /*表格主色*/
-.el-table, .el-table__expanded-cell, .el-table tr{
-  background-color:#212537;
-  color:#c7cde5;
+.el-table, .el-table__expanded-cell, .el-table tr {
+  background-color: #212537;
+  color: #c7cde5;
 }
 
-.el-table td, .el-table th.is-leaf{
-  border:none;
+.el-table td, .el-table th.is-leaf {
+  border: none;
   text-align: center;
-  height:40px;
-  padding:0;
- line-hieght:40px;
+  height: 40px;
+  padding: 0;
+  line-height: 40px;
   font-weight: 700;
 }
+
 /*表格hover变色*/
-.el-table--enable-row-hover .el-table__body tr:hover>td{
-  background-color:#1b1f2e;
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+  background-color: #1b1f2e;
 
 }
-.el-tabs--left .el-tabs__nav-wrap.is-left{
-  margin-right:0px;
+
+.el-tabs--left .el-tabs__nav-wrap.is-left {
+  margin-right: 0px;
 }
-.el-table--border::after, .el-table--group::after, .el-table::before{
+
+.el-table--border::after, .el-table--group::after, .el-table::before {
   background-color: transparent;
 }
-.financeContent .el-tabs--left .el-tabs__item.is-left{
-  background-color:#0e1425;
+
+.financeContent .el-tabs--left .el-tabs__item.is-left {
+  background-color: #0e1425;
 }
-.financeContent .el-tabs--left .el-tabs__item.is-left.is-active{
-  background-color:#081024;
+
+.financeContent .el-tabs--left .el-tabs__item.is-left.is-active {
+  background-color: #081024;
 }
+
 /*.el-table .cell .up{*/
-  /*color:#ac4f55;*/
+/*color:#ac4f55;*/
 /*}*/
 
 /*.el-table .cell .down{*/
-  /*color:#598f66;*/
+/*color:#598f66;*/
 /*}*/
 
 /*赵鑫磊修改elementui*/
-.recharge-box .el-button--primary{
-  background-color:#455993;
-  border-color:#455993;
-  width:100%;
+.recharge-box .el-button--primary {
+  background-color: #455993;
+  border-color: #455993;
+  width: 100%;
 }
-.el-date-editor .el-range__icon{
+
+.el-date-editor .el-range__icon {
   line-height: 24px;
 }
 
-.picker .el-date-editor .el-range-separator{
-  color:#fff;
+.picker .el-date-editor .el-range-separator {
+  color: #fff;
 }
 
 /**/
-.deal-box .el-slider__runway{
-  height:2px;
+.deal-box .el-slider__runway {
+  height: 2px;
 }
-.deal-box .el-slider__button{
-  width:10px;
-  height:10px;
-  border:1px solid #fff;
-  background-color:#10182d;
+
+.deal-box .el-slider__button {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #fff;
+  background-color: #10182d;
 }
-.deal-box .el-slider__button-wrapper{
-  height:32px;
+
+.deal-box .el-slider__button-wrapper {
+  height: 32px;
 }
-.deal-box .el-slider__bar{
-  height:2px;
+
+.deal-box .el-slider__bar {
+  height: 2px;
   background-color: #455993;
 }
 
-.dialog .el-form-item__label{
-  padding:0 20px 0 0 ;
+.dialog .el-form-item__label {
+  padding: 0 20px 0 0;
 }
-.dialog .el-form,.dialog .el-input{
-  width:90%;
+
+.dialog .el-form, .dialog .el-input {
+  width: 90%;
 }
-.dialog .el-button--mini, .el-button--mini.is-round{
+
+.dialog .el-button--mini, .el-button--mini.is-round {
   /*margin-left:76px;*/
-  width:90%;
+  width: 90%;
 }
-.dialog .el-button{
-  background-color:#d75452;
-  color:#fff;
-  border:none;
+
+.dialog .el-button {
+  background-color: #d75452;
+  color: #fff;
+  border: none;
   font-size: 12px;
 }
-.dialog .el-button:hover{
+
+.dialog .el-button:hover {
   /*background-color:#c73232;*/
   background-color: #455993;
-  border-radius:2px;
+  border-radius: 2px;
   font-size: 12px;
 }
-.dialog .el-form-item{
-  margin-bottom:10px;
+
+.dialog .el-form-item {
+  margin-bottom: 10px;
 }
-.dialog .el-input-group__append{
+
+.dialog .el-input-group__append {
   /*border-radius:0;*/
-  padding:0;
-  color:#fff;
-  background-color:#11192c ;
+  padding: 0;
+  color: #fff;
+  background-color: #11192c;
 }
-.dialog .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select{
-  margin:0px;
+
+.dialog .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select {
+  margin: 0px;
 }
-.withdraw-deposit-box .el-select{
+
+.withdraw-deposit-box .el-select {
   width: 400px;
 }
-.billing_box .el-col-12{
+
+.billing_box .el-col-12 {
   line-height: 60px;
 }
 
-.fund_box .el-input--suffix .el-input__inner, .el-form-item__label{
-  border:none;
-  background-color:#0f1425;
+.fund_box .el-input--suffix .el-input__inner, .el-form-item__label {
+  border: none;
+  background-color: #0f1425;
 }
-.fund_box .tabs li.active .el-input--suffix .el-input__inner, .el-form-item__label{
-  color:#407edf;
+
+.fund_box .tabs li.active .el-input--suffix .el-input__inner, .el-form-item__label {
+  color: #407edf;
 }
 
 /*错误提示*/
@@ -505,6 +554,69 @@ el-carousel-item img{
   -webkit-background-size: 16px 16px;
   background-size: 16px 16px;
 }
-.v-modal{
+
+.v-modal {
   z-index: 2000 !important;
+}
+
+/*赵鑫磊修改主页样式*/
+.search-box .el-input--prefix .el-input__inner {
+  border-radius: 20px;
+  height: 25px;
+}
+
+.search-box .el-input__icon {
+  line-height: 28px;
+}
+
+.el-table__body td {
+  border-bottom: 1px solid rgba(255, 255, 255, .10);
+}
+
+/*轮播图*/
+.el-carousel__arrow--left {
+  left: 30px;
+  background-color: transparent;
+}
+
+el-carousel__arrow--right {
+  right: 30px;
+  background-color: transparent;
+
+}
+
+.el-carousel__arrow--left:hover {
+  left: 25px;
+}
+
+.el-carousel__arrow--right:hover {
+  right: 25px;
+}
+
+.el-carousel__arrow i {
+  font-size: 30px;
+}
+
+.el-carousel__item {
+  /*position: relative;*/
+}
+
+.el-carousel__item img {
+  /*position: absolute;*/
+
+  /*transform:translate(50%,0);*/
+}
+
+/*收藏图标*/
+.el-icon-star-on.active {
+  color: yellow;
+}
+
+.bitIcon {
+  margin: 0 auto;
+  width: 15px !important;
+  height: 15px !important;
+  display: inline-block;
+  vertical-align: middle;
+  /*margin-right:5px;*/
 }

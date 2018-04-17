@@ -53,7 +53,7 @@
         Msdify: '',//修改api
         Rese: '',//重置api
         Apikey: '',
-        haveKey: false,
+        haveKey: true,
         ApiIP: true,
         errorMsg: '',//错误信息
       };
@@ -76,7 +76,6 @@
         let apifd = new FormData();
         apifd.append('ip', this.key);
         ajax(apiUrl, 'post', apifd, (res) => {
-          console.log(res);
           if (res.data.code !== 200) {
             this.errorMsg = res.data.msg;
             return;
@@ -90,7 +89,6 @@
           }
 
           // this.$store.commit("changeDialogInfo",{dataInfo:});
-          // console.log(this.Apikey);
         });
         //
         // this.centerDialogVisible = true
@@ -101,8 +99,11 @@
         let modifyfd = new FormData();
         modifyfd.append('ip', this.Msdify);
         ajax(modifyUrl, 'post', modifyfd, (res) => {
-          this.$store.commit('changeDialogInfo', {dataInfo: '修改成功'})
-          // console.log(this.Msdify);
+          if (res.data.code !== 200) {
+            return;
+          } else {
+            this.$store.commit('changeDialogInfo', {dataInfo: '修改成功'})
+          }
         });
       },
       //重置api
@@ -111,29 +112,40 @@
         let resetfd = new FormData();
         resetfd.append('ip', this.Rese);
         ajax(resetUrl, 'post', resetfd, (res) => {
-          this.Rese = res.data.msg;
-          this.keytext = this.Rese
-          // console.log(this.Rese);
+          if (res.data.code !== 200) {
+            return;
+          } else {
+            this.Rese = res.data.msg;
+            this.keytext = this.Rese;
+            this.$store.commit('changeDialogInfo', {dataInfo: res.data.msg});
+          }
         });
         this.centerDialogVisible = true
+      },
+      //  检测是否存在apikey
+      checkApiKeyExist() {
+        return new Promise((resolve, reject) => {
+          let url = common.apidomain + 'user/apikey';
+          ajax(url, 'post', {}, (res) => {
+            resolve(res);
+          });
+        });
       }
     },
     computed: {},
     created() {
-      // this.haveKey = true
-      // let url = common.apidomain + 'user/apikey';
-      // ajax(url, 'post', {}, (res) => {
-      //   if (res.data.code !== 200) {
-      //     return;
-      //   } else {
-      //     if (res.data.data.api) {
-      //       this.Msdify = res.data.data.api.apiaccesskey;
-      //       this.Rese = res.data.data.api.apisecretkey;
-      //
-      //     }
-      //   }
-      //
-      // });
+      this.checkApiKeyExist().then((res) => {
+        console.log(res);
+        if (res.data.code !== 200) {
+          return;
+        } else {
+          if (res.data.data.api) {
+            this.haveKey = true;
+            this.Msdify = res.data.data.api.apiaccesskey;
+            this.Rese = res.data.data.api.apisecretkey;
+          }
+        }
+      });
     },
     components: {
       tips,//弹窗组件

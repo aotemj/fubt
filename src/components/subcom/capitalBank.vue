@@ -51,16 +51,11 @@
             <el-select class="selece_box" v-model="city">
               <el-option v-for="(option,index) in cityArr" :value="option.name" :key="option.name">{{ option.name }}
               </el-option>
-
-              <!--<el-option value="郑州市">{{ this.city }}</el-option>-->
-              <!--<el-option value="州市"></el-option>-->
             </el-select>
             <el-select class="selece_box" v-model="district">
               <el-option v-for="(option,index) in districtArr" :value="option.name" :key="option.name">{{ option.name
                 }}
               </el-option>
-              <!--<el-option value="金水区" label="金水区">{{ this.district }}</el-option>-->
-              <!--<el-option value="水区" label="金水区"></el-option>-->
             </el-select>
             <input type="text" class="prova" placeholder="请输入您的详细地址" v-model="address">
           </el-form-item>
