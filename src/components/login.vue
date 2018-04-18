@@ -17,7 +17,7 @@
         </div>
         <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
         <!--<input type="button" :disabled="logging" v-model="loginBtn" class="login-btn" v-on:click="loadCurrencyList">-->
-        <el-button size="midium" :disabled="logging" class="login-btn" type="primary" :loading="logging" v-on:click="loadCurrencyList">登录</el-button>
+        <el-button size="midium" :disabled="logging" class="login-btn blue-bg" v-on:click="loadCurrencyList">登录</el-button>
 
       </div>
 
@@ -150,6 +150,12 @@
       },
       //加载个人资产
       loadCurrencyList() {
+
+        const loading = this.$loading({
+          lock: true,
+          background: 'rgba(0, 0, 0, 0.7)',
+        });
+
         this.login().then((res) => {
           this.$store.commit('userLogin', res.data.data)
 
@@ -160,6 +166,7 @@
             if (res.data.code !== 200) {
               return;
             } else {
+              loading.close();
               // this.currencyList = res.data.data.userWalletList;
               this.$store.commit('getPersonalAsset', res.data.data.userWalletList);
               localStorage.setItem('personalAsset', JSON.stringify(res.data.data.userWalletList));
@@ -250,7 +257,6 @@
     margin-top: 10px;
     width: 100px !important;
     border: none !important;
-    background-color: #445895;
     border-radius:0;
   }
 

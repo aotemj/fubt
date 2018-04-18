@@ -28,7 +28,7 @@ export default new Vuex.Store({
 
     //市场信息
     marketList: [],
-    marketLoading:true,
+    marketLoading: true,
   },
   mutations: {
     //用户登录
@@ -89,7 +89,7 @@ export default new Vuex.Store({
     //  获取市场信息
     getMarket(state, data) {
       state.marketList = data;
-      state.marketLoading=false;
+      state.marketLoading = false;
     }
   }
 })

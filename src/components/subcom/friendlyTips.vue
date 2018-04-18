@@ -12,7 +12,7 @@
 		  <span class="datainfo">{{this.$store.state.message.dataInfo}}</span>
 		  <span slot="footer" class="dialog-footer">
 		    <!-- <el-button @click="centerDialogVisible = false">取 消</el-button> -->
-		    <el-button type="primary" @click="close">确 定</el-button>
+		    <el-button  size="mini" class="blue-bg w100" @click="close">确 定</el-button>
 		  </span>
 		</el-dialog>
 	</div>

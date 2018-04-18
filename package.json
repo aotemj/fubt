@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@xkeshi/vue-qrcode": "^0.3.0",
+    "animate.css": "^3.6.1",
     "axios": "^0.18.0",
     "echarts": "^4.0.4",
     "element-ui": "^2.2.2",
@@ -21,8 +22,7 @@
     "vue-clipboard2": "^0.1.0",
     "vue-i18n": "^7.6.0",
     "vue-qart": "^2.1.1",
-    "vue-router": "^3.0.1",
-    "vue2-animate": "^2.0.0"
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

@@ -1,5 +1,6 @@
 <template>
   <div class="content pr">
+    <Customer></Customer>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <!--全部-->
       <el-tab-pane name="1">
@@ -87,7 +88,7 @@
             >
               <template slot-scope="scope">
                 <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
-                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose| keepTwoNum}}%
                 </div>
               </template>
             </el-table-column>
@@ -108,7 +109,7 @@
               width="100"
             >
               <template slot-scope="scope">
-                <i class="el-icon-star-on fz22" v-on:click="toggleLike(scope.row.id)"
+                <i class="el-icon-star-on fz16" v-on:click="toggleLike(scope.row.id)"
                    v-bind:class="{'active':scope.row.isLike}">
                 </i>
               </template>
@@ -202,7 +203,7 @@
             >
               <template slot-scope="scope">
                 <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
-                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose| keepTwoNum}}%
                 </div>
               </template>
             </el-table-column>
@@ -317,7 +318,7 @@
             >
               <template slot-scope="scope">
                 <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
-                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose| keepTwoNum}}%
                 </div>
               </template>
             </el-table-column>
@@ -430,7 +431,7 @@
             >
               <template slot-scope="scope">
                 <div class="data-item ml40" v-bind:class="{'up':scope.row.rose>0,'down':scope.row.rose<0}">
-                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose*100| keepTwoNum}}%
+                  <span v-show="scope.row.rose>0">+</span>{{scope.row.rose| keepTwoNum}}%
                 </div>
               </template>
             </el-table-column>
@@ -470,6 +471,8 @@
 <script>
   import common from "../../kits/domain.js";
   import {ajax} from "../../kits/http.js";
+  //在线客服
+  import Customer from './customer_service'
 
   export default {
     data() {
@@ -633,6 +636,9 @@
 
     },
     mounted() {
+    },
+    components: {
+      Customer
     }
   }
 </script>
@@ -679,9 +685,6 @@
     height: 40px;
     line-height: 40px;
     color: #fff;
-  }
-
-  .tbody {
   }
 
   .tbody .item {
@@ -743,8 +746,9 @@
   }
 
   .content {
-  / / 增加此样式 width: 1300 px;
+    /*/ / 增加此样式 width: 1300 px;*/
     margin: 0 auto;
+    padding-bottom: 70px;
   }
 
   .animate {

@@ -378,7 +378,7 @@
   .personal_center {
     width: 400px;
     /*height: 500px;*/
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 1);
     position: absolute;
     top: 85px;
     right: -108px;

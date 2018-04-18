@@ -11,38 +11,37 @@
             <div>UID:{{userInfo.fid}}</div>
           </div>
         </div>
-        
         <!-- 1.02退出按钮 -->
         <div class="quite" @mouseover="quiteonMouseOver" @mouseleave="quiteupMouseOut">
-          <img src="../../assets/quit.png" height="20" width="20" alt="" v-show="quitetoggle1">
-          <img src="../../assets/quitSelected.png" height="20" width="20" alt="" v-show="quitetoggle2">
+          <img src="../../assets/quit.png" height="20" width="20" alt="" v-if="quitetoggle">
+          <img src="../../assets/quitSelected.png" height="20" width="20" alt="" v-else>
           <a href="#" v-on:click.prevent="quit" class="quitstyle">退出</a>
         </div>
         <!-- 1.03设置按钮 -->
         <div class="setbutton" @mouseover="setonMouseOver" @mouseleave="setupMouseOut">
-          <img src="../../assets/set.png" height="20" width="20" alt="" v-show="settoggle1">
-          <img src="../../assets/setSelected.png" height="20" width="20" alt="" v-show="settoggle2">
+          <img src="../../assets/set.png" height="20" width="20" alt="" v-if="settoggle">
+          <img src="../../assets/setSelected.png" height="20" width="20" alt="" v-else>
           <router-link to="/user" class="setstyle">设置</router-link>
         </div>
-        <!-- <p class="username">{{ userInfo.floginname }}
-          <span class="set">
-            <router-link to="/user" class="blue">设置</router-link>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="#" class="blue" v-on:click.prevent="quit">退出</a>
-          </span>
-        </p>
-        <div class="userid">
-          <span>UID：{{userInfo.fid}}</span>
-        </div> -->
       </div>
-      <!-- 个人中心币种列表 -->
+      <!-- 2.0个人中心币种列表 -->
       <div class="currency">
-        <!-- 账户资产 -->
+        <!-- 2.01账户资产 -->
         <div class="title">账户资产</div>
+        <!-- 2.02隐藏或显示全部 -->
         <div class="part">
-            <input type="radio" id="male" name="radioGroup"/>
-            <label for="male">隐藏资产为0的币种</label>
+          <div class="partright" @click="hidezero">
+            <img src="../../assets/radio.png" height="14" width="14" alt=""  v-if="radiotogglehide">
+            <img src="../../assets/radioSelected.png" height="14" width="14" alt="" v-else>
+            <span>隐藏资产为0的币种</span>
+          </div>
+          <div class="partleft" @click="showall">
+            <img src="../../assets/radio.png" height="14" width="14" alt="" v-if="radiotoggleall">
+            <img src="../../assets/radioSelected.png" height="14" width="14" alt="" v-else>
+            <span>显示全部</span>
+          </div>
         </div>
-        <!-- 列表 -->
+        <!-- 2.03列表 -->
         <ul class="currency_List">
           <li>币种</li>
           <li>可用</li>
@@ -53,6 +52,7 @@
              <li v-for="(item,index) in currencyList"><span>{{ item.shortName }}</span><span>{{ item.total }}</span><span>{{ item.frozen }}</span></li>
           </ul>
         </div>
+        <!-- 2.04按钮 -->
         <div class="button_click">
           <button><router-link class="fff" to="/finance">充值</router-link></button>
           <button><router-link class="fff" to="/finance">提币</router-link></button>
@@ -64,14 +64,13 @@
 <script>
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
-
   export default {
     data() {
       return {
-        settoggle1:true,
-        settoggle2:false,
-        quitetoggle1:true,
-        quitetoggle2:false,
+        quitetoggle:true,//退出按钮状态
+        settoggle:true,//设置按钮状态
+        radiotoggleall:false,//显示全部单选
+        radiotogglehide:true,//隐藏币种为0单选
       }
     },
     created() {
@@ -84,27 +83,35 @@
       //     this.userCenter = res.data.data.user;
       // });
       // console.log(this.$store.state.userInfo.fid);
+      console.log(this.currencyList)
+
     },
     methods: {
-      setonMouseOver(){
-        this.settoggle1=false
-        this.settoggle2=true
+      setonMouseOver(){//设置按钮鼠标移入
+        this.settoggle=false
       },
-      setupMouseOut(){
-        this.settoggle1=true
-        this.settoggle2=false
+      setupMouseOut(){//设置按钮鼠标移出
+        this.settoggle=true
       },
-      quiteonMouseOver(){
-        this.quitetoggle1=false
-        this.quitetoggle2=true
+      quiteonMouseOver(){//退出按钮鼠标移入
+        this.quitetoggle=false
       },
-      quiteupMouseOut(){
-        this.quitetoggle1=true
-        this.quitetoggle2=false
+      quiteupMouseOut(){//退出按钮鼠标移出
+        this.quitetoggle=true
       },
-      quit() {
+      quit() {//点击退出退出系统
         this.$store.commit('userLogOut');
-      }
+      },
+      hidezero(){//隐藏币种为0方法
+        console.log("您点击了隐藏币种为0的单选框")
+        this.radiotogglehide=false;
+        this.radiotoggleall=true;
+      },
+      showall(){//显示全部方法
+        console.log("您点击了显示全部的单选框")
+        this.radiotogglehide=true;
+        this.radiotoggleall=false;
+      },
     },
     computed: {
       //个人信息
@@ -120,17 +127,22 @@
 </script>
 <style scoped>
   .user_div{
-    padding: 10px 10px 0 10px;
+    /*background-color: #1D2E5C;*/
+    background-color: #1e223c;
+    opacity:0.8;
   }
+  /*个人中心头部*/
   .user_info {
     height: 80px;
     border-bottom: 1px solid #7583A8;
     overflow: hidden;
+    padding: 0 25px;
   }
   .personinfo{
     float: left;
     overflow: hidden;
     width: 50%;
+    font-size:12px;
   }
   .pictou,.pinfo{
     box-sizing:border-box;
@@ -148,7 +160,10 @@
   .pinfo>div{
     text-align: left;
     margin-left: 7%;
-    line-height:25px;
+    line-height:20px;
+  }
+  .pinfo>div:first-child{
+    padding-top: 5px;
   }
   .setbutton{
     float: right;
@@ -158,6 +173,7 @@
   }
   .setbutton:hover .setstyle,.quite:hover .quitstyle{
     color: #338FF5;
+    font-size:12px;
   }
   .setbutton>img,.quite>img{
     display: inline-block;
@@ -165,7 +181,7 @@
   }
   .setstyle,.quitstyle{
     color: #FFF;
-    font-size: 14px;
+    font-size: 12px;
   }
   .quite{
     float: right;
@@ -177,178 +193,136 @@
     top: 32px;
   }
 
-  /*.username {
-    width: 100%;
-    padding-left: 13%;
-  }
-
-  .userid span:first-child {
-    display: inline-block;
-    width: 46%;
-    margin-left: 13%;
-  }
-
-  .set {
-    display: inline-block;
-    float: right;
-    width: 25%;
-    height: 20px;
-    margin-right: 13%;
-    color: #6bb1e1;
-    margin-top: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    cursor: pointer;
-  }*/
-/*  .userid, .username, .currency_List li {
-    height: 30px;
-    line-height: 30px;
-    color: #c2c3c8;
-    font-size: 14px;
-  }*/
-
-
+  /*账户资产*/
   .title{
     height: 30px;
     line-height: 30px;
     margin-top: 15px;
     font-size: 18px;
     text-align: left;
-    /*font-weight: 700;*/
+    padding: 0 25px;
   }
+  
+  /*隐藏显示部分*/
   .part{
-    text-align: right;
-    padding-right: 10px;
-    height: 30px;
-    line-height: 30px;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    font-size:12px;
+    padding: 0 25px;
   }
-  .part input {
-    display: inline-block;
+  .partleft>img,.partright>img{
+    vertical-align: middle;
   }
-  .part label {
-    font-size: 14px;
+  .partleft{
+    float: right;
     cursor: pointer;
   }
-    input[type="radio"] + label::before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14px;
-    width: 1em;
-    height: 1em;
-    margin-right: .4em;
-    border-radius: 50%;
-    border: 1px solid #338ff5;
-    text-indent: .15em;
-    line-height: 1;
+  .partright{
+    float: right;
+    margin-left: 15px;
+    cursor: pointer;
   }
 
-  input[type="radio"]:checked + label::before {
-    width: .6em;
-    height: .6em;
-    vertical-align: middle;
-    background-color: #338ff5;
-    background-clip: content-box;
-    padding: .2em;
-  }
-
-  input[type="radio"] {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-  }
-
-
-
-
-
-
-
-
+  /*列表部分*/
   .currency{
     max-height: 500px;
   }
   .currency_List {
     display: flex;
+    font-size:12px;
+    padding: 0 25px;
   }
-
   .currency_List li {
     flex: 1;
     text-align: center;
     height: 40px;
     line-height: 40px;
   }
-
+  .currency_List>li:nth-of-type(1) {
+    text-align:left;
+    padding-left:3px;
+  }
+  .currency_List>li:nth-of-type(3) {
+    text-align:right;
+  }
   .currencylist {
-    max-height: 260px;
+    max-height: 250px;
     overflow-y: auto;
   }
-
   .currencylist ul li {
-    height: 25px;
-    line-height: 25px;
+    height: 32px;
+    line-height: 32px;
     display: flex;
     cursor: pointer;
+    font-size:12px;
+    font-family:"Microsoft Yahei";
   }
-
   .currencylist ul li span {
     display: inline-block;
-    flex: 1;
+    /*flex: 1;*/
     text-align: center;
   }
-
+  .currencylist ul li span:first-child{
+    text-align: center;
+    width: 10%;
+    padding-left: 23px;
+  }
+  .currencylist ul li span:nth-of-type(2){
+    text-align: center;
+    width: 80%;
+  }
+  .currencylist ul li span:last-child{
+    text-align: center;
+    width: 10%;
+    padding-right: 7px;
+  }
+  
+  /*滚动条部分*/
   .currencylist::-webkit-scrollbar {
-    width: 2px;
+    width: 10px;
   }
-
   .currencylist::-webkit-scrollbar-track-piece {
-    background-color: #c2c3c8;
+    background-color: #181C28;
   }
-
   .currencylist::-webkit-scrollbar-track {
-    background-color: #c2c3c8;
   }
-
   .currencylist::-webkit-scrollbar-thumb {
-    background-color: #000;
+    background-color: #222439;
+    border-radius: 20px;
   }
-
   .currencylist::-webkit-scrollbar-button {
     background-color: #fff;
     display: none;
   }
 
-  .button_click {
-    /*width: 100%;*/
-    /*line-height: 20px;*/
-  }
-
+  /*按钮部分*/
   .button_click button {
-    width: 25%;
-    /*height: 30px;*/
-    /*line-height: 25px;*/
-    /*text-align: center;*/
+    width: 30%;
     line-height: 30px;
     cursor: pointer;
-    /*border-radius: 5px;*/
     margin: 0 auto;
     display: inline-block;
     border: 1px solid #F8FFF3;
   }
-
   .button_click button:first-child {
-    /*background: #d9534f;*/
-    /*background: #1C2F5A;*/
-    /*margin: 30px auto 20px;*/
     margin-right: 30px;
-    /*background: #050505;*/
     background: transparent;
   }
-
+  .button_click button:first-child:hover {
+    border: 1px solid #2972C4;
+    color: #2972C4;
+  }
+  .button_click button:first-child:hover .fff{
+    color: #2972C4;
+  }
   .button_click button:last-child {
-    /*background: #5cb85c;*/
-    /*background: #1C2F5A;*/
-    /*background: #050505;*/
     background: transparent;
+  }
+  .button_click button:last-child:hover {
+    border: 1px solid #2972C4;
+  }
+  .button_click button:last-child:hover .fff{
+    color: #2972C4;
   }
 </style>

@@ -253,7 +253,7 @@ el-carousel-item img {
 
 .el-input__inner {
   background: #11182c;
-  border: 1px solid #a0a3ab;
+  border: 1px solid rgba(255,255,255,.8);
 }
 
 .el-date-editor.el-input {
@@ -476,7 +476,7 @@ el-carousel-item img {
 
 .deal-box .el-slider__bar {
   height: 2px;
-  background-color: #455993;
+  background-color: #338ff5;
 }
 
 .dialog .el-form-item__label {
@@ -493,15 +493,11 @@ el-carousel-item img {
 }
 
 .dialog .el-button {
-  background-color: #d75452;
-  color: #fff;
   border: none;
   font-size: 12px;
 }
 
 .dialog .el-button:hover {
-  /*background-color:#c73232;*/
-  background-color: #455993;
   border-radius: 2px;
   font-size: 12px;
 }
@@ -531,11 +527,11 @@ el-carousel-item img {
 
 .fund_box .el-input--suffix .el-input__inner, .el-form-item__label {
   border: none;
-  background-color: #0f1425;
+  /*background-color: #0f1425;*/
 }
 
 .fund_box .tabs li.active .el-input--suffix .el-input__inner, .el-form-item__label {
-  color: #407edf;
+  /*color: #407edf;*/
 }
 
 /*错误提示*/
@@ -560,6 +556,40 @@ el-carousel-item img {
   z-index: 2000 !important;
 }
 
+/* 任付伟改c2c中c2c_record.vue页面中点击付款信息后的弹出窗样式 */
+.exchange .el-dialog{
+  text-align: left;
+  background-color: #222F52;
+  border-radius: 10px;
+}
+.exchange .el-dialog__header{
+  border-bottom: 1px solid #4C597B;
+  padding-top: 40px;
+}
+.exchange .el-dialog__body{
+  padding-top: 15px;
+}
+.exchange .el-form-item__label{
+  background-color: #222F52;
+  color: #DADFF3;
+  font-family: "Microsoft YaHei";
+}
+.exchange .el-input__inner{
+  background: none;
+  border: 0;
+}
+.exchange .el-form{
+  width: 60%;
+}
+.exchange .el-input--suffix{
+  width: 260px;
+}
+.exchange .el-form-item{
+  margin-bottom: 10px;
+}
+
+
+
 /*赵鑫磊修改主页样式*/
 .search-box .el-input--prefix .el-input__inner {
   border-radius: 20px;
@@ -571,7 +601,7 @@ el-carousel-item img {
 }
 
 .el-table__body td {
-  border-bottom: 1px solid rgba(255, 255, 255, .10);
+  border-bottom: 1px solid rgba(255, 255, 255,0.03);
 }
 
 /*轮播图*/
@@ -610,7 +640,7 @@ el-carousel__arrow--right {
 
 /*收藏图标*/
 .el-icon-star-on.active {
-  color: yellow;
+  color: #338ff5;
 }
 
 /*tab栏*/
@@ -636,9 +666,47 @@ el-carousel__arrow--right {
   margin-top:13px;
   border: none;
 }
+.el-input.is-disabled .el-input__inner{
+  background-color: transparent;
+  border:1px solid rgba(255,255,255,.8)
+}
+.el-input.is-active .el-input__inner, .el-input__inner:focus{
+  border:1px solid #338ff5;
+}
 /*下拉箭头*/
 .el-collapse-item__arrow{
   margin-top:15px;
+}
+
+
+.el-collapse-item{
+  position: relative;
+
+}
+
+.currencyData .el-tabs--top .el-tabs__item.is-top:nth-child(2){
+  padding-left:28px;
+}
+
+.currencyData .el-table th.is-leaf{
+  text-align: left;
+}
+.currencyData .el-table th>.cell{
+  margin-left:20px;
+}
+/*分页*/
+.el-pagination button.disabled,.el-pager li,.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li,.el-pagination.is-background .el-pager li:not(.disabled).active,.el-pagination .btn-next, .el-pagination .btn-prev{
+  background-color: transparent;
+}
+.el-pager li{
+  color:#c7c8cb;
+}
+.el-pager li.active{
+  color:#338ff5;
+}
+
+.el-dialog--center .el-dialog__body{
+  text-align: center;
 }
 .bitIcon {
   margin: 0 auto;
@@ -648,3 +716,4 @@ el-carousel__arrow--right {
   vertical-align: middle;
   /*margin-right:5px;*/
 }
+
