@@ -224,7 +224,7 @@
               width="100"
             >
               <template slot-scope="scope">
-                <i class="el-icon-star-on fz22" v-on:click="toggleLike(scope.row.id)"
+                <i class="el-icon-star-on fz16" v-on:click="toggleLike(scope.row.id)"
                    v-bind:class="{'active':scope.row.isLike}">
                 </i>
               </template>
@@ -338,7 +338,7 @@
               width="100"
             >
               <template slot-scope="scope">
-                <i class="el-icon-star-on fz22" v-on:click="toggleLike(scope.row.id)"
+                <i class="el-icon-star-on fz16" v-on:click="toggleLike(scope.row.id)"
                    v-bind:class="{'active':scope.row.isLike}">
                 </i>
               </template>
@@ -452,7 +452,7 @@
               width="100"
             >
               <template slot-scope="scope">
-                <i class="el-icon-star-on fz22" v-on:click="toggleLike(scope.row.id)"
+                <i class="el-icon-star-on fz16" v-on:click="toggleLike(scope.row.id)"
                    v-bind:class="{'active':scope.row.isLike}">
                 </i>
               </template>
@@ -498,9 +498,9 @@
       },
 
       reflashMarket() {
-        // console.log(this.$store.state.marketList);
-        this.dataList = this.$store.state.marketList;
-        // console.log(this.dataList);
+        // this.dataList = this.$store.state.marketList;
+        this.getMarketAuto();
+        this.toggleUpDownShow();
       },
 
       toggleUpDownShow() {
@@ -554,7 +554,6 @@
           if (item.id == id) {
             count++;
             this.likeList.splice(index, 1);
-
             return;
           }
         })
@@ -564,7 +563,9 @@
             this.likeList.push(item);
           }
         })
+        this.localMarketList = this.marketList;
         localStorage.setItem('localMarketList', JSON.stringify(this.marketList));
+        this.$store.commit('getMarket', this.marketList);
       },
       //获取市场数据(币种)
       getMarket() {
@@ -575,6 +576,40 @@
           })
         })
       },
+      //  自动获取币种
+      getMarketAuto() {
+        this.likeList = [];
+        this.localMarketList.forEach((item, index) => {
+          if (item.isLike) {
+            this.likeList.push(item);
+          }
+        });
+        //获取市场数据
+        this.getMarket().then((res) => {
+          if (res.data.code !== 200) {
+            return;
+          }
+          if (this.localMarketList.length !== 0) {
+            //添加收藏
+            res.data.data.forEach((item, index) => {
+
+              //添加本地数据存储中的收藏
+              if (item.id == this.localMarketList[index].id) {
+                item.isLike = this.localMarketList[index].isLike;
+              }
+
+            })
+          } else {
+            res.data.data.forEach((item, index) => {
+              item.isLike = 0;
+            });
+          }
+          this.marketList = res.data.data;
+          this.loadingArr[0] = false;
+          localStorage.setItem('localMarketList', JSON.stringify(res.data.data));
+          this.$store.commit('getMarket', res.data.data);
+        })
+      }
     },
     computed: {
       filteredData: function () {
@@ -595,47 +630,20 @@
       },
     },
     created() {
-      this.localMarketList.forEach((item, index) => {
-        if (item.isLike) {
-          this.likeList.push(item);
-        }
-      });
-      //获取市场数据
-      this.getMarket().then((res) => {
-        if (res.data.code !== 200) {
-          return;
-        }
-        if (this.localMarketList.length !== 0) {
-          //添加收藏
-          res.data.data.forEach((item, index) => {
-
-            //添加本地数据存储中的收藏
-            if (item.id == this.localMarketList[index].id) {
-              item.isLike = this.localMarketList[index].isLike || 0;
-            }
-
-          })
-        } else {
-          res.data.data.forEach((item, index) => {
-            item.isLike = 0;
-          });
-        }
-
-        this.marketList = res.data.data;
-        this.loadingArr[0] = false;
-        localStorage.setItem('localMarketList', JSON.stringify(res.data.data));
-        this.$store.commit('getMarket', res.data.data);
-
-      })
 
       //加载收藏列表
+      //清除定时器
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
 
-
-      // this.timer = setInterval(this.toggleUpDownShow, 1000);
-      // this.timer = setInterval(this.reflashMarket, 10000000);
+      this.timer = setInterval(this.reflashMarket, 1000);
 
     },
     mounted() {
+    },
+    destroyed() {
+      clearInterval(this.timer);
     },
     components: {
       Customer
@@ -748,7 +756,7 @@
   .content {
     /*/ / 增加此样式 width: 1300 px;*/
     margin: 0 auto;
-    padding-bottom: 70px;
+    padding-bottom: 30px;
   }
 
   .animate {

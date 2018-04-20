@@ -5,20 +5,28 @@
     <div class="inner-box">
       <div class="login-box">
         <h4>登录</h4>
-        <div class="username">
-          <input type="text" placeholder="请输入手机号/邮箱" v-model.trim="username">
+        <div class="username mb20">
+          <el-input type="text" size="medium" class="blue w400" v-model.trim="username"
+                    placeholder="请输入手机号/邮箱"></el-input>
         </div>
-        <div class="pwd">
-          <input type="password" placeholder="请输入密码" v-model.trim="password">
+        <div class="pwd mb20">
+          <el-input class="blue w400" size="medium" type="password" v-model.trim="password"
+                    placeholder="请输入密码"></el-input>
         </div>
         <div class="todos">
           <router-link to="/forgetPwd">忘记密码？</router-link>
           <router-link to="/register">免费注册</router-link>
         </div>
-        <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
-        <!--<input type="button" :disabled="logging" v-model="loginBtn" class="login-btn" v-on:click="loadCurrencyList">-->
-        <el-button size="midium" :disabled="logging" class="login-btn blue-bg" v-on:click="loadCurrencyList">登录</el-button>
 
+        <!--<div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>-->
+        <!--错误框-->
+        <transition
+          enter-active-class="animated shake"
+        >
+          <div class="false-tips fz12" v-show="errorMsg"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+        </transition>
+
+        <el-button size="midium" class="login-btn blue-bg" v-on:click="loadCurrencyList">登录</el-button>
       </div>
 
     </div>
@@ -64,7 +72,6 @@
           }
 
           this.loginBtn = '登录中...';
-          this.logging = true;
 
           let loginUrl = common.apidomain + 'login';
 
@@ -74,19 +81,7 @@
 
           ajax(loginUrl, 'post', formData, (res) => {
             this.loginBtn = '登录';
-            this.logging = false;
-            if (res.data.code !== 200) {
-              if (res.data.msg == '帐号不存在，<a href="/user/register.html">去注册>></a>！') {
-                this.errorMsg = '账号不存在！请核对后重新输入';
-                reject(res);
-                return;
-              }
-              this.errorMsg = res.data.msg;
-              return;
-            } else {
-              resolve(res);
-            }
-            // console.log(res.data);
+            resolve(res);
             /*
             *  用户登录返回信息：
             *
@@ -142,7 +137,6 @@
               }
             }
             */
-
           });
 
         })
@@ -157,6 +151,17 @@
         });
 
         this.login().then((res) => {
+          loading.close();
+
+          if (res.data.code !== 200) {
+            if (res.data.msg == '帐号不存在，<a href="/user/register.html">去注册>></a>！') {
+              this.errorMsg = '账号不存在！请核对后重新输入';
+              return;
+            }
+            this.errorMsg = res.data.msg;
+            return;
+          }
+
           this.$store.commit('userLogin', res.data.data)
 
           let coinUrl = common.apidomain + 'financial/index';
@@ -166,7 +171,7 @@
             if (res.data.code !== 200) {
               return;
             } else {
-              loading.close();
+
               // this.currencyList = res.data.data.userWalletList;
               this.$store.commit('getPersonalAsset', res.data.data.userWalletList);
               localStorage.setItem('personalAsset', JSON.stringify(res.data.data.userWalletList));
@@ -257,7 +262,6 @@
     margin-top: 10px;
     width: 100px !important;
     border: none !important;
-    border-radius:0;
   }
 
   /*错误提示*/

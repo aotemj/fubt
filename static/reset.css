@@ -89,15 +89,14 @@ input::-ms-input-placeholder { /*Internet Explorer*/
 .blue-bg {
   background-color: #6da0d9;
   color: #fff;
-  border:none;
+  border: none;
 }
 
 .blue-bg:hover {
   background-color: #338ff5;
   color: #fff;
-  border:none;
+  border: none;
 }
-
 
 .blue:hover {
   color: #338ff5;
@@ -317,7 +316,11 @@ fz30 {
 }
 
 .w100 {
-  width: 100px;
+  width: 100px !important;
+}
+
+.w400 {
+  width: 400px;
 }
 
 .w80p {

@@ -2,33 +2,11 @@
   <div class="billing_box">
     <header>
       <div class="block">
-
         <el-row class="block-col-2">
           <div class="picker">
-            <el-date-picker
-              v-model="value1"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              id="1">
+            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" id="1" v-on:click="endTime">
             </el-date-picker>
           </div>
-
-          <el-col class="w5p lh60">
-            <span class="fr">市场</span>
-          </el-col>
-          <!--市场-->
-          <el-col :span="12">
-            <el-select v-model="selectMarket" placeholder="请选择">
-              <el-option
-                v-for="item in market"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-col>
 
           <el-col class="w5p lh60">
             <span class="fr">币种</span>
@@ -36,11 +14,7 @@
           <!--币种-->
           <el-col :span="12" class="w8p fz12">
             <el-select v-model="selectCoin" placeholder="请选择">
-              <el-option class="fz12"
-                v-for="item in coinTypeList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+              <el-option class="fz12" v-for="item in coinTypeList" :key="item.value" :label="item.label" :value="item.value" v-on:click="currency" >
               </el-option>
             </el-select>
           </el-col>
@@ -51,28 +25,7 @@
           <!--类型-->
           <el-col :span="12" class="w8p">
             <el-select v-model="selectType" placeholder="请选择">
-              <el-option
-                v-for="item in typeList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-col>
-          <el-col class="w5p lh60">
-            <span class="fr">状态</span>
-          </el-col>
-          <!--类型-->
-          <el-col :span="12">
-
-            <!--<el-col>-->
-            <el-select class="fl" v-model="selectStatus" placeholder="请选择">
-
-              <el-option class=""
-                v-for="item in statusList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value" v-on:click="type">
               </el-option>
             </el-select>
           </el-col>
@@ -83,20 +36,22 @@
     <div class="billing_list">
       <div class="container-screen">
         <div class="voteNew">
-          <ul v-for="(item,index) in billingTab">
-            <li>{{item.time}}</li>
-            <li>{{item.type}}</li>
-            <li>{{item.number}}</li>
-            <li>{{item.service}}</li>
-            <li>{{item.state}}</li>
+          <ul>
+            <li>时间</li>
+            <li>币种</li>
+            <li>充值地址</li>
+            <li>充值数量</li>
+            <li>确认数</li>
+            <li>状态</li>
           </ul>
-          <div id="voteNew-list">
-            <article v-for="(item,index) in billingList" v-show="billingList.length!==0">
-              <span>{{item.time}}</span>
-              <span>{{item.type}}</span>
-              <span>{{item.number}}</span>
-              <span>{{item.service}}</span>
+          <div id="voteNew-list" v-show="billingList.length!==0">
+            <article v-for="(item,index) in billingList" :key="index">
+              <span>{{item.fupdatetime}}</span>
+              <span>{{item.fsource_s}}</span>
+              <span>{{item.fwithdrawaddress}}</span>
+              <span>{{item.famount}}</span>
               <span>{{item.state}}</span>
+              <span>{{item.fstatus_s}}</span>
             </article>
           </div>
           <div class="noRecord" v-show="billingList.length==0">暂无记录</div>
@@ -106,36 +61,16 @@
   </div>
 </template>
 <script>
+  import common from "../../kits/domain";
+  import {ajax} from "../../kits/http";
   export default {
     data() {
       return {
-        //市场
-        market: [
-          {
-            value: '0',
-            label: 'FBT交易区'
-          }, {
-            value: '1',
-            label: 'FUC交易区'
-          }, {
-            value: '2',
-            label: 'BTC交易区'
-          }
-        ],
+        value1: '',//开始时间
+        value2: '',//结束时间
         selectMarket: '',//市场选中值
         //币种列表
-        coinTypeList: [
-          {
-            value: '3',
-            label: 'FBT交易区'
-          }, {
-            value: '4',
-            label: 'FUC交易区'
-          }, {
-            value: '5',
-            label: 'BTC交易区'
-          }
-        ],
+        coinTypeList: [],
         selectCoin: '',//币种选中值
 
         //类型
@@ -151,17 +86,6 @@
         ],
         selectType:'6',//类型选中值
 
-        //状态
-        statusList:[
-          {
-            vlaue:'8',
-            label:'等待提现'
-          },
-          {
-            value:'9',
-            label:'提现完成'
-          }
-        ],
         selectStatus:8,//状态选中值
 
         pickerOptions1: {
@@ -169,33 +93,11 @@
             return time.getTime() > Date.now();
           }
         },
-        value1: '',
-        value2: '',
-        billingTab: [
-          {
-            time: '交易时间',
-            type: '类型',
-            number: '数量',
-            service: '手续费',
-            state: '状态'
-          }
-        ],
-        billingList: [
-          {
-            time: '2018.3.29 20:30:20',
-            type: 'FTB',
-            number: '155631',
-            service: '0.01',
-            state: '已确认'
-          }
-        ]
+        // 账单明细记录
+        billingList: [],
       };
     },
-    methods:{
-      getRecord(){
-        let recordUrl = common.apidomain+'financial/record';
-        let fd = new FormData();
-        // fd.append('symbol',);
+    // fd.append('symbol',);
         // fd.append('currentPage',);
         // fd.append('type',);
         // fd.append('datetype',);
@@ -210,11 +112,105 @@
           begindate: 2018-04-13
           enddate: 2018-04-13
           */
+    //获取表单数据
+    methods:{
+      //开始时间
+      startTime(){
+        let startUrl = common.apidomain + 'financial/record';
+        let start = new FormData();
+        start.append('typbegindatee',this.value1);//开始时间
+        start.append('enddate',this.value2);//结束时间
+        start.append('enddate',this.selectCoin);//币种
+        start.append('enddate',this.selectType);//类型
+        ajax(startUrl, 'post', start, (res) => {
+          if (res.data.code !== 200) {
+            return;
+          } 
+          // console.log(res)
+          // this.coinTypeList = res.data.data.filters
+        });
+      },
+      //结束时间
+      endTime(){
+        let endUrl = common.apidomain + 'financial/record';
+        let end = new FormData();
+        end.append('typbegindatee',this.value1);//开始时间
+        end.append('enddate',this.value2);//结束时间
+        end.append('enddate',this.selectCoin);//币种
+        end.append('enddate',this.selectType);//类型
 
-      },//获取表单数据
+        ajax(endUrl, 'post', end, (res) => {
+          if (res.data.code !== 200) {
+            return;
+          }
+          // console.log(res)
+        });
+      },
+      //币种
+      currency(){
+        let currencyUrl = common.apidomain + 'financial/record';
+        let currency = new FormData();
+        currency.append('typbegindatee',this.value1);//开始时间
+        currency.append('enddate',this.value2);//结束时间
+        currency.append('enddate',this.selectCoin);//币种
+        currency.append('enddate',this.selectType);//类型
+
+
+        ajax(currencyUrl, 'post', currency, (res) => {
+           //  调用失败
+          if (res.data.code !== 200) {
+            return;
+          } else {
+          //调用成功
+            this.coinTypeList = res.data.data.filters
+            // console.log(res)
+          }
+          
+        });
+      },
+      //类型
+      type(){
+        let typeUrl = common.apidomain + 'financial/record';
+        let type = new FormData();
+        type.append('typbegindatee',this.value1);//开始时间
+        type.append('enddate',this.value2);//结束时间
+        type.append('enddate',this.selectCoin);//币种
+        type.append('enddate',this.selectType);//类型
+
+        ajax(typeUrl, 'post', type, (res) => {
+          if (res.data.code !== 200) {
+            return
+          }
+          // console.log(123)
+        });
+      },
+      billingLists(){
+        return new Promise((resolve, reject) => {
+          let billingUrl = common.apidomain + 'financial/record'
+          let record = new FormData();
+          record.append('type',2);
+          record.append('type',1);
+          record.append('fuid',this.$store.state.userInfo.fid);
+            ajax(billingUrl, 'post', record , (res) => {
+                resolve(res);
+            });
+        })
+      }
+    },
+    
+    created(){
+      this.billingLists().then((res) => {
+         //  调用失败
+        if (res.data.code !== 200) {
+          return;
+        }
+        //调用成功
+          this.coinTypeList = res.data.data.filters
+          this.billingList = res.data.data.list.data
+          // console.log(this.billingList)
+      });
     },
     computed:{},
-    created(){}
   };
 </script>
 <style scoped>
@@ -251,7 +247,7 @@
   }
 
   .voteNew > ul > li {
-    width: 20%;
+    width: 16.5%;
     float: left;
     font-size: 14px;
   }
@@ -268,7 +264,7 @@
 
   #voteNew-list > article > span {
     display: inline-block;
-    width: 20%;
+    width: 16.5%;
     color: #c2c3c8;
     font-size: 12px;
     float: left;

@@ -179,7 +179,7 @@
                             <span class="ml40">{{scope.row.price}}</span>
                             <transition @before-enter="beforeEnterUp" @enter="enterUp" @after-enter="afterEnterUp">
                   <span v-show="upDownShow" class="animate pa">
-                  <i v-show="scope.row.rose >0" class="iconfont icon-up fz12"></i>
+                    <i v-show="scope.row.rose >0" class="iconfont icon-up fz12"></i>
                   </span>
                             </transition>
                             <transition @before-enter="beforeEnterDown" @enter="enterDown"
@@ -394,92 +394,6 @@
                 </el-input>
               </div>
             </div>
-            <!--</div>-->
-            <!--</el-collapse-transition>-->
-
-            <!--<el-tabs type="">-->
-            <!--<el-tab-pane>-->
-            <!--<span slot="label"><span style="font-size:18px;">●</span> FBT交易</span>-->
-            <!--<div class="table">-->
-            <!--<ul class="th">-->
-            <!--<li class="td">币种</li>-->
-            <!--<li class="td">最新成交价</li>-->
-            <!--<li class="td">24H成交量</li>-->
-            <!--<li class="td">日涨跌</li>-->
-            <!--</ul>-->
-            <!--<div class="tbody" v-on:click="selectedCurrency">-->
-            <!--<div :id="item.id" class="item" v-for="(item,index) in fbtFilteredData" v-on:mouseover="hover"-->
-            <!--v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">-->
-            <!--<li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>-->
-            <!--<li class="data-item">{{item.price}}</li>-->
-            <!--<li class="data-item">{{item.total}}</li>-->
-            <!--<li class="data-item">{{item.rose}}</li>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</el-tab-pane>-->
-            <!--<el-tab-pane>-->
-            <!--<span slot="label"><span style="font-size:18px;">●</span> BTC交易</span>-->
-            <!--<div class="table">-->
-            <!--<ul class="th">-->
-            <!--<li class="td">币种</li>-->
-            <!--<li class="td">最新成交价</li>-->
-            <!--<li class="td">24H成交量</li>-->
-            <!--<li class="td">日涨跌</li>-->
-            <!--</ul>-->
-            <!--<div class="tbody" v-on:click="selectedCurrency">-->
-            <!--<div :id="item.id" class="item" v-for="(item,index) in btcFilteredData" v-on:mouseover="hover"-->
-            <!--v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">-->
-            <!--<li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>-->
-            <!--<li class="data-item">{{item.price}}</li>-->
-            <!--<li class="data-item">{{item.total}}</li>-->
-            <!--<li class="data-item">{{item.rose}}</li>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</el-tab-pane>-->
-            <!--<el-tab-pane>-->
-            <!--<span slot="label"><span style="font-size:18px;">●</span> FUC交易</span>-->
-            <!--<div class="table">-->
-            <!--<ul class="th">-->
-            <!--<li class="td">币种</li>-->
-            <!--<li class="td">最新成交价</li>-->
-            <!--<li class="td">24H成交量</li>-->
-            <!--<li class="td">日涨跌</li>-->
-            <!--</ul>-->
-            <!--<div class="tbody" v-on:click="selectedCurrency">-->
-            <!--<div :id="item.id" class="item" v-for="(item,index) in fucFilteredData" v-on:mouseover="hover"-->
-            <!--v-on:click.stop="say(item.id,item.sellsymbol,item.buysymbol)">-->
-            <!--<li class="data-item">{{item.sellsymbol}}/{{item.buysymbol}}</li>-->
-            <!--<li class="data-item">{{item.price}}</li>-->
-            <!--<li class="data-item">{{item.total}}</li>-->
-            <!--<li class="data-item">{{item.rose}}</li>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</el-tab-pane>-->
-            <!--<el-tab-pane>-->
-            <!--<span slot="label"><span style="font-size: 10px;">★ </span>收藏</span>-->
-            <!--<div class="table">-->
-            <!--<ul class="th">-->
-            <!--<li class="td">币种</li>-->
-            <!--<li class="td">最新成交价</li>-->
-            <!--<li class="td">24H成交量</li>-->
-            <!--<li class="td">日涨跌</li>-->
-            <!--</ul>-->
-            <!--<div class="tbody">-->
-            <!--<div class="item" v-for="(item,index) in currencyList" v-on:mouseover="hover">-->
-            <!--<li class="data-item">{{item.name}}</li>-->
-            <!--<li class="data-item">{{item.newestPrice}}</li>-->
-            <!--<li class="data-item">{{item.tfDoneCunt}}</li>-->
-            <!--<li class="data-item">{{item.upAndDown}}</li>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</el-tab-pane>-->
-            <!--</el-tabs>-->
-            <!--<input class="search-btn" type="text" name="" id="" v-bind:placeholder="$t('m.search')"><i-->
-            <!--class="el-icon-search search-icon"></i>-->
           </div>
         </el-collapse-transition>
       </div>
@@ -987,7 +901,12 @@
         pagesizeHis: 5,//历史委单当前页
         marketListloading: true,//市场列表加载状态
 
+        timer: '',//定时器
         // maxBuy:this.activeSellTotal/this.buyReferencePrice,
+        activeId: 0,//当前选中交易对id
+        activeSellsymbol: '',
+        activeBuysymbol: '',
+        reflashCount: -1,//自动刷新次数
       }
     },
     filters: {
@@ -997,13 +916,15 @@
     },
     methods: {
       chooseRow(e) {
-        console.log(e.id);
-        this.say(e.id, e.sellsymbol, e.buysymbol);
+        clearInterval(this.timer);
+        this.activeId = e.id;
+        this.activeSellsymbol = e.sellsymbol;
+        this.activeBuysymbol = e.buysymbol;
+        this.timer = setInterval(this.reflashMarket, 1000);
+        this.curListIsShow =false;
       },
       //显示隐藏币种选择框
       toggleCurList() {
-        console.log(this.curListIsShow);
-        // this.isShow = !this.isShow;
         this.curListIsShow = !this.curListIsShow;
       },
       toggleCurDesc() {
@@ -1087,7 +1008,7 @@
 
         //请求买一卖一数据
         this.getRealMarket(id).then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code !== 200) {
             return;
           }
@@ -1118,7 +1039,7 @@
           // console.log(this.sellReferencePrice);
         })
         //隐藏币种列表
-        this.curListIsShow = false;
+        // this.curListIsShow = false;
       },
       //获取市场数据(币种)
       getMarket() {
@@ -1214,7 +1135,6 @@
           this.tradePwdErrorMsg = '请输入交易密码！';
           return;
         }
-
         let fd = new FormData();
         fd.append('tradePwd', this.tradePwd);
         fd.append('symbol', this.activeCoinInfo.id);
@@ -1230,7 +1150,7 @@
               this.buyErrorMsg = res.data.msg;
               return;
             } else {
-              this.$store.commit('changeDialogInfo', res.data.msg);
+              this.$store.commit('changeDialogInfo', {dataInfo:res.data.msg});
             }
           })
         } else {
@@ -1244,7 +1164,7 @@
               this.sellErrorMsg = res.data.msg;
               return;
             } else {
-              this.$store.commit('changeDialogInfo', res.data.msg);
+              this.$store.commit('changeDialogInfo', {dataInfo:res.data.msg});
             }
           });
         }
@@ -1336,7 +1256,6 @@
         this.currentPage = val;
       },
       //  历史委单分页
-
       handleCurrentChangeHis(val) {
         this.multipleSelection = val;
       },
@@ -1346,47 +1265,66 @@
       handleCurrentChangeHis(val) {
         this.currentPageHis = val;
       },
+      //  自动刷新币种
+      getMarketAuto() {
+        this.getMarket().then((res) => {
+          if (res.data.code !== 200) {
+            return;
+          }
+          if (this.localMarketList.length !== 0) {
+            //添加收藏
+            res.data.data.forEach((item, index) => {
+
+              //添加本地数据存储中的收藏
+              if (item.id == this.localMarketList[index].id) {
+                item.isLike = this.localMarketList[index].isLike || 0;
+              }
+
+            })
+          } else {
+            res.data.data.forEach((item, index) => {
+              item.isLike = 0;
+            });
+          }
+          this.marketListloading = false;
+          this.currencyList = res.data.data;
+          if (!this.reflashCount) {
+            this.activeId = this.currencyList[0].id;
+
+            this.activeSellsymbol = this.currencyList[0].sellsymbol;
+            this.activeBuysymbol = this.currencyList[0].buysymbol;
+          }
+
+          // this.currencyList = JSON.parse(localStorage.getItem('localMarketList')) || this.$store.state.marketList;
+
+
+          this.say(this.activeId, this.activeSellsymbol, this.activeBuysymbol);
+
+          //   this.activeCoinInfo = this.currencyList[0];
+          //
+          //   this.personalAsset.forEach((item, index) => {
+          //     if (item.shortName == this.activeCoinInfo.sellsymbol) {
+          //       this.activeCoinInfo.sellItem = item;
+          //     }
+          //     if (item.shortName == this.activeCoinInfo.buysymbol) {
+          //       this.activeCoinInfo.buyItem = item;
+          //     }
+          //   })
+          //   console.log(this.activeCoinInfo);
+        })
+      },
+      reflashMarket() {
+        this.getMarketAuto();
+        this.reflashCount++;
+        this.toggleUpDownShow();
+      }
     },
     created() {
-      this.getMarket().then((res) => {
-        if (res.data.code !== 200) {
-          return;
-        }
-        if (this.localMarketList.length !== 0) {
-          //添加收藏
-          res.data.data.forEach((item, index) => {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      this.timer = setInterval(this.reflashMarket, 1000);
 
-            //添加本地数据存储中的收藏
-            if (item.id == this.localMarketList[index].id) {
-              item.isLike = this.localMarketList[index].isLike || 0;
-            }
-
-          })
-        } else {
-          res.data.data.forEach((item, index) => {
-            item.isLike = 0;
-          });
-        }
-        this.marketListloading = false;
-        this.currencyList = res.data.data;
-        // this.currencyList = JSON.parse(localStorage.getItem('localMarketList')) || this.$store.state.marketList;
-
-        // console.log(this.currencyList);
-
-        this.say(this.currencyList[0].id, this.currencyList[0].sellsymbol, this.currencyList[0].buysymbol);
-
-        //   this.activeCoinInfo = this.currencyList[0];
-        //
-        //   this.personalAsset.forEach((item, index) => {
-        //     if (item.shortName == this.activeCoinInfo.sellsymbol) {
-        //       this.activeCoinInfo.sellItem = item;
-        //     }
-        //     if (item.shortName == this.activeCoinInfo.buysymbol) {
-        //       this.activeCoinInfo.buyItem = item;
-        //     }
-        //   })
-        //   console.log(this.activeCoinInfo);
-      })
       // 币种数据接口
       // var url = common.apidomain + 'real/indexmarket';
       // ajax(url, 'get', {}, (res) => {
@@ -1408,6 +1346,9 @@
       //   // this.newarr = this.business.slice(0,12);//截取的数据
       //   // this.buys();
       // });
+    },
+    destoryed() {
+      clearInterval(this.timer)
     },
     mounted() {
     },
@@ -1644,11 +1585,11 @@
   }
 
   .sell-btn {
-    background-color:#5fb760;
+    background-color: #5fb760;
   }
 
   .sell-btn:hover {
-    background-color:#479c48;
+    background-color: #479c48;
   }
 
   .sell-one, .buy-one {

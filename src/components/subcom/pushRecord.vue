@@ -34,17 +34,42 @@
                 <!-- 判断fstate == 1 并且 fuid !== $store.state.userInfo.fshowid  显示付款 -->
                 <!-- financial.push.record.05=付款 -->
                 <!-- comm.cancel=取消 -->
-                <span class="cancel" v-if="item.fstate == 1 && item.fuid == $store.state.userInfo.fshowid" v-on:click="dialogVisible = true(item.fid,1)" :id="item.fid">{{fstate1}}</span>
-                <span class="cancel" v-if="item.fstate == 1 && item.fuid !== $store.state.userInfo.fshowid" v-on:click="payment">{{fstate0}}</span>
+                <span class="cancel" v-if="item.fstate == 1 && item.fuid == $store.state.userInfo.fshowid" v-on:click="cancel(item.fid)" :id="item.fid">{{fstate1}}</span>
+                <span class="cancel" v-if="item.fstate == 1 && item.fuid !== $store.state.userInfo.fshowid" v-on:click="payment(item.fid)" :id="item.fid">{{fstate0}}</span>
             </article>
         </div>
         <div class="noRecord" v-show="pushList.length==0">暂无记录</div>  
+        <!-- 取消push -->
         <el-dialog title="温馨提示" :visible.sync="dialogVisible" width="20%" center>
             <span class="info">确定取消PUSH资产吗？</span>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" v-on:click="cancel">确 定</el-button>
+                <el-button type="primary" @click="confirm">确 定</el-button>
                 <el-button @click="dialogVisible = false">取 消</el-button>
             </span>
+        </el-dialog>
+        <!-- 付款 -->
+        <el-dialog title="PUSH确认" :visible.sync="paymentVisible" width="25%" center>
+            <el-form class="form_padding">
+                <el-form-item label="PUSH资产">
+                    <el-input class="input1" type="text" v-model="push" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="PUSH价格">
+                    <el-input class="input1" type="text" v-model="pros" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="PUSH数量">
+                    <el-input class="input1" type="text" v-model="number" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="付款金额">
+                    <el-input class="input1" type="text" v-model="money" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="交易密码">
+                    <el-input class="input" type="password" v-model="password"></el-input>
+                </el-form-item>
+            </el-form>
+            <div class="false-tips fz12"><i v-show="pushMsg"></i>{{pushMsg}}</div>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="Submit">确定提交</el-button>
+            </div>
         </el-dialog>
     </div>
   </div>
@@ -52,7 +77,7 @@
 <script>
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
-  import tips from "./friendlyTips.vue"
+  import tips from "./friendlyTips.vue"//弹框提示
   
   export default {
     data(){
@@ -61,9 +86,17 @@
         type1:'转出',
         fstate0:'付款',
         fstate1:'取消',
-        fpushuid:'',
+        pushuid:'',
         dialogVisible: false,
-        pushList:[]
+        pushList:[],
+        //付款
+        paymentVisible: false,
+        push:'',//push资产
+        pros:'',//push价格
+        number:'',//push数量
+        money:'',//付款金额
+        password:'',//交易密码
+        pushMsg:'',//错误提示
       }
     },
     methods:{
@@ -76,27 +109,74 @@
         })
       },
       //取消push
-      cancel(){
-        let recordUrl = common.apidomain + 'cancel_push';
-        var recordfd = new FormData();
-        recordfd.append('fpushuid',this.fpushuid);
-        ajax(recordUrl, 'post', recordfd, (res) => {
-            if(res.data.code !== 200){
-                return;
-            }else{
-                this.$store.commit('changeDialogInfo','取消成功')
-                dialogVisible = false
-            }
-        });
+      cancel(id){
+        this.pushList.forEach((fid)=>{
+          if(item.fid == fid){
+            this.pushList = item;
+          }
+        })
+        this.dialogVisible = true
+        this.pushuid = id;
+        // console.log(this.pushuid);
       },
+        confirm(){
+            // console.log(this.pushuid)
+            let recordUrl = common.apidomain + 'cancel_push';
+            let recordfd = new FormData();
+            recordfd.append('pushid',this.pushuid);
+            ajax(recordUrl, 'post', recordfd, (res) => {
+                 //  调用失败
+                if (res.data.code !== 200) {
+
+                    this.$store.commit('changeDialogInfo', res.data.msg)
+                } else {
+                //调用成功
+                    this.$store.commit('changeDialogInfo', res.data.msg);
+                    
+                }this.dialogVisible = false
+            });
+        },
+        //付款
+        payment(id){
+            this.paymentVisible = true
+            this.pushuid = id;
+            this.pushList.forEach((item,index)=>{
+                if(item.fid == id){
+                    this.push = item.fcoin_s
+                    this.pros = item.fprice
+                    this.number = item.fcount
+                    this.money = item.famount
+                }
+            })
+        },
+        Submit(){
+            let paymentUrl = common.apidomain + 'confirm_push';
+            let paymentfd = new FormData();
+            paymentfd.append('pushid',this.pushuid);
+            paymentfd.append('password',this.password);
+            ajax(paymentUrl, 'post', paymentfd, (res) => {
+                console.log(res)
+                //  调用失败
+                if (res.data.code !== 200) {
+
+                    this.$store.commit('changeDialogInfo', res.data.msg)
+                } else {
+                //调用成功
+                    this.$store.commit('changeDialogInfo', res.data.msg);
+                }
+                this.paymentVisible = false
+            });
+        }
     },
+   
     created(){
       this.loadPushInfo().then((res) => {
         if (res.data.code !== 200) {
           return;
         }else{
           this.pushList = res.data.data.page.data;
-          this.fpushuid = res.data.data.page.data.fpushuid;
+
+        //   console.log(this.pushList);
         }
       });
     },
@@ -171,5 +251,24 @@ header,
     color: #c2c3c8;
     float: left;
     font-size: 12px;
+}
+button {
+    margin: -11px 0 0 23%;
+    width: 43%;
+    height: 35px;
+    border-radius: 5px;
+    outline: medium;
+    border: 0;
+    color: #c2c3c8;
+}
+.form_padding{
+    width: 65%;
+}
+.input{
+    width: 65%;
+    float: right;
+}
+.input1{
+    width: 50%;
 }
 </style>

@@ -230,13 +230,24 @@ el-carousel-item img {
   box-sizing: border-box;
 }
 
+/* push 付款*/
+
+.push_record .el-input__inner {
+  background: transparent;
+}
+
+.push_record .el-input.is-disabled .el-input__inner {
+  border: 0;
+  padding: 0;
+}
+
 .el-collapse {
   border: 0;
 }
 
 .el-collapse-item__content {
   padding-bottom: 0;
-  padding:0 15px;
+  padding: 0 15px;
 }
 
 .el-collapse-item__wrap {
@@ -253,7 +264,7 @@ el-carousel-item img {
 
 .el-input__inner {
   background: #11182c;
-  border: 1px solid rgba(255,255,255,.8);
+  border: 1px solid rgba(255, 255, 255, .8);
 }
 
 .el-date-editor.el-input {
@@ -557,38 +568,62 @@ el-carousel-item img {
 }
 
 /* 任付伟改c2c中c2c_record.vue页面中点击付款信息后的弹出窗样式 */
-.exchange .el-dialog{
+.exchange .el-dialog {
   text-align: left;
   background-color: #222F52;
   border-radius: 10px;
 }
-.exchange .el-dialog__header{
+
+.exchange .el-dialog__header {
   border-bottom: 1px solid #4C597B;
   padding-top: 40px;
 }
-.exchange .el-dialog__body{
+
+.exchange .el-dialog__body {
   padding-top: 15px;
 }
-.exchange .el-form-item__label{
+
+.exchange .el-form-item__label {
   background-color: #222F52;
   color: #DADFF3;
   font-family: "Microsoft YaHei";
+  padding-right: 30px;
 }
-.exchange .el-input__inner{
+
+.exchange .el-input__inner {
   background: none;
   border: 0;
 }
-.exchange .el-form{
+
+.exchange .el-form {
   width: 60%;
 }
-.exchange .el-input--suffix{
+
+.exchange .el-input--suffix {
   width: 260px;
 }
-.exchange .el-form-item{
+
+.exchange .el-form-item {
   margin-bottom: 10px;
 }
 
+.exchange .el-input.is-disabled .el-input__inner {
+  border: none;
+}
 
+.exchange .el-input__inner:focus {
+  border: none;
+}
+
+/*加载框*/
+.el-loading-spinner .circular {
+  height: 50px;
+  width: 50px;
+}
+
+.el-loading-spinner .path {
+  stroke: #338FF5;
+}
 
 /*赵鑫磊修改主页样式*/
 .search-box .el-input--prefix .el-input__inner {
@@ -601,7 +636,7 @@ el-carousel-item img {
 }
 
 .el-table__body td {
-  border-bottom: 1px solid rgba(255, 255, 255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /*轮播图*/
@@ -663,51 +698,63 @@ el-carousel__arrow--right {
 .el-collapse-item__header {
   width: 120px;
   margin-left: 20px;
-  margin-top:13px;
+  margin-top: 13px;
   border: none;
 }
-.el-input.is-disabled .el-input__inner{
+
+.el-input.is-disabled .el-input__inner {
   background-color: transparent;
-  border:1px solid rgba(255,255,255,.8)
+  border: 1px solid rgba(255, 255, 255, .8)
 }
-.el-input.is-active .el-input__inner, .el-input__inner:focus{
-  border:1px solid #338ff5;
+
+.el-input.is-active .el-input__inner, .el-input__inner:focus {
+  border: 1px solid #338ff5;
 }
+
 /*下拉箭头*/
-.el-collapse-item__arrow{
-  margin-top:15px;
+.el-collapse-item__arrow {
+  margin-top: 15px;
 }
 
-
-.el-collapse-item{
+.el-collapse-item {
   position: relative;
 
 }
 
-.currencyData .el-tabs--top .el-tabs__item.is-top:nth-child(2){
-  padding-left:28px;
+.currencyData .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+  padding-left: 28px;
 }
 
-.currencyData .el-table th.is-leaf{
+.currencyData .el-table th.is-leaf {
   text-align: left;
 }
-.currencyData .el-table th>.cell{
-  margin-left:20px;
-}
-/*分页*/
-.el-pagination button.disabled,.el-pager li,.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li,.el-pagination.is-background .el-pager li:not(.disabled).active,.el-pagination .btn-next, .el-pagination .btn-prev{
-  background-color: transparent;
-}
-.el-pager li{
-  color:#c7c8cb;
-}
-.el-pager li.active{
-  color:#338ff5;
+
+.currencyData .el-table th > .cell {
+  margin-left: 20px;
 }
 
-.el-dialog--center .el-dialog__body{
+/*分页*/
+.el-pagination button.disabled, .el-pager li, .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li, .el-pagination.is-background .el-pager li:not(.disabled).active, .el-pagination .btn-next, .el-pagination .btn-prev {
+  background-color: transparent;
+}
+
+.el-pager li {
+  color: #c7c8cb;
+}
+
+.el-pager li.active {
+  color: #338ff5;
+}
+
+.el-button:focus, .el-button:hover {
+  color: #fff;
+  background-color: #338ff5;
+}
+
+.el-dialog--center .el-dialog__body {
   text-align: center;
 }
+
 .bitIcon {
   margin: 0 auto;
   width: 15px !important;

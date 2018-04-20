@@ -94,7 +94,6 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <Customer></Customer>
   </div>
 </template>
 <script>
@@ -103,7 +102,7 @@
   import Header from './header'
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
-  import Customer from './subcom/customer_service'//在线客服
+
   export default {
     data() {
       return {
@@ -165,7 +164,9 @@
       //   this.noticeLists = res.data.data.items;
       // });
     },
-    components: {Header, Customer},
+    components: {
+      Header
+    },
     filters: {
       formatDate(time) {
         var date = new Date(time);

@@ -99,16 +99,16 @@
         fd.append('idcardno',this.idacard);//可选项
         ajax(url, 'post', fd, (res) => {
           console.log(res.data);
-          if(res.data.code==200){
+          if(res.data.code!==200){
             this.tipinfo = res.data.msg;
             return;
           }
-          if(res.data.code!==200){
+          if(res.data.code==200){
             //弹出友情提示框
-            // this.$store.commit('changeDialogInfo',{dataInfo:'邮件发送成功，请点击邮件链接找回密码！'});
+            this.$store.commit('changeDialogInfo',{dataInfo:'邮件发送成功，请点击邮件链接找回密码！'});
 
             //此条为假数据，用于验证成功后跳转到密码重置界面的:注意上面的不等号应该换一下位置才是正确的逻辑，此处只是为了测试
-            this.$store.commit('changeDialogInfo',{dataInfo:'邮件发送成功，请点击邮件链接找回密码！',skipurl:'/addNewPwdByEmail'});
+            // this.$store.commit('changeDialogInfo',{dataInfo:'邮件发送成功，请点击邮件链接找回密码！',skipurl:'/addNewPwdByEmail'});
             // this.$router.push({ path: '/addNewPwdByEmail' })//路由跳转
           }
         });

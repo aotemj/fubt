@@ -12,12 +12,12 @@
         </ul>
         <div id="voteNew-list" v-show="recordList.length!==0">
           <article v-for="(item,index) in recordList" :key="index">
-            <span>{{ item.fcreatetime }}</span>
-            <span>{{ item.updata }}</span>
-            <span>{{ item.address }}</span>
-            <span>{{ item.number }}</span>
-            <span>{{ item.confirmations }}</span>
-            <span>{{ item.status }}</span>
+            <span>{{item.fupdatetime}}</span>
+            <span>{{item.fsource_s}}</span>
+            <span>{{item.fwithdrawaddress}}</span>
+            <span>{{item.famount}}</span>
+            <span>{{item.state}}</span>
+            <span>{{item.fstatus_s}}</span>
           </article>
         </div>
         <div class="wu" v-show="recordList.length==0">暂无记录</div>
@@ -54,6 +54,7 @@
           }else{
             this.recordList = res.data.data.list.data
             console.log(res)
+            console.log(123)
           }
 
       });

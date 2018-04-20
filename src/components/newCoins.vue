@@ -30,7 +30,7 @@
             <li>{{item.partakenumber}}</li><!-- 投票总人数 -->
             <li>
               <button type="button" @click="vote(item.fid,1)" :id="item.fid">赞成</button>
-              <button type="button" @click="vote(item.fid,2)" :id="item.fid">反对</button> 
+              <button type="button" @click="vote(item.fid,2)" :id="item.fid">反对</button>
               <el-dialog title="添加投票" :visible.sync="dialogFormVisible" class="dialog-contentinfo" width="35%">
                 <el-form :model="form" class="cent">
                   <el-form-item label="投票数" :label-width="formLabelWidth">
@@ -53,15 +53,12 @@
         </div>
       </div>
     </div>
-    <!-- 3.0客服二维码 -->
-    <Customer></Customer>
     <!-- 4.0 弹出提示 -->
     <tips></tips>
   </div>
 </template>
 <script>
   import Header from './header'
-  import Customer from './subcom/customer_service'//在线客服
   import tips from './subcom/friendlyTips'//提示信息
   import common from "../kits/domain"
   import {ajax} from "../kits/http"
@@ -143,7 +140,6 @@
     },
     components:{
       Header,//头部
-      Customer,//客服
       tips//提示
     }
   }
@@ -168,7 +164,7 @@
     height: 36px;
     line-height: 11px;
     margin-left: 30px;
-    /*background-color: #449d44;*/ 
+    /*background-color: #449d44;*/
   }
   .buttomvote:hover{
     color: #fff;
@@ -196,7 +192,7 @@
   .tipchar>span{
     color: #FF0000;
   }
-  
+
   /*弹出框部分样式-结束*/
   /*操作按钮部分*/
   button{
@@ -264,5 +260,5 @@
     height: 400px;
     line-height: 400px;
   }
-  
+
 </style>
