@@ -921,7 +921,7 @@
         this.activeSellsymbol = e.sellsymbol;
         this.activeBuysymbol = e.buysymbol;
         this.timer = setInterval(this.reflashMarket, 1000);
-        this.curListIsShow =false;
+        this.curListIsShow = false;
       },
       //显示隐藏币种选择框
       toggleCurList() {
@@ -1150,7 +1150,7 @@
               this.buyErrorMsg = res.data.msg;
               return;
             } else {
-              this.$store.commit('changeDialogInfo', {dataInfo:res.data.msg});
+              this.$store.commit('changeDialogInfo', {dataInfo: res.data.msg});
             }
           })
         } else {
@@ -1164,7 +1164,7 @@
               this.sellErrorMsg = res.data.msg;
               return;
             } else {
-              this.$store.commit('changeDialogInfo', {dataInfo:res.data.msg});
+              this.$store.commit('changeDialogInfo', {dataInfo: res.data.msg});
             }
           });
         }

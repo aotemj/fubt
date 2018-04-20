@@ -6,7 +6,7 @@
         <span>{{ this.tota }}</span>
       </el-form-item>
       <el-form-item label="资产类型" class="border_bottom">
-        <el-select class="reg_select" v-model="assetstype">
+        <el-select class="reg_select" v-model="assetstype" aria-placeholder="请选择资产类型">
           <el-option  v-for="(item,index) in assets" :key="index" :value="item.fname">{{ item.fname }}</el-option>
         </el-select>
       </el-form-item>
@@ -26,7 +26,9 @@
         <input class="verify-btn" :disabled="assetsDisabled" type="button" v-on:click="sendCode"
                 v-model="assetsBtnTxt">
       </el-form-item>
-      <div class="false-tips"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+      <transition enter-active-class="animated shake">
+        <div class="false-tips"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+      </transition>
       <el-form-item>
         <el-button type="primary" @click="submi">提交</el-button>
       </el-form-item>
@@ -55,7 +57,7 @@
       };
       return {
         tota:'',//账户余额
-        assetstype: '【定期不可提前取回】90天收益3.75%收益-合年化15%',//资产类型
+        assetstype: '',//资产类型
         profit: 'FUC',//收益类型
         currencyList:[],//收益类型
         numb:'',//数量
@@ -90,22 +92,24 @@
           this.errorMsg = ""
         }
 
-        let moneyUrla = common.apidomain + 'financial/finances';
+        let moneyUrla = common.apidomain + 'submit_finances';
         let moneya = new FormData();
-        moneya.append('fname',this.assetstype);//存币收益
-        moneya.append('name',this.profit);//收益类型
-        moneya.append('sumNumber',this.numb);//数量
-        moneya.append('ftradepassword',this.password);//交易密码
-        moneya.append('phoneCode',this.ver);//短信验证
-        moneya.append('frealname',this.$store.state.userInfo.frealname);//短信验证
+        moneya.append('symbol', 1);//存币收益
+        moneya.append('type', 4);//存币收益
+        moneya.append('count', this.numb);//存币收益
+        moneya.append('tradepwd', this.password);//存币收益D
+        moneya.append('phonecode', this.ver);//存币收益D
+
         ajax(moneyUrla, 'post', moneya, (res) => {
           if(res.data.code !==200){
             return;
           }else{
             this.$store.commit('changeDialogInfo','存入成功')
+            this.submitForm();
           }
 
         });
+        
       },
 
       submitForm() {
@@ -165,18 +169,14 @@
     created(){
        this.submitForm().then((res) => {
           if (res.data.code !== 200) {
-            // this.errorMsg = res.data.msg;
             return;
           }else{
             this.tota = res.data.data.userWallet.total
             this.assets =  res.data.data.typeList
             this.currencyList = res.data.data.financesCoinMap
             this.profit = res.data.data.financesCoinMap[0].name
-            console.log(res)
-            // this.currencytype = res.data.data.financesCoinMap
           }
       });
-      // console.log(this.$store.state.userInfo.frealname)
     },
     computed:{
     },

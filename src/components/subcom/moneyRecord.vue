@@ -1,5 +1,6 @@
 <template>
   <div class="push_record">
+    <tips></tips>
     <header>记录</header>
     <div class="empty"></div>
     <div class="voteNew">
@@ -19,24 +20,36 @@
         <span class="fname">{{ item.fname }}</span>
         <span class="famount">{{ item.famount }}</span>
         <span class="famount">{{ item.frate }}</span>
-        <span class="fupdatetime">{{ item.fupdatetime }}</span>
-        <span class="fupdatetime">{{ item.fcreatetime }}</span>
+        <span class="fupdatetime">{{ item.fupdatetime|formatDateTime }}</span>
+        <span class="fupdatetime">{{ item.fcreatetime|formatDateTime }}</span>
         <span class="famount">{{ item.fstate_s }}</span>
-        <span class="famount">dfgafg</span>
+        <span class="famount" v-if="item.fstate==1 && item.fcoinstate !==2" v-on:click="payment(item.fid)" :id="item.fid">取消</span>
+        <span v-else></span>
       </article>
     </div>
     <div class="noRecord" v-show="pushList.length==0">暂无记录</div>
     </div>
+    <!-- 取消push -->
+    <el-dialog title="温馨提示" :visible.sync="dialogVisible" width="20%" center>
+        <span class="info">确定取消PUSH资产吗？</span>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" v-on:click="subt">确 定</el-button>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 <script>
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+  import tips from "./friendlyTips.vue"//弹框提示
+  import {formatDate} from '../../kits/dateFormat';//格式化时间
   export default {
     data(){
       return {
         profit:[],
-        pushList: []
+        pushList: [],
+        dialogVisible: false,
       }
     },
     methods:{
@@ -47,7 +60,37 @@
             resolve(res);
           });
         });
-      }
+      },
+      //取消
+      payment(id){
+        console.log(123)
+        this.dialogVisible = true
+        this.pushuid = id;
+        this.pushList.forEach((item,index)=>{
+          if(item.fid == id){
+
+          }
+        })
+      },
+      //取消存币
+      subt(){
+        let recordUrl = common.apidomain + 'cancel_finances';
+        let pushfd = new FormData();
+        pushfd.append('fid', this.pushuid);
+          ajax(recordUrl, 'post', pushfd, (res) => {
+            //  调用失败
+              if (res.data.code !== 200) {
+                this.$store.commit('changeDialogInfo', res.data.msg)
+              } else {
+              //调用成功
+                // this.$store.commit('changeDialogInfo',{} res.data.msg);
+                this.$store.commit('changeDialogInfo',{dataInfo:'取消成功'})
+                this.dialogVisible = false
+              }
+            
+          });
+      },
+
     },
     created(){
       this.recordList().then((res) => {
@@ -57,17 +100,23 @@
         } else {
           this.pushList = res.data.data.page.data
           this.profit = res.data.data.financesCoinMap
-          console.log(1)
-          console.log(res)
-          console.log(res.data.data.financesCoinMap[0].name)
-          console.log(2)
           
         }
       });
     },
     computed:{},
     components:{
-
+      tips,//弹窗确认
+    },
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
     }
   }
 </script>
@@ -132,7 +181,7 @@ header,
 }
 .fname{
   margin: 0 3%;
-  width: 27%;
+  width: 29%;
 }
 .famount{
   width: 5%;

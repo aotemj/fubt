@@ -28,7 +28,7 @@
                 <span>{{item.fcount}}</span>
                 <span>{{item.fprice}}</span>
                 <span>{{item.famount}}</span>
-                <span>{{item.fcreatetime}}</span>
+                <span>{{item.fcreatetime|formatDateTime}}</span>
                 <span>{{item.fstate_s}}</span>
                 <!-- 判断fstate == 1 并且 fuid == $store.state.userInfo.fshowid  显示取消 -->
                 <!-- 判断fstate == 1 并且 fuid !== $store.state.userInfo.fshowid  显示付款 -->
@@ -66,7 +66,9 @@
                     <el-input class="input" type="password" v-model="password"></el-input>
                 </el-form-item>
             </el-form>
-            <div class="false-tips fz12"><i v-show="pushMsg"></i>{{pushMsg}}</div>
+            <transition enter-active-class="animated shake">
+                <div class="false-tips fz12"><i v-show="pushMsg"></i>{{pushMsg}}</div>
+            </transition>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="Submit">确定提交</el-button>
             </div>
@@ -75,6 +77,7 @@
   </div>
 </template>
 <script>
+  import {formatDate} from '../../kits/dateFormat';//格式化时间
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
   import tips from "./friendlyTips.vue"//弹框提示
@@ -110,13 +113,13 @@
       },
       //取消push
       cancel(id){
-        this.pushList.forEach((fid)=>{
+        this.dialogVisible = true
+        this.pushuid = id;
+        this.pushList.forEach((fid,item)=>{
           if(item.fid == fid){
             this.pushList = item;
           }
         })
-        this.dialogVisible = true
-        this.pushuid = id;
         // console.log(this.pushuid);
       },
         confirm(){
@@ -132,9 +135,11 @@
                 } else {
                 //调用成功
                     this.$store.commit('changeDialogInfo', res.data.msg);
-                    
-                }this.dialogVisible = false
+                }
+                this.dialogVisible = false
+                this.loadPushInfo()
             });
+            
         },
         //付款
         payment(id){
@@ -174,6 +179,9 @@
         if (res.data.code !== 200) {
           return;
         }else{
+            if(res.data.data.page.data.fcoin_s == null){
+                this.push = '1'
+            }
           this.pushList = res.data.data.page.data;
 
         //   console.log(this.pushList);
@@ -183,6 +191,16 @@
     computed:{},
     components:{
       tips,//取消弹窗
+    },
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
     }
   }
 </script>

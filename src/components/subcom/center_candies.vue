@@ -12,12 +12,12 @@
               <li>创建时间</li>
             </ul>
             <div class="user-rewards" v-show="candy.length!=0">
-              <article v-for="(item,index) in candy">
+              <article v-for="(item,index) in candy" :key="index">
                 <span>{{ index+1 }}</span>
                 <span>{{ item.fcoinname }}</span>
                 <span>{{ item.dividendmunber }}</span>
                 <span>{{ item.sharedividendname }}</span>
-                <span>{{ item.fcreatetime }}</span>
+                <span>{{ item.fcreatetime|formatDateTime }}</span>
               </article>
             </div>
             <div class="no-data" v-show ="candy.length==0">暂无记录</div>
@@ -30,6 +30,7 @@
 <script>
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+  import {formatDate} from '../../kits/dateFormat';//时间格式化
   export default {
    data() {
       return {
@@ -50,7 +51,17 @@
         // console.log(this.candy);
       });
     },
-    components:{}
+    components:{},
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
+    }
   }
 </script>
 <style scoped>

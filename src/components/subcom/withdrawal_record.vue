@@ -12,7 +12,7 @@
         </ul>
         <div id="voteNew-list" v-show="recordList.length!==0">
           <article v-for="(item,index) in recordList" :key="index">
-            <span>{{item.fupdatetime}}</span>
+            <span>{{item.fupdatetime|formatDateTime}}</span>
             <span>{{item.fsource_s}}</span>
             <span>{{item.fwithdrawaddress}}</span>
             <span>{{item.famount}}</span>
@@ -26,21 +26,27 @@
   </div>
 </template>
 <script>
+  import {formatDate} from '../../kits/dateFormat';//格式化时间
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+
   export default {
     data(){
       return {
-        recordList:[]
+        recordList:[],//
       }
     },
     methods:{
+      //用户提现列表方法
       loadAlipayList() {
         return new Promise((resolve, reject) => {
           let recordUrl = common.apidomain + 'financial/record';
           let record = new FormData();
           record.append('type',2);
           record.append('fuid',this.$store.state.userInfo.fid);
+          record.append('symbol',1);
+           record.append('currentPage',1);
+           record.append('datetype',2);
           ajax(recordUrl, 'post', record, (res) => {
             resolve(res);
           });
@@ -48,26 +54,30 @@
       },
     },
     created(){
+      //加载提现列表数据
       this.loadAlipayList().then((res) => {
-          if (res.data.code !== 200) {
-            return;
-          }else{
-            this.recordList = res.data.data.list.data
-            console.log(res)
-            console.log(123)
-          }
-
+         console.log(res)
+        if (res.data.code !== 200) {
+          return;
+        }else{
+          this.recordList = res.data.data.list.data
+        }
       });
         
     },
     computed:{
-      // 用户id
-      dialogFormVisible(){
-        return this.$store.state.userInfo;
-      }
+      
     },
-    components:{
-
+    components:{},
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
     }
   }
 </script>

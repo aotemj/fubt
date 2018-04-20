@@ -10,8 +10,8 @@
                   <li>登录IP</li>
               </ul>
               <ul>
-                <li v-for="(item,index) in Logonlog">
-                  <span>{{ item.fupdatetime }}</span>
+                <li v-for="(item,index) in Logonlog" :key="index">
+                  <span>{{ item.fupdatetime|formatDateTime }}</span>
                   <span>{{ item.fip }}</span>
                 </li>
               </ul>
@@ -25,8 +25,8 @@
                 <li>登录IP</li>
               </ul>
               <ul v-show="security.length!=0">
-                <li v-for="(item,index) in security">
-                  <span>{{ item.fcreatetime }}</span>
+                <li v-for="(item,index) in security" :key="index">
+                  <span>{{ item.fcreatetime|formatDateTime }}</span>
                   <span>安全</span>
                   <span>{{ item.fip }}</span>
                 </li>
@@ -71,6 +71,7 @@
 
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
+  import {formatDate} from '../../kits/dateFormat';//时间格式化
   export default {
     data(){
        return {
@@ -103,7 +104,17 @@
         console.log(res.data.data.flogs.data);
       });
     },
-    components:{}
+    components:{},
+     filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
+    }
   }
 </script>
 <style scoped>

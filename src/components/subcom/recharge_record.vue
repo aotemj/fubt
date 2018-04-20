@@ -12,7 +12,7 @@
         </ul>
         <div id="voteNew-list" v-show="recordList.length!==0">
           <article v-for="(item,index) in recordList" :key="index">
-            <span>{{item.fupdatetime}}</span>
+            <span>{{item.fupdatetime|formatDateTime}}</span>
             <span>{{item.fsource_s}}</span>
             <span>{{item.fwithdrawaddress}}</span>
             <span>{{item.famount}}</span>
@@ -91,6 +91,7 @@
 
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+  import {formatDate} from '../../kits/dateFormat';//格式化时间
   export default {
     data(){
       return {
@@ -130,6 +131,16 @@
     },
     computed:{},
     components:{
+    },
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
     }
   }
 </script>

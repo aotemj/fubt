@@ -4,7 +4,7 @@
       <div class="block">
         <el-row class="block-col-2">
           <div class="picker">
-            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" id="1" v-on:click="endTime">
+            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" id="1" @change="changeTime">
             </el-date-picker>
           </div>
 
@@ -13,8 +13,8 @@
           </el-col>
           <!--币种-->
           <el-col :span="12" class="w8p fz12">
-            <el-select v-model="selectCoin" placeholder="请选择">
-              <el-option class="fz12" v-for="item in coinTypeList" :key="item.value" :label="item.label" :value="item.value" v-on:click="currency" >
+            <el-select v-model="selectCoin" placeholder="请选择"  @change="changeTime">
+              <el-option class="fz12" v-for="item in coinTypeList" :key="item.value" :label="item.label" :value="item.value" >
               </el-option>
             </el-select>
           </el-col>
@@ -24,8 +24,8 @@
           </el-col>
           <!--类型-->
           <el-col :span="12" class="w8p">
-            <el-select v-model="selectType" placeholder="请选择">
-              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value" v-on:click="type">
+            <el-select v-model="selectType" placeholder="请选择"  @change="changeTime">
+              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value" >
               </el-option>
             </el-select>
           </el-col>
@@ -46,7 +46,7 @@
           </ul>
           <div id="voteNew-list" v-show="billingList.length!==0">
             <article v-for="(item,index) in billingList" :key="index">
-              <span>{{item.fupdatetime}}</span>
+              <span>{{item.fupdatetime|formatDateTime}}</span>
               <span>{{item.fsource_s}}</span>
               <span>{{item.fwithdrawaddress}}</span>
               <span>{{item.famount}}</span>
@@ -63,6 +63,7 @@
 <script>
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+  import {formatDate} from '../../kits/dateFormat';//格式化时间
   export default {
     data() {
       return {
@@ -114,75 +115,22 @@
           */
     //获取表单数据
     methods:{
-      //开始时间
-      startTime(){
-        let startUrl = common.apidomain + 'financial/record';
-        let start = new FormData();
-        start.append('typbegindatee',this.value1);//开始时间
-        start.append('enddate',this.value2);//结束时间
-        start.append('enddate',this.selectCoin);//币种
-        start.append('enddate',this.selectType);//类型
-        ajax(startUrl, 'post', start, (res) => {
-          if (res.data.code !== 200) {
-            return;
-          } 
-          // console.log(res)
-          // this.coinTypeList = res.data.data.filters
-        });
-      },
-      //结束时间
-      endTime(){
-        let endUrl = common.apidomain + 'financial/record';
-        let end = new FormData();
-        end.append('typbegindatee',this.value1);//开始时间
-        end.append('enddate',this.value2);//结束时间
-        end.append('enddate',this.selectCoin);//币种
-        end.append('enddate',this.selectType);//类型
 
-        ajax(endUrl, 'post', end, (res) => {
-          if (res.data.code !== 200) {
-            return;
-          }
-          // console.log(res)
-        });
-      },
-      //币种
-      currency(){
-        let currencyUrl = common.apidomain + 'financial/record';
-        let currency = new FormData();
-        currency.append('typbegindatee',this.value1);//开始时间
-        currency.append('enddate',this.value2);//结束时间
-        currency.append('enddate',this.selectCoin);//币种
-        currency.append('enddate',this.selectType);//类型
-
-
-        ajax(currencyUrl, 'post', currency, (res) => {
-           //  调用失败
-          if (res.data.code !== 200) {
-            return;
-          } else {
-          //调用成功
-            this.coinTypeList = res.data.data.filters
-            // console.log(res)
-          }
-          
-        });
-      },
-      //类型
-      type(){
-        let typeUrl = common.apidomain + 'financial/record';
-        let type = new FormData();
-        type.append('typbegindatee',this.value1);//开始时间
-        type.append('enddate',this.value2);//结束时间
-        type.append('enddate',this.selectCoin);//币种
-        type.append('enddate',this.selectType);//类型
-
-        ajax(typeUrl, 'post', type, (res) => {
-          if (res.data.code !== 200) {
-            return
-          }
-          // console.log(123)
-        });
+      changeTime(){
+        let changeUrl = common.apidomain + 'financial/record'
+        let change = new FormData();
+        change.append('type',2);//提现
+        change.append('type',1);//充值
+        change.append('fuid',this.$store.state.userInfo.fid);//fuid
+        change.append('typbegindatee',this.value1);//开始时间
+        change.append('enddate',this.value2);//结束时间
+        change.append('enddate',this.selectCoin);//币种
+        change.append('enddate',this.selectType);//类型
+          ajax(changeUrl, 'post', change , (res) => {
+             if(res.data.code !== 200){
+               return;
+             }
+          });
       },
       billingLists(){
         return new Promise((resolve, reject) => {
@@ -211,6 +159,16 @@
       });
     },
     computed:{},
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
+    }
   };
 </script>
 <style scoped>

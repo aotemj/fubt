@@ -35,7 +35,9 @@
                        v-model="loginBtnTxt">
               </el-form-item>
             </el-form>
-            <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+            <transition enter-active-class="animated shake">
+              <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+            </transition>
             <div slot="footer" class="dialog-footer footertop">
               <el-button type="primary" v-on:click="loginPassword">确 定</el-button>
             </div>
@@ -81,6 +83,9 @@
                        v-model="sendBtnTxt">
               </el-form-item>
             </el-form>
+            <transition enter-active-class="animated shake">
+              <div class="false-tips fz12"><i v-show="bindfdMsg"></i>{{bindfdMsg}}</div>
+            </transition>
             <div slot="footer" class="dialog-footer footertop">
               <el-button type="primary" v-on:click="phoneVisible">确 定</el-button>
             </div>
@@ -100,7 +105,9 @@
                 <input class="modifyInput" type="email" v-model="EmailNum">
               </el-form-item>
             </el-form>
-            <div class="false-tips fz12"><i v-show="emailMsg"></i>{{emailMsg}}</div>
+            <transition enter-active-class="animated shake">
+              <div class="false-tips fz12"><i v-show="emailMsg"></i>{{emailMsg}}</div>
+            </transition>
             <div slot="footer" class="dialog-footer footertop">
               <el-button type="primary" v-on:click="Bindingmailbox">确 定</el-button>
             </div>
@@ -129,7 +136,9 @@
                        v-model="magBtnTxt">
               </el-form-item>
             </el-form>
-            <div class="false-tips fz12"><i v-show="tranrMsg"></i>{{tranrMsg}}</div>
+            <transition enter-active-class="animated shake">
+              <div class="false-tips fz12"><i v-show="tranrMsg"></i>{{tranrMsg}}</div>
+            </transition>
             <div slot="footer" class="dialog-footer footertop">
               <el-button type="primary" v-on:click="Transactionpwd">确 定</el-button>
             </div>
@@ -164,7 +173,9 @@
                 <input class="modifyInput" type="text" v-model="identityno">
               </el-form-item>
             </el-form>
-            <div class="false-tips fz12"><i v-show="RealMsg"></i>{{RealMsg}}</div>
+            <transition enter-active-class="animated shake">
+              <div class="false-tips fz12"><i v-show="RealMsg"></i>{{RealMsg}}</div>
+            </transition>
             <div slot="footer" class="dialog-footer footertop">
               <el-button type="primary" v-on:click="Realnamebox()">确 定</el-button>
             </div>
@@ -559,7 +570,7 @@ videoTime:null*/
       phoneCode() {
         let TrUrl = common.apidomain + 'user/send_sms';
         let fd = new FormData();
-        fd.append('type', 106);
+        fd.append('type', 107);
         fd.append('msgtype', 1);
         fd.append('areaCode', 0);
         fd.append('phone', 0);

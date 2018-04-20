@@ -16,13 +16,13 @@
         </ul>
         <div class="promotion-list">
           <ul v-show="oneExtension.length!=0">
-            <li v-for="(item,index) in oneExtension">
+            <li v-for="(item,index) in oneExtension" :key="index">
               <span>{{ index + 1 }}</span>
               <span>{{ item.floginname }}</span>
               <span>{{ item.frealname }}</span>
               <span>{{ item.femail }}</span>
               <span>{{ item.ftelephone }}</span>
-              <span>{{ item.fregistertime }}</span>
+              <span>{{ item.fregistertime|formatDate }}</span>
             </li>
           </ul>
           <div class="no-data" v-show ="oneExtension.length==0">暂无记录</div>
@@ -45,13 +45,13 @@
         </ul>
         <div class="promotion-list">
           <ul v-show="Twopromotion.length!=0">
-            <li v-for="(item,index) in Twopromotion">
+            <li v-for="(item,index) in Twopromotion" :key="index">
               <span>{{ index + 1 }}</span>
               <span>{{ item.floginname }}</span>
               <span>{{ item.frealname }}</span>
               <span>{{ item.femail }}</span>
               <span>{{ item.ftelephone }}</span>
-              <span>{{ item.fregistertime }}</span>
+              <span>{{ item.fregistertime|formatDate }}</span>
             </li>
           </ul>
           <div class="no-data" v-show ="Twopromotion.length==0">暂无记录</div>
@@ -74,13 +74,13 @@
         </ul>
         <div class="promotion-list">
           <ul v-show="Threepromotion.length!=0">
-            <li v-for="(item,index) in Threepromotion">
+            <li v-for="(item,index) in Threepromotion" :key="index">
               <span>{{ index + 1 }}</span>
               <span>{{ item.floginname }}</span>
               <span>{{ item.frealname }}</span>
               <span>{{ item.femail }}</span>
               <span>{{ item.ftelephone }}</span>
-              <span>{{ item.fregistertime }}</span>
+              <span>{{ item.fregistertime|formatDate }}</span>
             </li>
           </ul>
           <div class="no-data" v-show ="Threepromotion.length==0">暂无记录</div>
@@ -92,6 +92,7 @@
 <script>
   import common from "../../kits/domain";
   import {ajax} from "../../kits/http";
+  import {formatDate} from '../../kits/dateFormat';//时间格式化
   export default {
     data(){
       return {
@@ -137,7 +138,17 @@
     computed:{
 
     },
-    components:{}
+    components:{},
+     filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd");
+      },
+      formatDateTime(time) {
+        var date = new Date(time);
+        return formatDate(date, "yyyy-MM-dd hh:mm");
+      }
+    }
   }
 </script>
 <style scoped>

@@ -4,7 +4,7 @@
     <slider class="slider"></slider>
     <news></news>
     <Content class="content"></Content>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 <script>

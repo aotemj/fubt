@@ -2,33 +2,36 @@
   <div class="pushAss push_box">
     <el-form ref="form" label-width="80px">
       <el-form-item class="Unit border_bottom" label="账户余额">
-        <span>{{ this.tota }}</span>
+        <span>0.2507245</span>
       </el-form-item>
-      <el-form-item label="买方UID" class="border_bottom">
-        <el-input v-model="pushuid"></el-input>
+      <el-form-item label="卖方UID" class="border_bottom">
+        <el-input v-model="Sellerid"></el-input>
       </el-form-item>
       <el-form-item label="资产类型" class="border_bottom">
-        <el-select class="reg_select" v-model="pushcoinid" placeholder="TKC">
-          <el-option v-for="(item,index) in regionList" :key="index" :value="item.id" :label="item.name"></el-option>
+        <el-select class="reg_select" v-model="Assetstype" placeholder="TKC">
+          <!--<el-option  value="TKC" v-for="(item,index) in regionList"></el-option>-->
         </el-select>
       </el-form-item>
       <el-form-item label="数量" class="border_bottom">
-        <el-input v-model="pushcount" placeholder="最小数量为100"></el-input>
+        <el-input v-model="number" placeholder="最小数量为100"></el-input>
       </el-form-item>
       <el-form-item label="价格" class="border_bottom">
-        <el-input v-model="pushprice"></el-input>
+        <el-input v-model="price"></el-input>
       </el-form-item>
       <el-form-item label="交易密码" prop="pass" class="border_bottom">
-        <el-input type="password" v-model="tradepwd" auto-complete="off" placeholder="请输入交易密码"></el-input>
+        <el-input type="password" v-model="tranpassword" auto-complete="off" placeholder="请输入交易密码"></el-input>
       </el-form-item>
-      <el-form-item label="短信验证" class="modify">
-        <input class="modifyInput" type="text" v-model="ver">
-        <input class="verify-btn" :disabled="assetsDisabled" type="button" v-on:click="sendCode"
-               v-model="assetsBtnTxt">
+      <el-form-item label="短信验证码">
+        <el-input class="input-info input-with-select" v-model="msgForNewAddress"
+                  placeholder="请输入短信验证码">
+          <!-- <el-button slot="append" size="mini" class="bdr0 w100p"
+                      :disabled="msgDisabledForAddress"
+                      v-on:click="sendCode('addAddress')">{{msgBtnTxt}}
+          </el-button> -->
+        </el-input>
       </el-form-item>
-      <div class="false-tips fz12"><i v-show="pushMsg"></i>{{pushMsg}}</div>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">提交PUSH</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm2')">提交PUSH</el-button>
       </el-form-item>
     </el-form>
     <div class="empty"></div>
@@ -36,77 +39,50 @@
   </div>
 </template>
 <script>
-
-  // pushcoinid //资产类型
-  // pushuid //卖方id
-  // pushcount //数量
-  // pushprice //价格
-  // tradepwd  //交易密码
-  // phonecode //短信验证码
-
   import Push from "./pushRecord.vue"
   import common from "../../kits/domain"
   import {ajax} from "../../kits/http"
 
   export default {
     data() {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm2.checkPass !== '') {
+            this.$refs.ruleForm2.validateField('checkPass');
+          }
+          callback();
+        }
+      };
       return {
-        tota: '',//余额
-        pushuid: '',//买方id
-        pushcoinid: '',//资产类型
-        pushcount: '',//数量
-        pushprice: '',//价格
-        tradepwd: '',//交易密码
-        phonecode: '',
+        Sellerid: '',//卖方id
+        Assetstype: '',//资产类型
+        number: '',//数量
+        price: '',//价格
+        tranpassword: '',//交易密码
+        checkPass: '',
         //push info
         tradePwd: '',//交易密码
-        assetsTime: 0,//短信验证码时间
-        assetsDisabled: false,//短信验证码按钮状态
-        assetsBtnTxt: "发送验证码",//短信验证码按钮文字
-        ver: '',//短信验证码
+        msgForNewAddress: '',//新增提现地址短信验证码
+        msgBtnTxt: '获取验证码',//短信验证码文字
+        msgDisabledForAddress: false,//短信验证码按钮状态
+        submitWithdrawErrorMsg: '',//提交订单错误信息
+        addAddressErrorMsg: '',//新增提现错误信息
+        addAddressTimer: 0,//新增提现地址发送验证码时间
+
         regionList: [],//资产列表
-        userInfo: [],//个人信息
-        pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,//密码验证
-        pushMsg: '',//错误提示信息
+        userInfo: {},//个人信息
       }
     },
     methods: {
-      submitForm() {
-        if (!this.pushuid) {
-          this.pushMsg = '请输入卖方id';
-          return;
-        } else if (!this.pushcount) {
-          this.pushMsg = '请输入数量';
-          return;
-        } else if (!this.pushprice) {
-          this.pushMsg = '请输入价格';
-          return;
-        } else if (!this.tradepwd) {
-          this.pushMsg = '请输入密码';
-          return;
-        } else if (!this.pwdReg.test(this.tradepwd)) {
-          this.pushMsg = "密码格式错误，密码必须大于等于6位且包含字母和数字"
-          return;
-        } else if (!this.ver) {
-          this.pushMsg = "请输入短信验证码"
-          return;
-        } else {
-          this.pushMsg = ""
-        }
-
-        let submitUrl = common.apidomain + 'submit_push';
-        let pushfd = new FormData();
-        pushfd.append('pushuid', this.pushuid);
-        pushfd.append('pushcoinid', this.pushcoinid);
-        pushfd.append('pushcount', this.pushcount);
-        pushfd.append('pushprice', this.pushprice);
-        pushfd.append('tradepwd', this.tradepwd);
-        pushfd.append('phonecode', this.ver);
-        ajax(submitUrl, 'post', pushfd, (res) => {
-          if (res.data.code !== 200) {
-            return;
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
           } else {
-            console.log(this.pushuid)
+            console.log('error submit!!');
+            return false;
           }
         });
       },
@@ -114,65 +90,127 @@
       loadPushInfo() {
         return new Promise((resolve, reject) => {
           let pushUrl = common.apidomain + 'financial/push';
-          ajax(pushUrl, 'post', {}, (res) => {
+          let fd = new FormData();
+          fd.append('currentPage', 1);
+          ajax(pushUrl, 'post', fd, (res) => {
             resolve(res);
           });
         })
       },
-      sendCode() {
-        if (!this.tradepwd) {
-          this.pushMsg = "请输入密码"
-          return;
-        } else if (this.pushcount == 0) {
-          this.pushMsg = "數量不能为0"
-          return;
-        } else if (this.pushcount > this.tota) {
-          this.pushMsg = "余额不足"
-          return;
-        } else {
-          this.pushMsg = ""
-        }
-        let loginUrl = common.apidomain + 'user/send_sms';
-        let fd = new FormData();
-        fd.append('type', 113);
-        fd.append('msgtype', 1);
-        fd.append('areaCode', 0);
-        fd.append('phone', 0);
-        fd.append('vcode', 0);
-        fd.append('uid', 0);
-        ajax(loginUrl, 'post', fd, (res) => {
-          if (res.data.code !== 200) {
-            this.errorMsg = res.data.msg;
+      //发送验证码
+      sendCode(msgType) {
+        //新增用户地址
+        // if(msgType=='addAddress'){
+        /*
+        * 发送验证码格式
+        * type: 108
+          msgtype: 1
+          areaCode: 0
+          phone: 0
+          vcode: 0
+          uid: 0*/
+
+        // }else if(msgType=='submitWithdraw'){}
+
+        if (msgType == 'addAddress') {
+          if (!this.newWithdrawAddress) {
+            this.addAddressErrorMsg = '请输入新的提现地址';
             return;
-          } else {
-            this.assetsTime = 60;
-            this.assetsDisabled = true;
-            this.Timer();
           }
-        })
-      },
-      //60s短信倒计时
-      Timer() {
-        if (this.assetsTime > 0) {
-          this.assetsTime--;
-          this.assetsBtnTxt = this.assetsTime + "s后重新获取"
-          setTimeout(this.Timer, 1000);
-        } else {
-          this.assetsTime = 0;
-          this.assetsBtnTxt = "获取验证码";
-          this.assetsDisabled = false;
+          this.sendCodeAll('addAddress').then((res) => {
+            console.log(res);
+            if (res.data.code !== 200) {
+              this.addAddressErrorMsg = res.data.msg;
+              return;
+            } else {
+              this.addAddressErrorMsg = '';
+              this.addAddressTimer = 60;
+              this.msgDisabledForAddress = true;
+              this.addMsgTimer();
+            }
+          });
+        } else if (msgType == 'submitWithdraw') {
+          this.sendCodeAll('submitWithdraw').then((res) => {
+            console.log(res);
+
+            if (res.data.code !== 200) {
+              this.submitWithdrawErrorMsg = res.data.msg;
+              return;
+            } else {
+              this.submitWithdrawErrorMsg = '';
+              this.submitTimer = 60;
+              this.msgDisabledForSubmitWithdraw = true;
+              this.submitMsgTimer();
+            }
+          })
+
         }
+      },
+      addMsgTimer() {
+        if (this.addAddressTimer > 0) {
+          this.addAddressTimer--;
+          this.msgBtnTxt = this.addAddressTimer + "s后重新获取"
+          setTimeout(this.addMsgTimer, 1000);
+        } else {
+          this.addAddressTimer = 0;
+          this.msgBtnTxt = "获取验证码";
+          this.msgDisabledForAddress = false;
+        }
+      },
+      //发送验证码
+      sendCodeAll(msgType) {
+        return new Promise((resolve, reject) => {
+          let msgUrl = common.apidomain + 'user/send_sms';
+          let fd = new FormData();
+          if (msgType == 'addAddress') {
+            /*
+            * type: 108
+              msgtype: 1
+              areaCode: 0
+              phone: 0
+              vcode: 0
+              uid:*/
+            fd.append('type', 108);
+            fd.append('msgtype', 1);
+            fd.append('areaCode', 0);
+            fd.append('phone', 0);
+            fd.append('vcode', 0);
+            fd.append('uid', 0);
+            ajax(msgUrl, 'post', fd, (res) => {
+              resolve(res);
+            })
+          } else if (msgType == 'submitWithdraw') {
+            /*
+            *
+            * type: 105
+              msgtype: 1
+              areaCode: 0
+              phone: 0
+              vcode: 0
+              uid: 0*/
+            fd.append('type', 105);
+            fd.append('msgtype', 1);
+            fd.append('areaCode', 0);
+            fd.append('phone', 0);
+            fd.append('vcode', 0);
+            fd.append('uid', 0);
+            ajax(msgUrl, 'post', fd, (res) => {
+              resolve(res);
+            })
+          }
+
+        })
       },
     },
     created() {
       this.loadPushInfo().then((res) => {
+        console.log(res);
         if (res.data.code !== 200) {
           return;
-        } else if (this.tota !== null) {
-          this.tota = res.data.data.coinWallet.total;
         }
         this.regionList = res.data.data.pushCoinMap;
-
+        this.userInfo = res.data.data.coinWallet;
+        // regionList
       });
     },
     computed: {},
@@ -182,34 +220,6 @@
   }
 </script>
 <style scoped>
-  .false-tips {
-    text-align: left;
-    margin-left: 20%;
-  }
-
-  /* 短信验证 */
-  .verify-btn {
-    width: 105px;
-    position: absolute;
-    top: 9px;
-    right: 3px;
-    cursor: pointer;
-    background: #000;
-    height: 27px;
-  }
-
-  .modifyInput {
-    width: 100%;
-    float: right;
-    /* margin-right: 8%; */
-    height: 30px;
-    border: 1px solid #c2c3c8;
-    border-radius: 5px;
-    margin-top: 7px;
-    padding-left: 3%;
-    background: #19233c;
-  }
-
   .border_bottom {
     margin-bottom: 10px;
   }
@@ -227,6 +237,7 @@
     height: 35px;
     line-height: 9px;
     border-radius: 5px;
+    background: #0e1326;
     outline: medium;
     border: 0;
     margin: 0 auto;
