@@ -29,7 +29,7 @@
 
             <!--最新价格-->
             <el-table-column
-              label="最新价格(***)"
+              :label="$t('m.latestprice')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -52,7 +52,7 @@
 
             <!--买一-->
             <el-table-column
-              label="买一(***)"
+              :label="$t('m.index_abuy')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -61,7 +61,7 @@
             </el-table-column>
             <!--买一-->
             <el-table-column
-              label="卖一(***)"
+              :label="$t('m.index_asell')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -71,7 +71,7 @@
 
             <!--成交量-->
             <el-table-column
-              label="成交量"
+              :label="$t('m.tfHVolume')"
               align="left"
             >
               <template slot-scope="scope">
@@ -83,7 +83,7 @@
 
             <!--24小时涨跌-->
             <el-table-column
-              label="24小时涨跌"
+              :label="$t('m.change')"
               align="left"
             >
               <template slot-scope="scope">
@@ -95,7 +95,7 @@
 
             <!--6小时走势-->
             <el-table-column
-              label="6小时走势"
+              :label="$t('m.sixChange')"
               align="left"
               width="100"
             >
@@ -105,7 +105,7 @@
 
             <!--收藏-->
             <el-table-column
-              label="收藏"
+              :label="$t('m.index_coleccionismo')"
               width="100"
             >
               <template slot-scope="scope">
@@ -119,7 +119,7 @@
       </el-tab-pane>
       <!--BTC交易区-->
       <el-tab-pane name="2">
-        <span slot="label">BTC交易区</span>
+        <span slot="label">BTC{{$t('m.tradingArea')}}</span>
         <div class="table" v-if="activeName === '2'">
           <el-table
             align="left"
@@ -144,7 +144,7 @@
 
             <!--最新价格-->
             <el-table-column
-              label="最新价格(***)"
+              :label="$t('m.latestprice')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -167,7 +167,7 @@
 
             <!--买一-->
             <el-table-column
-              label="买一(***)"
+              :label="$t('m.index_abuy')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -176,7 +176,7 @@
             </el-table-column>
             <!--买一-->
             <el-table-column
-              label="卖一(***)"
+              :label="$t('m.index_asell')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -186,7 +186,7 @@
 
             <!--成交量-->
             <el-table-column
-              label="成交量"
+              :label="$t('m.tfHVolume')"
               align="left"
             >
               <template slot-scope="scope">
@@ -198,7 +198,7 @@
 
             <!--24小时涨跌-->
             <el-table-column
-              label="24小时涨跌"
+              :label="$t('m.change')"
               align="left"
             >
               <template slot-scope="scope">
@@ -210,7 +210,7 @@
 
             <!--6小时走势-->
             <el-table-column
-              label="6小时走势"
+              :label="$t('m.sixChange')"
               align="left"
               width="100"
             >
@@ -220,7 +220,7 @@
 
             <!--收藏-->
             <el-table-column
-              label="收藏"
+              :label="$t('m.index_coleccionismo')"
               width="100"
             >
               <template slot-scope="scope">
@@ -234,7 +234,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane name="3">
-        <span slot="label">FUC交易区</span>
+        <span slot="label">FUC{{$t('m.tradingArea')}}</span>
         <div class="table" v-if="activeName === '3'">
           <el-table
             align="left"
@@ -259,7 +259,7 @@
 
             <!--最新价格-->
             <el-table-column
-              label="最新价格(***)"
+              :label="$t('m.latestprice')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -282,7 +282,7 @@
 
             <!--买一-->
             <el-table-column
-              label="买一(***)"
+              :label="$t('m.index_abuy')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -291,7 +291,7 @@
             </el-table-column>
             <!--买一-->
             <el-table-column
-              label="卖一(***)"
+              :label="$t('m.index_asell')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -301,7 +301,7 @@
 
             <!--成交量-->
             <el-table-column
-              label="成交量"
+              :label="$t('m.tfHVolume')"
               align="left"
             >
               <template slot-scope="scope">
@@ -313,7 +313,7 @@
 
             <!--24小时涨跌-->
             <el-table-column
-              label="24小时涨跌"
+              :label="$t('m.change')"
               align="left"
             >
               <template slot-scope="scope">
@@ -325,7 +325,7 @@
 
             <!--6小时走势-->
             <el-table-column
-              label="6小时走势"
+              :label="$t('m.sixChange')"
               align="left"
               width="100"
             >
@@ -334,7 +334,7 @@
             </el-table-column>
             <!--收藏-->
             <el-table-column
-              label="收藏"
+              :label="$t('m.index_coleccionismo')"
               width="100"
             >
               <template slot-scope="scope">
@@ -372,7 +372,7 @@
 
             <!--最新价格-->
             <el-table-column
-              label="最新价格(***)"
+              :label="$t('m.latestprice')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -395,7 +395,7 @@
 
             <!--买一-->
             <el-table-column
-              label="买一(***)"
+              :label="$t('m.index_abuy')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -404,7 +404,7 @@
             </el-table-column>
             <!--买一-->
             <el-table-column
-              label="卖一(***)"
+              :label="$t('m.index_asell')+'(***)'"
               align="left"
             >
               <template slot-scope="scope">
@@ -414,7 +414,7 @@
 
             <!--成交量-->
             <el-table-column
-              label="成交量"
+              :label="$t('m.tfHVolume')"
               align="left"
             >
               <template slot-scope="scope">
@@ -426,7 +426,7 @@
 
             <!--24小时涨跌-->
             <el-table-column
-              label="24小时涨跌"
+              :label="$t('m.change')"
               align="left"
             >
               <template slot-scope="scope">
@@ -438,7 +438,7 @@
 
             <!--6小时走势-->
             <el-table-column
-              label="6小时走势"
+              :label="$t('m.sixChange')"
               align="left"
               width="100"
             >
@@ -448,7 +448,7 @@
 
             <!--收藏-->
             <el-table-column
-              label="收藏"
+              :label="$t('m.index_coleccionismo')"
               width="100"
             >
               <template slot-scope="scope">
@@ -469,309 +469,301 @@
   </div>
 </template>
 <script>
-  import common from "../../kits/domain.js";
-  import {ajax} from "../../kits/http.js";
-  //在线客服
-  import Customer from './customer_service'
+import common from "../../kits/domain.js";
+import { ajax } from "../../kits/http.js";
+//在线客服
+import Customer from "./customer_service";
 
-  export default {
-    data() {
-      return {
-        activeName: '1',
-        value: '',
-        sName: '',//搜索过滤
-        upDownShow: false,//涨跌箭头状态
-        timer: '',//定时器
-        // loadingArr: [true, false, false, false],
-        loadingArr: [true, false, false, false],
-        likeList: [],//收藏列表
-        marketList: [],//市场信息
-        localMarketList: JSON.parse(localStorage.getItem("localMarketList")) || [],//本地市场信息
+export default {
+  data() {
+    return {
+      activeName: "1",
+      value: "",
+      sName: "", //搜索过滤
+      upDownShow: false, //涨跌箭头状态
+      timer: "", //定时器
+      // loadingArr: [true, false, false, false],
+      loadingArr: [true, false, false, false],
+      likeList: [], //收藏列表
+      marketList: [], //市场信息
+      localMarketList: JSON.parse(localStorage.getItem("localMarketList")) || [] //本地市场信息
+    };
+  },
+  methods: {
+    hover(e) {
+      for (var i = 0; i < e.target.parentNode.parentNode.children.length; i++) {
+        e.target.parentNode.parentNode.children[i].classList.remove("active");
       }
+      e.target.parentNode.classList.add("active");
     },
-    methods: {
-      hover(e) {
-        for (var i = 0; i < e.target.parentNode.parentNode.children.length; i++) {
-          e.target.parentNode.parentNode.children[i].classList.remove('active');
+
+    reflashMarket() {
+      // this.dataList = this.$store.state.marketList;
+      this.getMarketAuto();
+      this.toggleUpDownShow();
+    },
+
+    toggleUpDownShow() {
+      this.upDownShow = !this.upDownShow;
+    },
+    //动画
+    beforeEnterDown(el) {
+      el.style = "padding-top:-5px";
+      // el.style.opacity = "1";
+    },
+    enterDown(el, done) {
+      el.offsetWidth;
+      el.style.paddingTop = "5px";
+      el.style.opacity = "0";
+      done();
+    },
+    afterEnterDown(el) {
+      // this.upDownShow = false;
+      this.isShow = !this.isShow;
+    },
+    //动画
+    beforeEnterUp(el) {
+      el.style = "margin-top:5px";
+      // el.style.opacity = "1";
+    },
+    enterUp(el, done) {
+      el.offsetWidth;
+      el.style.marginTop = "-5px";
+      el.style.opacity = "0";
+      done();
+    },
+    afterEnterUp(el) {
+      // this.upDownShow = false;
+      // this.isShow = !this.isShow;
+    },
+    //tab栏切换
+    changeTab(tab, event) {},
+    //  切换收藏
+    toggleLike(id) {
+      console.log(id);
+      let count = 0;
+      //切换收藏
+      this.marketList.forEach((item, index) => {
+        if (item.id == id) {
+          item.isLike = !item.isLike;
         }
-        e.target.parentNode.classList.add('active')
-      },
+      });
+      this.likeList.forEach((item, index) => {
+        //如果存在就删除
+        if (item.id == id) {
+          count++;
+          this.likeList.splice(index, 1);
+          return;
+        }
+      });
 
-      reflashMarket() {
-        // this.dataList = this.$store.state.marketList;
-        this.getMarketAuto();
-        this.toggleUpDownShow();
-      },
-
-      toggleUpDownShow() {
-        this.upDownShow = !this.upDownShow;
-      },
-      //动画
-      beforeEnterDown(el) {
-        el.style = "padding-top:-5px";
-        // el.style.opacity = "1";
-      },
-      enterDown(el, done) {
-        el.offsetWidth;
-        el.style.paddingTop = "5px";
-        el.style.opacity = "0";
-        done();
-      },
-      afterEnterDown(el) {
-        // this.upDownShow = false;
-        this.isShow = !this.isShow;
-      },
-      //动画
-      beforeEnterUp(el) {
-        el.style = "margin-top:5px";
-        // el.style.opacity = "1";
-      },
-      enterUp(el, done) {
-        el.offsetWidth;
-        el.style.marginTop = "-5px";
-        el.style.opacity = "0";
-        done();
-      },
-      afterEnterUp(el) {
-        // this.upDownShow = false;
-        // this.isShow = !this.isShow;
-      },
-      //tab栏切换
-      changeTab(tab, event) {
-      },
-      //  切换收藏
-      toggleLike(id) {
-        console.log(id);
-        let count = 0;
-        //切换收藏
-        this.marketList.forEach((item, index) => {
-          if (item.id == id) {
-            item.isLike = !item.isLike;
-          }
-        })
-        this.likeList.forEach((item, index) => {
-          //如果存在就删除
-          if (item.id == id) {
-            count++;
-            this.likeList.splice(index, 1);
-            return;
-          }
-        })
-
-        this.marketList.forEach((item, index) => {
-          if (item.id == id && count == 0) {
-            this.likeList.push(item);
-          }
-        })
-        this.localMarketList = this.marketList;
-        localStorage.setItem('localMarketList', JSON.stringify(this.marketList));
-        this.$store.commit('getMarket', this.marketList);
-      },
-      //获取市场数据(币种)
-      getMarket() {
-        return new Promise((resolve, reject) => {
-          let url = common.apidomain + 'real/indexmarket';
-          ajax(url, 'get', {}, (res) => {
-            resolve(res);
-          })
-        })
-      },
-      //  自动获取币种
-      getMarketAuto() {
-        this.likeList = [];
-        this.localMarketList.forEach((item, index) => {
-          if (item.isLike) {
-            this.likeList.push(item);
-          }
+      this.marketList.forEach((item, index) => {
+        if (item.id == id && count == 0) {
+          this.likeList.push(item);
+        }
+      });
+      this.localMarketList = this.marketList;
+      localStorage.setItem("localMarketList", JSON.stringify(this.marketList));
+      this.$store.commit("getMarket", this.marketList);
+    },
+    //获取市场数据(币种)
+    getMarket() {
+      return new Promise((resolve, reject) => {
+        let url = common.apidomain + "real/indexmarket";
+        ajax(url, "get", {}, res => {
+          resolve(res);
         });
-        //获取市场数据
-        this.getMarket().then((res) => {
-          if (res.data.code !== 200) {
-            return;
-          }
-          if (this.localMarketList.length !== 0) {
-            //添加收藏
-            res.data.data.forEach((item, index) => {
-
-              //添加本地数据存储中的收藏
-              if (item.id == this.localMarketList[index].id) {
-                item.isLike = this.localMarketList[index].isLike;
-              }
-
-            })
-          } else {
-            res.data.data.forEach((item, index) => {
-              item.isLike = 0;
-            });
-          }
-          this.marketList = res.data.data;
-          this.loadingArr[0] = false;
-          localStorage.setItem('localMarketList', JSON.stringify(res.data.data));
-          this.$store.commit('getMarket', res.data.data);
-        })
-      }
+      });
     },
-    computed: {
-      filteredData: function () {
-        var self = this;
-        return this.marketList.filter(function (item) {
-          return item['sellname'].indexOf((self.sName).toLocaleUpperCase()) !== -1;
-        })
-      },
-      fbtFilteredData: function () {
-        return this.filteredData.filter(function (item) {
-          return item['type'] == 2;
-        })
-      },
-      btcFilteredData: function () {
-        return this.filteredData.filter(function (item) {
-          return item['type'] == 1;
-        })
-      },
-    },
-    created() {
-
-      //加载收藏列表
-      //清除定时器
-      if (this.timer) {
-        clearInterval(this.timer);
-      }
-
-      this.timer = setInterval(this.reflashMarket, 1000);
-
-    },
-    mounted() {
-    },
-    destroyed() {
-      clearInterval(this.timer);
-    },
-    components: {
-      Customer
+    //  自动获取币种
+    getMarketAuto() {
+      this.likeList = [];
+      this.localMarketList.forEach((item, index) => {
+        if (item.isLike) {
+          this.likeList.push(item);
+        }
+      });
+      //获取市场数据
+      this.getMarket().then(res => {
+        if (res.data.code !== 200) {
+          return;
+        }
+        if (this.localMarketList.length !== 0) {
+          //添加收藏
+          res.data.data.forEach((item, index) => {
+            //添加本地数据存储中的收藏
+            if (item.id == this.localMarketList[index].id) {
+              item.isLike = this.localMarketList[index].isLike;
+            }
+          });
+        } else {
+          res.data.data.forEach((item, index) => {
+            item.isLike = 0;
+          });
+        }
+        this.marketList = res.data.data;
+        this.loadingArr[0] = false;
+        localStorage.setItem("localMarketList", JSON.stringify(res.data.data));
+        this.$store.commit("getMarket", res.data.data);
+      });
     }
+  },
+  computed: {
+    filteredData: function() {
+      var self = this;
+      return this.marketList.filter(function(item) {
+        return item["sellname"].indexOf(self.sName.toLocaleUpperCase()) !== -1;
+      });
+    },
+    fbtFilteredData: function() {
+      return this.filteredData.filter(function(item) {
+        return item["type"] == 2;
+      });
+    },
+    btcFilteredData: function() {
+      return this.filteredData.filter(function(item) {
+        return item["type"] == 1;
+      });
+    }
+  },
+  created() {
+    //加载收藏列表
+    //清除定时器
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+
+    this.timer = setInterval(this.reflashMarket, 1000);
+  },
+  mounted() {},
+  destroyed() {
+    clearInterval(this.timer);
+  },
+  components: {
+    Customer
   }
+};
 </script>
 <style scoped>
-  .animate {
-    /*transition:all 1.5s;*/
-    transition-property: all;
-    transition-duration: 1.5s;
-    transition-timing-function: linear;
-  }
+.animate {
+  /*transition:all 1.5s;*/
+  transition-property: all;
+  transition-duration: 1.5s;
+  transition-timing-function: linear;
+}
 
-  .search-btn {
-    position: absolute;
-    right: 100px;
-    top: 10px;
-    width: 100px;
-    border: 1px solid #fff;
-    border-radius: 25px;
-    box-sizing: border-box;
-    padding: 0 20px;
-    color: #fff;
-  }
+.search-btn {
+  position: absolute;
+  right: 100px;
+  top: 10px;
+  width: 100px;
+  border: 1px solid #fff;
+  border-radius: 25px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  color: #fff;
+}
 
-  .search-icon {
-    position: absolute;
-    right: 180px;
-    top: 12px;
-  }
+.search-icon {
+  position: absolute;
+  right: 180px;
+  top: 12px;
+}
 
-  .table {
-    font-weight: 700;
-    min-height: 300px;
-  }
+.table {
+  font-weight: 700;
+  min-height: 300px;
+}
 
-  .th {
-    display: flex;
-    background-color: #272b41;
-    /*text-align: left;*/
-    /*margin-left:30px;*/
-  }
+.th {
+  display: flex;
+  background-color: #272b41;
+  /*text-align: left;*/
+  /*margin-left:30px;*/
+}
 
-  .th .td {
-    flex: 1;
-    height: 40px;
-    line-height: 40px;
-    color: #fff;
-  }
+.th .td {
+  flex: 1;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+}
 
-  .tbody .item {
-    display: flex;
-    height: 40px;
-    line-height: 40px;
-    background-color: #212537;
-    color: #fff;
-    border-bottom: .5px solid #fff;
-  }
+.tbody .item {
+  display: flex;
+  height: 40px;
+  line-height: 40px;
+  background-color: #212537;
+  color: #fff;
+  border-bottom: 0.5px solid #fff;
+}
 
-  /*各行变色*/
-  .tbody .item:nth-child(odd) {
-    /*background-color: #485283;*/
-  }
+/*各行变色*/
+.tbody .item:nth-child(odd) {
+  /*background-color: #485283;*/
+}
 
-  .tbody .item.active {
-    background-color: #1b1f2e;
-  }
+.tbody .item.active {
+  background-color: #1b1f2e;
+}
 
-  .tbody .item .data-item {
-    flex: 1;
-    /*background-color: pink;*/
-    /*margin-left:30px;*/
-    text-align: left;
-    /*text-align: left;*/
-  }
+.tbody .item .data-item {
+  flex: 1;
+  /*background-color: pink;*/
+  /*margin-left:30px;*/
+  text-align: left;
+  /*text-align: left;*/
+}
 
-  .tbody .item .data-item img {
-    /*display:inline-block !important;*/
-    display: inline-block;
-    width: 16px;
-    vertical-align: middle;
-    margin-right: 5px;
-  }
+.tbody .item .data-item img {
+  /*display:inline-block !important;*/
+  display: inline-block;
+  width: 16px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
 
-  .data-item.up {
-    color: #ac4f55;
-  }
+.data-item.up {
+  color: #ac4f55;
+}
 
-  .data-item.down {
-    color: #598f66;
-  }
+.data-item.down {
+  color: #598f66;
+}
 
-  .data-item.active {
-  }
+.data-item.active {
+}
 
-  .icon-shoucang {
-    color: #bfbfbf;
-    cursor: pointer;
-  }
+.icon-shoucang {
+  color: #bfbfbf;
+  cursor: pointer;
+}
 
-  .icon-shoucang.active {
-    color: #f4ea2a;
-  }
+.icon-shoucang.active {
+  color: #f4ea2a;
+}
 
-  .no-data {
-    line-height: 200px;
-  }
+.no-data {
+  line-height: 200px;
+}
 
-  .content {
-    /*/ / 增加此样式 width: 1300 px;*/
-    margin: 0 auto;
-    padding-bottom: 30px;
-  }
+.content {
+  /*/ / 增加此样式 width: 1300 px;*/
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
 
-  .animate {
-    /*top: -10px;*/
-  }
+.animate {
+  /*top: -10px;*/
+}
 
-  .search-box {
-    width: 150px;
-    overflow: hidden;
-    right: 0;
-    top: 6px;
-    height: 25px;
-    box-sizing: border-box;
-    padding: 0;
-  }
-
-
+.search-box {
+  width: 150px;
+  overflow: hidden;
+  right: 0;
+  top: 6px;
+  height: 25px;
+  box-sizing: border-box;
+  padding: 0;
+}
 </style>

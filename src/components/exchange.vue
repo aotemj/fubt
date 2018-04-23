@@ -409,7 +409,13 @@
               {{activeCoinInfo.sellsymbol}}余额: {{activeSellTotal}}
             </li>
             <li>
-              最大可买：{{activeSellTotal/buyReferencePrice}}
+              最大可买：
+              <span v-show="String(activeSellTotal/buyReferencePrice)!='NaN'">
+                {{activeSellTotal/buyReferencePrice}}
+              </span>
+              <span v-show="String(activeSellTotal/buyReferencePrice)=='NaN'">
+                0
+              </span>
             </li>
             <li>
               参考单价：{{buyReferencePrice}}
@@ -461,7 +467,11 @@
               {{activeCoinInfo.buysymbol}}余额：{{activeBuyTotal}}
             </li>
             <li>
-              最大可卖：{{activeBuyTotal/sellReferencePrice}}
+              最大可卖：
+              <span
+                v-show="String(activeBuyTotal/sellReferencePrice)!='NaN'">{{activeBuyTotal/sellReferencePrice}}
+              </span>
+              <span v-show="String(activeSellTotal/buyReferencePrice)=='NaN'">0</span>
             </li>
             <li>
               参考单价：{{sellReferencePrice}}
@@ -893,7 +903,7 @@
 
         // 委单记录
         entrutsHis: [],//历史委单
-        entrutsLoading: true,//委单数据加载状态
+        entrutsLoading: false,//委单数据加载状态
         entrutsCur: [],//当前委单
         currentPage: 1,//当前委单当前页
         pagesize: 5,//当前委单每页显示数据数量
@@ -1274,11 +1284,13 @@
           if (this.localMarketList.length !== 0) {
             //添加收藏
             res.data.data.forEach((item, index) => {
+                if(this.localMarketList[index]){
+                  //添加本地数据存储中的收藏
+                  if (item.id == this.localMarketList[index].id) {
+                    item.isLike = this.localMarketList[index].isLike || 0;
+                  }
+                }
 
-              //添加本地数据存储中的收藏
-              if (item.id == this.localMarketList[index].id) {
-                item.isLike = this.localMarketList[index].isLike || 0;
-              }
 
             })
           } else {
@@ -1320,6 +1332,10 @@
       }
     },
     created() {
+      //判断用户是否登录，用于加载委单
+      if (this.$store.state.isLogin) {
+        this.entrutsLoading = true;
+      }
       if (this.timer) {
         clearInterval(this.timer);
       }

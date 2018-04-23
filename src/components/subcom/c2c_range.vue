@@ -60,7 +60,7 @@
 
 
                       <div class="C2C-tab">
-                        <button v-on:click="buybutton()">{{item.buying}}</button>
+                        <button v-on:click="buybutton">{{item.buying}}</button>
                       </div>
                     </div>
                   </div>
@@ -250,7 +250,6 @@
               </div> -->
             </div>
           </el-tab-pane>
-
         </el-tabs>
       </div>
     </div>
@@ -337,11 +336,11 @@
     },
     created() {
       // 1.0 刚打开c2c页面请求数据
-      this.render();
+      this.render1();
     },
     methods: {
       // 1.0 刚打开c2c页面请求数据
-      render() {
+      render1() {
         var url = common.apidomain + 'c2c/index';
         var formData = new FormData();
         formData.append('c2ctradeId', 52);
@@ -382,10 +381,10 @@
       submitTradePwd(id) {
         var urlbuy = common.apidomain + 'trade/cny_c2c_buy';
         var urlsell = common.apidomain + 'trade/cny_c2c_sell';
-
         var formData1 = new FormData();
         formData1.append('symbol', 2);
         formData1.append('tradePwd', this.tradePwd);
+
         if (id == 0) {//买入按钮
           if (this.tradePwd == '') {
             this.warn = "请输入交易密码！";
@@ -396,22 +395,20 @@
           formData1.append('tradePrice', this.buyprice);
           ajax(urlbuy, 'post', formData1, (res) => {
             this.dialogFormVisible1 = false;
-            console.log(res);
+            // console.log(res);
             if (res.data.code !== 200) {
               this.warn = res.data.msg;
-              // this.dialogFormVisible1 = false;
               return;
             }
-            // if (res.data.code == 200) {
-            // this.warn = "数据请求成功！";
-            // this.warn = res.data.msg;
-            // this.$store.commit("changeDialogInfo", {dataInfo: res.data.msg})
+            this.$parent.render().then((res)=>{
+              if(res.data.code!==200){
+                return;
+              }
+              this.$store.commit('getC2cEntrust',res.data.data.data);
+            });
             this.$store.commit("changeDialogInfo", {dataInfo: '买入成功，请在30分钟内按要求完成付款。'})
-            console.log('123');
-            // }
           });
         }
-
 
         if (id == 1) {//卖出按钮
           if (this.tradePwd == '') {
@@ -428,10 +425,15 @@
               this.dialogFormVisible1 = false;
               return;
             }
-            if (res.data.code == 200) {
-              // this.sellwarn = res.data.msg;
-              this.$store.commit("changeDialogInfo", {dataInfo: '卖出成功，商家会在24小时内完成汇款。'})
-            }
+            this.$parent.render().then((res)=>{
+              if(res.data.code!==200){
+                return;
+              }
+              this.$store.commit('getC2cEntrust',res.data.data.data);
+            });
+            // if (res.data.code == 200) {
+            this.$store.commit("changeDialogInfo", {dataInfo: '卖出成功，商家会在24小时内完成汇款。'})
+            // }
           });
         }
       },
@@ -629,11 +631,14 @@
   }
 
   .trading-left > .C2C-tab > button {
-    background: rgb(217, 83, 79);
+    /*background: rgb(217, 83, 79);*/
+    background-color: #d75452;
+    border-radius: 5px;
   }
 
   .trading-left > .C2C-tab > button:hover {
-    background: rgb(201, 48, 44);
+    /*background: rgb(201, 48, 44);*/
+    background-color: #c73232;
   }
 
   .trading1 {
@@ -698,11 +703,14 @@
   }
 
   .trading-right1 > .C2C-tab > button {
-    background: rgb(92, 182, 92);
+    /*background: rgb(92, 182, 92);*/
+    background-color: #5fb760;
+    border-radius: 5px;
   }
 
   .trading-right1 > .C2C-tab > button:hover {
-    background: rgb(68, 152, 68);
+    /*background: rgb(68, 152, 68);*/
+    background-color: #479c48;
   }
 
   .tab_input {
@@ -710,7 +718,6 @@
   }
 
   .C2C-input {
-    /*border: 1px solid #11182c !important;*/
     border: 1px solid #11182c;
   }
 

@@ -29,6 +29,9 @@ export default new Vuex.Store({
     //市场信息
     marketList: [],
     marketLoading: true,
+
+    //c2c 用户最近交易记录列表
+    businessListings:[], 
   },
   mutations: {
     //用户登录
@@ -90,7 +93,12 @@ export default new Vuex.Store({
     getMarket(state, data) {
       state.marketList = data;
       state.marketLoading = false;
-    }
+    },
+
+    //加载c2c用户最近交易记录
+    getC2cEntrust(state,data){
+      state.businessListings = data;
+    } 
   }
 })
 

@@ -40,6 +40,8 @@
   // 用户List模块
   import record from "./subcom/c2c_record.vue"
 
+import common from "../kits/domain.js"
+import {ajax} from "../kits/http.js"
   export default {
     data() {
       return {
@@ -47,7 +49,30 @@
         prompt: true
       }
     },
-    methods: {},
+    methods: {
+      // 渲染用户最近交易记录列表
+      render(){
+        return new Promise((resolve,reject)=>{
+          var url = common.apidomain + 'trade/c2c/userEntrust';
+          var fd = new FormData();
+          fd.append('ftradeid', 15);
+          fd.append('currentPage', 1);
+          fd.append('size', 8);
+          ajax(url, 'post', fd, (res) => {
+            resolve(res);
+          })
+        })
+      }
+    },
+    created(){
+      this.render().then((res)=>{
+        if(res.data.code!==200){
+          return;
+        }
+        // console.log(this.$store.state.businessListings);
+        this.$store.commit('getC2cEntrust',res.data.data.data);
+      });
+    },
     computed: {},
     components: {
       Header,//头部

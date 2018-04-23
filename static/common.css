@@ -574,6 +574,16 @@ el-carousel-item img {
   border-radius: 10px;
 }
 
+/* 任付伟改c2c中c2c_record.vue页面中点击付款信息后的弹出窗样式 */
+/* 改成表格后写的样式 开始 */
+.exchange .el-table__body-wrapper {
+  height: 320px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* 改成表格后写的样式 结束 */
+
 .exchange .el-dialog__header {
   border-bottom: 1px solid #4C597B;
   padding-top: 40px;

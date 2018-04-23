@@ -6,39 +6,39 @@
                 <!-- <p><img src="https://www.fubt.top//front/images/index/logo_03.png" alt=""></p> -->
                 <b>FuBT.top</b>
                 <p class="info-site">
-                    <a href='https://pan.baidu.com/s/1dTC6h4' target='_blank'>FUC钱包下载</a>
+                    <a href='https://pan.baidu.com/s/1dTC6h4' target='_blank'>FUC{{$t('m.index_Thepursetodownload')}}</a>
                     &nbsp;&nbsp;
-                    <a href='/notice/detail.html?id=13' target='_blank' id='ur'>费率信息</a>
+                    <a href='/notice/detail.html?id=13' target='_blank' id='ur'>{{$t('m.index_Therateinformation')}}</a> 
                     &nbsp;&nbsp;
-                    <a href="https://www.fubt.top/notice/detail.html?id=36">公司简介</a>
+                    <a href="https://www.fubt.top/notice/detail.html?id=36">{{$t('m.index_companyprofile')}}</a>
                     &nbsp;&nbsp;
                 </p>
-                <p class="site">香港地址：香港九龍長沙灣東京街31號恒邦商業大廈6樓603F室R</p>
+                <p class="site">{{$t('m.index_address')}}</p>
             </li>
             <li>
                 <div class="site-info">
-                    <p><span>电话：</span><span class="big-font">51010294</span></p>
-                    <p><span>传真：</span><span class="big-font">21726413</span></p>
-                    <p><span>工作日：</span><span>9:00--18:00</span></p>
-                    <p><span>节假日：</span><span>9:30--17:30</span></p>
+                    <p><span>{{$t('m.index_Telephone')}}：</span><span class="big-font">51010294</span></p>
+                    <p><span>{{$t('m.index_Fax')}}：</span><span class="big-font">21726413</span></p>
+                    <p><span>{{$t('m.index_Workingdays')}}：</span><span>9:00--18:00</span></p>
+                    <p><span>{{$t('m.index_holiday')}}：</span><span>9:30--17:30</span></p>
                 </div>
             </li>
             <li>
                 <div class="site-info1">
-                    <p>QQ群：638885953</p>
-                    <p>客服QQ：2263378</p>
-                    <p>客服QQ：1372664</p>
-                    <p>财务QQ：2667400</p>
+                    <p>{{$t('m.index_QQgroup')}}：638885953</p>
+                    <p>{{$t('m.index_CustomerserviceQQ')}}：2263378</p>
+                    <p>{{$t('m.index_CustomerserviceQQ')}}：1372664</p>
+                    <p>{{$t('m.index_FinancialQQ')}}：2667400</p>
                 </div>
             </li>
             <li>
                 <div class="s-picture">
                     <img src="../assets/androidApp.png" >
-                    <p>扫一扫下载APP</p>
+                    <p>{{$t('m.footer_app_download')}}</p>
                 </div>
                 <div class="s-picture">
                     <img src="../assets/weChatPublicNumber.jpg" >
-                    <p>关注微信公众号</p>
+                    <p>{{$t('m.index_WeChat')}}</p>
                 </div>
             </li>
         </ul>
@@ -46,7 +46,7 @@
           <div id="link">
             <div class="container">
               <p>
-                <span>友情链接</span>
+                <span>{{$t('m.footer_link')}}</span>
                 &nbsp;&nbsp;&nbsp;
                 <a href="https://uncoinex.com/home" target="_blank">
                     <span>澳洲U网</span>
@@ -69,7 +69,7 @@
               </p>
             </div>
           </div>
-          <p class="footer-bottom1">CopyRight &copy; 2013-2018 富比特交易平台 All Rights Reserved </p>
+          <p class="footer-bottom1">CopyRight &copy; 2013-2018 {{$t('m.index_FuBT')}} All Rights Reserved </p> 
         </div>
     </footer>
   </div>
@@ -86,8 +86,7 @@ export default {
 </script>
 <style scoped>
 .container-footer {
-  width: 100%;
-  /* height: 400px; */
+  min-width: 100%;
   background: #030f27;
   float: left;
 }
@@ -99,6 +98,8 @@ export default {
 .footer-content {
   height: 150px;
   margin-top: 100px;
+  width: 1200px;
+  display: inline-block;
 }
 
 .logo-footer {
@@ -107,22 +108,20 @@ export default {
 }
 
 .footer-content img {
-  /* margin-right: 40px;
-  margin-bottom: 30px; */
   height: 80px;
   width: 80px;
 }
-.s-picture{
+.s-picture {
   display: inline-block;
   margin-right: 20px;
 }
-.s-picture p{
+.s-picture p {
   font-size: 12px;
 }
 
 .footer-content li {
   float: left;
-  margin-left: 5%;
+  margin-left: 4%;
   color: #fff;
   font-size: 15px;
 }
@@ -131,13 +130,13 @@ export default {
   color: #c2c3c8;
 }
 
-.footer-content li.first-li{
-  margin-left: 8.7%;
+.footer-content li.first-li {
   text-align: left;
   line-height: 25px;
   color: #c2c3c8;
+  margin-left: 5%;
 }
-.footer-content li.first-li b{
+.footer-content li.first-li b {
   font-size: 35px;
 }
 
@@ -164,25 +163,27 @@ export default {
   width: 100%;
   text-align: center;
   color: #f6fefb;
-  /* border-top: 1px solid #566079; */
   font-size: 12px;
 }
 
 .footer-bottom1 {
-  width: 1200px;
   margin: 15px auto 0;
-  margin: 0 -20px;
-  overflow: hidden;
   line-height: 50px;
-  background: rgba(0,0,0,.2);
-  color: rgba(255,255,255,.6);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.6);
 }
-
+.site {
+  max-width: 431px;
+}
+.site-info,
+.site-info1 {
+  text-align: left;
+}
 .site-info > p {
   margin-bottom: 5px !important;
   color: #c2c3c8;
 }
-.site-info1{
+.site-info1 {
   line-height: 21px;
 }
 .site-info1 > p {
@@ -193,20 +194,20 @@ export default {
 .site-info > p > span {
   color: #c2c3c8 !important;
 }
-.site-info .big-font{
+.site-info .big-font {
   font-size: 20px;
 }
 
 .info-site {
   margin: 10px 0;
 }
-#link{
+#link {
   border-top: 1px solid #566079;
-  margin-left: 8.7%;
+  margin-left: 6%;
+  width: 1200px;
+  display: inline-block;
 }
 #link > .container {
-  /* width: 1200px; */
-  /* padding-left: 8%; */
   margin: 10px 0 15px;
   text-align: left;
 }
@@ -219,8 +220,7 @@ export default {
 
 #link > .container > p > span {
   font-size: 15px;
-  /* color: #f6fefb; */
-  color: rgba(255,255,255,.85)
+  color: rgba(255, 255, 255, 0.85);
 }
 
 #link > .container > p > a {
@@ -235,14 +235,7 @@ export default {
     width: 1024px;
   }
   .footer-content li {
-    margin-left: 5%;
+    margin-left: 4%;
   }
-  .footer-bottom1 {
-    width: 1024px;
-  }
-}
-footer {
-  width: 1300px;
-  margin: 0 auto;
 }
 </style>

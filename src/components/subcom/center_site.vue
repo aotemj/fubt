@@ -5,30 +5,44 @@
       <div class="form_el">
         <el-form ref="form" label-width="80px">
           <el-form-item label="联系人">
-            <el-input v-model="username" placeholder="请输入姓名"></el-input>
+            <el-input v-model="username" placeholder="请输入姓名" v-if="this.username !== ''" disabled></el-input>
+            <el-input v-model="username" placeholder="请输入姓名" v-else></el-input>
           </el-form-item>
+
           <el-form-item label="联系电话">
-            <el-input v-model="phone" placeholder="请输入您的联系电话"></el-input>
+            <el-input v-model="phone" placeholder="请输入您的联系电话" v-if="this.phone !== ''" disabled></el-input>
+            <el-input v-model="phone" placeholder="请输入您的联系电话" v-else></el-input>
           </el-form-item>
+
           <el-form-item label="详细地址">
-            <el-select class="selece_box" v-model="prov">
-              <el-option v-for="(option,index) in arr" :value="option.name" :key="option.name">{{ option.name }}
-              </el-option>
+            <el-select class="selece_box" v-model="prov" v-if="this.prov !== ''" disabled>
+              <el-option v-for="(option,index) in arr" :value="option.name" :key="index">{{ option.name }}</el-option>
             </el-select>
-            <el-select class="selece_box" v-model="city">
-              <el-option v-for="(item,index) in cityArr" :key="index" v-model="item.name">
-              </el-option>
+            <el-select class="selece_box" v-model="prov" v-else>
+              <el-option v-for="(option,index) in arr" :value="option.name" :key="index">{{ option.name }}</el-option>
             </el-select>
 
-            <el-select class="selece_box" v-model="district">
-              <el-option v-for="(option,index) in districtArr" :value="option.name" :key="option.name">{{ option.name
-                }}
-              </el-option>
+            <el-select class="selece_box" v-model="city" v-if="this.city !== ''" disabled>
+              <el-option v-for="(item,index) in cityArr" :key="index" v-model="item.name"></el-option>
             </el-select>
-            <input type="text" class="prova" placeholder="请输入您的详细地址" v-model="dis">
+            <el-select class="selece_box" v-model="city" v-else>
+              <el-option v-for="(item,index) in cityArr" :key="index" v-model="item.name"></el-option>
+            </el-select>
+
+            <el-select class="selece_box" v-model="district" v-if="this.district !== ''" disabled>
+              <el-option v-for="(option,index) in districtArr" :value="option.name" :key="index">{{ option.name}}</el-option>
+            </el-select>
+            <el-select class="selece_box" v-model="district" v-else>
+              <el-option v-for="(option,index) in districtArr" :value="option.name" :key="index">{{ option.name}}</el-option>
+            </el-select>
+
+            <input type="text" class="prova" placeholder="请输入您的详细地址" v-model="dis" v-if="this.dis !== ''" disabled>
+            <input type="text" class="prova" placeholder="请输入您的详细地址" v-model="dis" v-else>
           </el-form-item>
+
           <el-form-item label="邮政编码">
-            <el-input v-model="zipcode" placeholder="请输入邮政编码"></el-input>
+            <el-input v-model="zipcode" placeholder="请输入邮政编码" v-if="this.zipcode !== ''" disabled></el-input>
+            <el-input v-model="zipcode" placeholder="请输入邮政编码"  v-else></el-input>
           </el-form-item>
           <div class="false-tips"><i v-show="errorMsg"></i>{{errorMsg}}</div>
           <el-form-item>
@@ -96,8 +110,12 @@
         Jourfd.append('zipcode', this.zipcode);//邮政编码
         Jourfd.append('address', this.dis);//地址
         ajax(addressUrl, 'post', Jourfd, (res) => {
-          this.$store.commit('changeDialogInfo', '添加收货地址成功')
+          if(res.data.code !== 200){
+            return;
+          }else{
+             this.$store.commit('changeDialogInfo',{dataInfo:'添加收货地址成功'})
           // console.log(res)
+          }
         });
       },
 
@@ -158,24 +176,24 @@
       this.linkage().then((res) => {
         if (res.data.code !== 200) {
           // this.errorMsg = res.data.msg;
-          return;
-        } else {
-          if (!this.username) {
             return;
-          } else if (!this.prov) {
-            return;
-          } else {
-            this.username = res.data.data.Info.fname;
-            this.phone = res.data.data.Info.fphone;
-            this.prov = res.data.data.Info.fprov;
-            this.city = res.data.data.Info.fcity;
-            this.district = res.data.data.Info.fdist;
-            this.dis = res.data.data.Info.faddress;
-            this.zipcode = res.data.data.Info.fzipcode;
-            this.subt = false
+          }else {
+            if(res.data.data.Info == null){
+              this.username = ''
+              this.phone = ''
+              this.zipcode = ''
+              return;
+            }else{
+              this.username = res.data.data.Info.fname;
+              this.phone = res.data.data.Info.fphone;
+              this.prov = res.data.data.Info.fprov;
+              this.city = res.data.data.Info.fcity;
+              this.district = res.data.data.Info.fdist;
+              this.dis = res.data.data.Info.faddress;
+              this.zipcode = res.data.data.Info.fzipcode;
+              this.subt = false
+            }
           }
-
-        }
       });
     },
     components: {
