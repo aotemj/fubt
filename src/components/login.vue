@@ -44,31 +44,40 @@
         // password: 'a111111',//赵鑫磊密码
         // username: 13253655737,//赵鑫磊账号
         // password: 'a111111',//赵鑫磊密码
-        username: 13639753981,//赵鑫磊账号
-        password: 'lvby199112',//赵鑫磊密码
-        // username: 15738818082,//任付伟账号
-        // password: 'admin123',//任付伟密码
+        // username: 13639753981,//赵鑫磊账号
+        // password: 'lvby199112',//赵鑫磊密码
+        username: 15738818082,//任付伟账号
+        password: 'admin123',//任付伟密码
         // username: 15994026836,//杨孝喜账号
         // password: 'a123456',//杨孝喜密码
         errorMsg: '',//错误提示
         loginBtn: '登录',
         logging: false,//登录中
+        loadingCircle:{},
       }
     },
     methods: {
       login() {
         return new Promise((resolve, reject) => {
+          this.loadingCircle = this.$loading({
+          lock: true,
+          background: 'rgba(0, 0, 0, 0.7)',
+        });
           if (!this.username) {
             this.errorMsg = '邮箱或手机号不能为空';
+            this.loadingCircle.close();
             return;
           } else if (!this.password) {
             this.errorMsg = '密码不能为空';
+              this.loadingCircle.close();
             return;
           } else if (this.password.length < 6) {
-            this.errorMsg = '密码长度不能小于6!'
+            this.errorMsg = '密码长度不能小于6位!'
+              this.loadingCircle.close();
             return;
           } else {
             this.errorMsg = '';
+              this.loadingCircle.close();
           }
 
           this.loginBtn = '登录中...';
@@ -145,29 +154,35 @@
       //加载个人资产
       loadCurrencyList() {
 
-        const loading = this.$loading({
+        
+        this.loadingCircle = this.$loading({
           lock: true,
           background: 'rgba(0, 0, 0, 0.7)',
         });
 
         this.login().then((res) => {
-          loading.close();
+
+            this.loadingCircle.close();
+          
 
           if (res.data.code !== 200) {
-            if (res.data.msg == '帐号不存在，<a href="/user/register.html">去注册>></a>！') {
+ this.loadingCircle.close();
+             if (res.data.msg == '帐号不存在，<a href="/user/register.html">去注册>></a>！') {
               this.errorMsg = '账号不存在！请核对后重新输入';
               return;
             }
             this.errorMsg = res.data.msg;
             return;
           }
-
+ this.loadingCircle.close();
           this.$store.commit('userLogin', res.data.data)
 
           let coinUrl = common.apidomain + 'financial/index';
           let fd = new FormData();
 
           ajax(coinUrl, 'post', fd, (res) => {
+            this.loadingCircle.close();
+
             if (res.data.code !== 200) {
               return;
             } else {

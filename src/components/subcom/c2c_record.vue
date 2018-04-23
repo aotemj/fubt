@@ -1,5 +1,6 @@
 <template>
   <div class="exchange">
+    <tips></tips>
     <header>最近交易记录</header>
     <div class="exchange-list" v-for="(item,index) in tabList">
       <ul>
@@ -55,16 +56,21 @@
               <el-form-item label="交易金额" :label-width="formLabelWidth">
                 <el-input v-model="form.tradeamount" auto-complete="off" disabled></el-input>
               </el-form-item>
+              <!-- 银行卡支付宝列表 开始 -->
+                <!-- <el-form-item label="收款方式" :label-width="formLabelWidth">
+                  <el-select v-model="form.region" style="border: 1px solid #FFFDFF;">
+                    <el-option label="储蓄卡" value=""></el-option>
+                    <el-option label="支付宝" value="15738818082"></el-option>
+                  </el-select>
+                </el-form-item> -->
               <el-form-item label="收款方式" :label-width="formLabelWidth">
-                <!-- <el-select v-model="form.region" style="border: 1px solid #FFFDFF;">
-                  <el-option label="银行卡" value="tyu"></el-option>
-                  <el-option label="支付宝" value="15738818082"></el-option>
-                </el-select> -->
-                <el-select v-model="form.region" style="border: 1px solid #FFFDFF;">
-                  <el-option label="储蓄卡" value=""></el-option>
-                  <el-option label="支付宝" value="15738818082"></el-option>
+                <el-select v-model="form.region" style="border: 1px solid #FFFDFF;" @change="changebank">
+                  <el-option v-for="(item,index) in form.banklist" :key="index" :value="item.fid" :label="item.fname+item.fbanknumber"></el-option>
+                  
                 </el-select>
               </el-form-item>
+              <!-- 银行卡支付宝列表 结束 -->
+
               <el-form-item label="商户汇款备注ID" :label-width="formLabelWidth">
                 <el-input v-model="form.remarkID" auto-complete="off" disabled></el-input>
                 <!-- <span style="display:inline-block;">请务必填写</span> -->
@@ -90,6 +96,7 @@
   import common from "../../kits/domain.js"
   import {ajax} from "../../kits/http.js"
   import {formatDate} from "../../kits/dateFormat";
+  import tips from './friendlyTips'//提示信息
 
   export default {
     data() {
@@ -106,21 +113,11 @@
             oper: '操作'
           }
         ],
-        businessListings: [
-          // {
-          //   time:'2018.3.26',
-          //   type:'买单',
-          //   serial:'4534433465',
-          //   quantity:'87645',
-          //   unit:'0.125',
-          //   total:'12354',
-          //   state:'已审核',
-          //   oper:'操作'
-          // }
-        ],
+        businessListings: [],
         // 点击付款信息后的弹窗初始化
         dialogVisible: false,
         formLabelWidth: '140px',
+        //表单参数
         form: {
           payeename: '',//收款方户名
           tradeamount: '',//交易金额
@@ -128,26 +125,29 @@
           serialnumber: '',//流水号
           state: '',//状态
           region: '',//收款方式
+          banklist:[],
         },
         buttontoggle: true,//按钮部分显示与隐藏
-
-        paytype: '',//付款类型--银行卡
-        bankid: '',//银行卡号
-        fuserbankinfo: '',
-
-        // 接口参数：
+        //  我要付款和取消订单 接口参数：
         ftype: '',
         fversion: '',
         fid: '',
         fstatus: '',
         ffinishtime: '',
         fpaytype: '',
+        bankid: '',
+        fuserbankinfo: '',
       }
     },
     created() {
       this.render();//初始化渲染页面列表
     },
     methods: {
+      // 5.0下拉列表改变时选中项事件
+      changebank(e){
+        console.log(e);
+        this.bankid=e;
+      },
       // 1.0初始化渲染页面列表
       render() {
         var url = common.apidomain + 'trade/c2c/userEntrust';
@@ -166,43 +166,83 @@
         this.businessListings.forEach((item, index) => {
           if (item.fid == id) {
             // this.businessListings = item;
-            this.form.payeename = "平台名字";
-            this.form.tradeamount = item.ffinishtotal;
-            this.form.remarkID = item.fappealsid + '（请务必填写）';
-            this.form.serialnumber = item.fserialnumber;
-            this.form.state = item.fstatus_s;
-
-            //银行卡信息
-            this.paytype = item.fpaytype_s; // 付款类型
-            this.bankid = item.fuserbankinfo; //银行卡号
-            // 我已付款接口参数
-            this.ftype = item.ftype;
-            this.fversion = item.fversion;
-            this.bankid = item.fuserbankinfo;
             this.fid = item.fid;
-            // 取消订单接口参数
-            this.fstatus = item.fstatus;
-            this.ffinishtime = item.ffinishtime;
-            this.fpaytype = item.fpaytype;
-            this.fuserbankinfo = item.fuserbankinfo;
+            console.log(this.fid);
+            var paymesURL = common.apidomain + 'c2c/orderDetail';
+            var paymefd = new FormData();
+            paymefd.append('fid', this.fid);
+            ajax(paymesURL, 'post', paymefd, (res) => {
+              console.log(res.data);
+              // 如果状态是已确认和已付款和已取消的不显示按钮
+              if(res.data.data.order.fstatus_s=="已付款" || res.data.data.order.fstatus_s=="已确认" || res.data.data.order.fstatus_s=="已取消"){
+                  this.buttontoggle=false;
+              }
+              //如果是卖单没有绑定银行卡，提示先去绑定银行卡
+              if(res.data.data.bankinfo.length==0){
+                // this.buttontoggle=false;//隐藏按钮
+                // this.$store.commit('changeDialogInfo',{dataInfo:'卖单收款方式只能是银行卡，请您先去绑定银行卡！'});
+                // return;
+                this.form.banklist='';//银行卡支付宝数组列表
+                this.form.payeename='';
+                this.form.region='';
+                this.bankid='';
+              }else{
+                this.form.banklist=res.data.data.bankinfo;//银行卡支付宝数组列表
+                this.form.payeename=res.data.data.bankinfo[0].frealname;
+                this.form.region=res.data.data.bankinfo[0].fname+res.data.data.bankinfo[0].fbanknumber;
+                this.bankid=res.data.data.bankinfo[0].fid;
+              }
+              this.form.tradeamount=res.data.data.order.ffinishtotal+'  CNY';//交易金额
+              this.form.remarkID=res.data.data.order.fappealsid + ' （请务必填写）';//备注ID
+              this.form.serialnumber=res.data.data.order.fserialnumber;//流水号
+              this.form.state=res.data.data.order.fstatus_s;//订单状态
+              // this.form.banklist=res.data.data.bankinfo;//银行卡支付宝数组列表
+              // this.form.payeename=res.data.data.bankinfo[0].frealname;
+              // this.form.region=res.data.data.bankinfo[0].fname+res.data.data.bankinfo[0].fbanknumber;
+              // console.log(this.form.banklist);
+              // 以下为接口参数：
+              this.ftype=res.data.data.order.ftype;
+              this.fversion=res.data.data.order.fversion;
+              this.fid=res.data.data.order.fid;
+              // this.bankid=res.data.data.bankinfo[0].fid;
+              // console.log(99);
+              // console.log(this.bankid);
+              this.fstatus=res.data.data.order.fstatus;
+              this.ffinishtime=res.data.data.order.ffinishtime;
+              this.fpaytype=res.data.data.order.fpaytype;
+              this.fuserbankinfo=res.data.data.order.fuserbankinfo;
+            });
           }
         })
         this.dialogVisible = true;
       },
       // 3.0我已付款按钮发送请求
       payorder() {
+        if(this.form.banklist.length==0){
+          this.$store.commit('changeDialogInfo',{dataInfo:'卖单收款方式只能是银行卡，请您先去绑定银行卡！'});
+          return;
+        }
         console.log("你点击了付款按钮");
         var url = common.apidomain + 'trade/c2c/payOrder';
         var fdpayorder = new FormData();
         fdpayorder.append('ftype', this.ftype);
         fdpayorder.append('fversion', this.fversion);
-
-        fdpayorder.append('bankid', this.bankid);//暂时没找到这个字段
-
+        fdpayorder.append('bankid', this.bankid);
         fdpayorder.append('fid', this.fid);
         ajax(url, 'post', fdpayorder, (res) => {
+          
+          console.log(1);
           console.log(res.data);
+          console.log(2);
+          if(res.code!==200){
+            this.$store.commit('changeDialogInfo',{dataInfo:res.data.msg});
+            return;
+          }
+          if(res.code==200){
+            this.$store.commit('changeDialogInfo',{dataInfo:res.data.msg});
+          }
         });
+        
       },
       // 4.0取消订单按钮发送请求
       cancelorder() {
@@ -211,17 +251,26 @@
         var fdcancelorder = new FormData();
         fdcancelorder.append('fid', this.fid);
         fdcancelorder.append('fversion', this.fversion);
-        fdcancelorder.append('fstatus', this.fstatus);
-        fdcancelorder.append('ffinishtime', this.ffinishtime);
-        fdcancelorder.append('fpaytype', this.fpaytype);
-        fdcancelorder.append('fuserbankinfo', this.fuserbankinfo);
+        // fdcancelorder.append('fstatus', this.fstatus);
+        // fdcancelorder.append('ffinishtime', this.ffinishtime);
+        // fdcancelorder.append('fpaytype', this.fpaytype);
+        // fdcancelorder.append('fuserbankinfo', this.fuserbankinfo);
         ajax(url, 'post', fdcancelorder, (res) => {
+          console.log(3);
           console.log(res.data);
+          console.log(4);
+          if(res.code!==200){
+            this.$store.commit('changeDialogInfo',{dataInfo:res.data.msg});
+            return;
+          }
+          if(res.code==200){
+            this.$store.commit('changeDialogInfo',{dataInfo:res.data.msg});   
+          } 
         });
       },
     },
     computed: {},
-    components: {},
+    components: {tips},
     filters: {
       formatDate(time) {
         var date = new Date(time);
@@ -239,7 +288,6 @@
   .paytip {
     color: #DADFF3;
     font-family: "Microsoft YaHei";
-
   }
 
   .payform {

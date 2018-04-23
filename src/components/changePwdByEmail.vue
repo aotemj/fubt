@@ -40,7 +40,11 @@
         </div>
         
         <!-- 提示信息 -->
-        <div class="tipinfo">{{tipinfo}}</div>
+        <!-- <div class="tipinfo">{{tipinfo}}</div> -->
+        <!-- 错误提示信息 -->
+          <transition enter-active-class="animated shake">
+            <div class="false-tips fz12" v-show="tipinfo"><i v-show="tipinfo"></i>{{tipinfo}}</div>
+          </transition>
         
         <!-- 点击下一步按钮 -->
         <input class="register-btn dis-in-blk" type="button" v-on:click="next" value="下一步">

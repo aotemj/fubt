@@ -9,28 +9,40 @@
         <div class="select-box">
           <div class="loginnum">登录账号<input type="text" class="loginid" v-model="loginid"></div>
         </div>
+
         <!-- 手机发送验证码：如果绑定了手机就显示，否则不显示 -->
         <div class="select-box verify-box" v-show="telbind">
           <input type="text" v-model="msgCode" placeholder="短信验证码">
           <input class="verify-btn cp middle fz12" :disabled="msgDisabled" type="button" v-on:click="sendCode"
                  v-model="msgBtnTxt">
         </div>
+
         <!--新密码-->
         <div class="select-box">
-          <input type="text" name=""  placeholder="新密码" v-model="newpwd">
+          <input type="password" name=""  placeholder="新密码" v-model="newpwd">
         </div>
+
         <!--确认新密码-->
         <div class="select-box">
-          <input type="text" name=""  placeholder="确认密码" v-model="newpwd2">
+          <input type="password" name=""  placeholder="确认密码" v-model="newpwd2">
         </div>
+
         <!-- 接口数据res.msg信息提示 -->
-        <div class="errtip">{{errorMsg}}</div>
+        <!-- <div class="errtip">{{errorMsg}}</div> -->
+        <transition enter-active-class="animated shake">
+          <div class="false-tips fz12" v-show="errorMsg"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+        </transition>
+
         <!-- 下一步按钮 -->
         <input class="register-btn dis-in-blk" type="button" v-on:click="next" value="下一步">
       </div>
+
       <!-- 密码重置成功后显示登陆界面 -->
       <div class="success" v-show="success">
-        <h4>{{successtip}}</h4>
+        <!-- <h4>{{successtip}}</h4> -->
+        <transition enter-active-class="animated shake">
+          <div class="false-tips fz12" v-show="successtip"><i v-show="successtip"></i>{{successtip}}</div>
+        </transition>
         <input class="register-btn dis-in-blk" v-on:click="login" type="button" value="立即登录">
       </div>
     </div>
@@ -56,7 +68,7 @@
         uid:'',
         uuid:'',
         fid:'',
-        pwdreg:/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
+        // pwdreg:/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
       }
     },
     methods:{
@@ -66,6 +78,10 @@
 
       // 5.0 点击下一步按钮发送请求通过邮箱修改密码
       next(){
+        if(!this.msgCode){
+          this.errorMsg = '请输入短信验证码';
+          return;
+        }
         // if(!this.pwdreg.test(this.newpwd)){
         //   this.errorMsg = '请输入6-16数字、字母组合的密码';
         //   return;
@@ -82,24 +98,26 @@
         // } else {
         //   this.errorMsg = '';
         // } 
-        if(!this.newpwd){
-          this.errorMsg = '请输入新密码';
-          return;
-        }else if(!this.pwdreg.test(this.newpwd)){
-          this.errorMsg = '请输入6-16位数字、字母组合的密码';
-          return;
-        }else if(!this.newpwd2){
-          this.errorMsg = '请输入确认密码';
-          return;
-        }else if(!this.pwdreg.test(this.newpwd2)){
-          this.errorMsg = '请输入6-16数字、字母组合的密码';
-          return;
-        }else if(this.newpwd !== this.newpwd2){
-          this.errorMsg = '两次密码输入不一致';
-          return;
-        }else{
-          this.errorMsg = '';
-        } 
+        // if(!this.msgCode){
+        //   this.errorMsg = '请输入短信验证码';
+        // }else if(!this.newpwd){
+        //   this.errorMsg = '请输入新密码';
+        //   return;
+        // }else if(!this.pwdreg.test(this.newpwd)){
+        //   this.errorMsg = '请输入6-16位数字、字母组合的密码';
+        //   return;
+        // }else if(!this.newpwd2){
+        //   this.errorMsg = '请输入确认密码';
+        //   return;
+        // }else if(!this.pwdreg.test(this.newpwd2)){
+        //   this.errorMsg = '请输入6-16数字、字母组合的密码';
+        //   return;
+        // }else if(this.newpwd !== this.newpwd2){
+        //   this.errorMsg = '两次密码输入不一致';
+        //   return;
+        // }else{
+        //   this.errorMsg = '';
+        // } 
         var url = common.apidomain + 'validate/reset_password';
         var formData = new FormData();
         formData.append('totpCode',0);
@@ -111,6 +129,7 @@
           formData.append('phoneCode',this.msgCode);
           ajax(url, 'post', formData, (res) => {
             console.log(res.data);
+            console.log(1);
             if(res.data.code!==200){
               this.errorMsg = res.data.msg;
               return;
@@ -132,6 +151,7 @@
           // formData.append('fid',this.fid);
           ajax(url, 'post', formData, (res) => {
             console.log(res.data);
+            console.log(2);
             if(res.data.code!==200){
               this.errorMsg = res.data.msg;
               return;

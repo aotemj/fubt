@@ -405,7 +405,8 @@
             // if (res.data.code == 200) {
             // this.warn = "数据请求成功！";
             // this.warn = res.data.msg;
-            this.$store.commit("changeDialogInfo", {dataInfo: res.data.msg})
+            // this.$store.commit("changeDialogInfo", {dataInfo: res.data.msg})
+            this.$store.commit("changeDialogInfo", {dataInfo: '买入成功，请在30分钟内按要求完成付款。'})
             console.log('123');
             // }
           });
@@ -421,13 +422,15 @@
           formData1.append('tradeAmount', this.sellPurchases);
           formData1.append('tradePrice', this.sellpice);
           ajax(urlsell, 'post', formData1, (res) => {
+            this.dialogFormVisible1 = false;
             if (res.data.code !== 200) {
               this.sellwarn = res.data.msg;
               this.dialogFormVisible1 = false;
               return;
             }
             if (res.data.code == 200) {
-              this.sellwarn = res.data.msg;
+              // this.sellwarn = res.data.msg;
+              this.$store.commit("changeDialogInfo", {dataInfo: '卖出成功，商家会在24小时内完成汇款。'})
             }
           });
         }

@@ -19,12 +19,23 @@
           <!-- <input type="text" name="" placeholder="确认密码" v-model="rNewPwd"> -->
           <input type="password" name="" placeholder="确认密码" v-model="rNewPwd">
         </div>
-        <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+
+        <!-- 错误提示信息 -->
+          <transition enter-active-class="animated shake">
+            <div class="false-tips fz12" v-show="errorMsg"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+          </transition>
+       
+        <!-- <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div> -->
+
         <input class="register-btn dis-in-blk" v-on:click="next" type="button" value="下一步">
       </div>
       <div class="success" v-show="success">
         <!-- <h4>恭喜您,登录密码修改成功!</h4> -->
-        <h4>{{successtip}}</h4>
+        <!-- <h4>{{successtip}}</h4> -->
+        <transition enter-active-class="animated shake"
+          <div class="false-tips fz12" v-show="successtip"><i v-show="successtip"></i>{{successtip}}</div>
+        </transition>
+
         <input class="register-btn dis-in-blk" v-on:click="login" type="button" value="立即登录">
       </div>
     </div>
@@ -46,19 +57,26 @@
         errorMsg: '',//错误提示
         phoneNum:'',//手机号
         successtip:'',//修改手机成功提示
+        pwdreg:/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
       }
     },
     methods: {
       // 1.0下一步按钮
       next() {
         if (!this.newPwd) {
-          this.errorMsg = '请输入新密码';
+          this.errorMsg = '请输入新密码！';
           return;
-        } else if (!this.rNewPwd) {
-          this.errorMsg = '请确认新密码';
+        } else if(!this.pwdreg.test(this.newPwd)){
+          this.errorMsg = '请输入6-16位数字、字母组合的密码！';
           return;
-        } else if (this.newPwd !== this.rNewPwd) {
-          this.errorMsg = '新密码输入不一致';
+        }else if (!this.rNewPwd) {
+          this.errorMsg = '请输入确认密码！';
+          return;
+        } else if(!this.pwdreg.test(this.rNewPwd)){
+          this.errorMsg = '请输入6-16位数字、字母组合的密码！';
+          return;
+        }else if (this.newPwd !== this.rNewPwd) {
+          this.errorMsg = '两次输入不一致！';
           return;
         } else {
           this.errorMsg = '';

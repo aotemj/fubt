@@ -55,7 +55,13 @@
         </div>
         <span style="display:inline-block;">如果账户未实名可不填</span>
 
-        <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+        <!-- 错误提示信息 -->
+        <transition
+          enter-active-class="animated shake"
+        >
+          <div class="false-tips fz12" v-show="errorMsg"><i v-show="errorMsg"></i>{{errorMsg}}</div>
+        </transition>
+        <!-- <div class="false-tips fz12"><i v-show="errorMsg"></i>{{errorMsg}}</div> -->
 
         <input class="register-btn dis-in-blk" type="button" value="下一步" v-on:click="next">
       </div>
@@ -71,12 +77,8 @@
   export default {
     data() {
       return {
-
         phoneResetKey:'',
         phoneResetSecond:'',
-
-
-
         // activeId:1,//激活面板
         refreshStatus: false,//是否允许刷新
         imgCode: '',//图形验证码
@@ -393,6 +395,7 @@
     border: none !important;
     background-color: #445895;
     padding: 10px 20px;
+    display: block;
 
   }
 
